@@ -13,7 +13,7 @@ import project.insa.idchatsystem.gui.ChatWindow;
  * @author nsmaniotto
  */
 public class ClientView {
-    private ChatWindow chatWindow = new ChatWindow();
+    private static ChatWindow chatWindow = null;
     
     public static void main(String[] args) {
         //Schedule a job for the event-dispatching thread:
@@ -31,6 +31,7 @@ public class ClientView {
         JFrame.setDefaultLookAndFeelDecorated(true);
         
         //Create and set up the window.
-        //chatWindow.init();
+        chatWindow = new ChatWindow();
+        chatWindow.display();
     }
 }
