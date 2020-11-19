@@ -41,11 +41,14 @@ public class ChatWindow extends Window {
         this.userPanel.setBackground(new java.awt.Color(23, 237, 237));
         
         this.chatPanel = new JPanel();
+        this.chatPanel.setPreferredSize(new Dimension(600, HEIGHT));
+        this.chatPanel.setBackground(new java.awt.Color(202, 246, 250));
         /* END: variables initialization */
     }
     
     @Override
     protected void build() {
         this.frame.add(this.userPanel,BorderLayout.WEST);
+        this.frame.add(this.chatPanel,BorderLayout.EAST);
     }
 }
