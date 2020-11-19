@@ -1,14 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package project.insa.idchatsystem.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import javax.swing.*;
 
 /**
@@ -18,6 +11,14 @@ import javax.swing.*;
 public class ChatWindow extends Window {
     /* BEGIN: variables declaration */
     private JPanel userPanel = null;
+        private JPanel userInfoPanel = null;
+            private JLabel usernameLabel = null;
+            private JButton changeUsernameButton = null;
+        private JTabbedPane conversationTabs = null;
+            private JScrollPane recentConversationsTab = null;
+            private JScrollPane onlineUsersTab = null;
+            private JScrollPane offlineUsersTab = null;
+            private JScrollPane allUsersTab = null;
     private JPanel chatPanel = null;
     /* END: variables declarations */
     
@@ -40,6 +41,15 @@ public class ChatWindow extends Window {
         this.userPanel.setPreferredSize(new Dimension(200, HEIGHT));
         this.userPanel.setBackground(new java.awt.Color(23, 237, 237));
         
+        this.userInfoPanel = new JPanel();
+        this.userInfoPanel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        this.userInfoPanel.setBackground(new java.awt.Color(227, 250, 252));
+        
+        this.usernameLabel = new JLabel("AAAAA#xx", JLabel.LEFT);
+        
+        this.changeUsernameButton = new JButton();
+        this.changeUsernameButton.setText("edit");
+        
         this.chatPanel = new JPanel();
         this.chatPanel.setPreferredSize(new Dimension(600, HEIGHT));
         this.chatPanel.setBackground(new java.awt.Color(202, 246, 250));
@@ -48,7 +58,25 @@ public class ChatWindow extends Window {
     
     @Override
     protected void build() {
+        /* BEGIN: userPanel build */
+        this.userInfoPanel.add(this.usernameLabel, BorderLayout.WEST);
+        this.userInfoPanel.add(this.changeUsernameButton, BorderLayout.EAST);
+        
+        this.userPanel.add(this.userInfoPanel, BorderLayout.NORTH);
+        
+        
+        /*
+        this.recentConversationsTab.setViewportView(this.recentConversationsPanel);
+        
+        this.conversationTabs.addTab("Recent", this.recentConversationsTab);
+        this.conversationTabs.addTab("Online", this.onlineUsersTab);
+        this.conversationTabs.addTab("Offline", this.offlineUsersTab);
+        this.conversationTabs.addTab("All", this.allUsersTab);*/
+        /* END: userPanel build */
+        
+        /* BEGIN: frame build */
         this.frame.add(this.userPanel,BorderLayout.WEST);
         this.frame.add(this.chatPanel,BorderLayout.EAST);
+        /* END: frame build */
     }
 }
