@@ -5,6 +5,10 @@
  */
 package project.insa.idchatsystem.gui;
 
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import javax.swing.*;
 
 /**
@@ -24,14 +28,24 @@ public class ChatWindow extends Window {
     @Override
     protected void init() {
         /* BEGIN: frame initialization */
-        this.frame.setSize(600,400);
+        this.frame.setSize(800,600);
+        this.frame.setLayout(new BorderLayout());
         this.frame.setLocationRelativeTo(null);
         this.setResizable(false); // Not resizable for now
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         /* END: frame initialization */
         
         /* BEGIN: variables initialization */
+        this.userPanel = new JPanel();
+        this.userPanel.setPreferredSize(new Dimension(200, HEIGHT));
+        this.userPanel.setBackground(new java.awt.Color(23, 237, 237));
         
+        this.chatPanel = new JPanel();
         /* END: variables initialization */
+    }
+    
+    @Override
+    protected void build() {
+        this.frame.add(this.userPanel,BorderLayout.WEST);
     }
 }

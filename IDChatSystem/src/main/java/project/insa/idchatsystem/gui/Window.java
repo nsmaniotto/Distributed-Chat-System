@@ -17,6 +17,7 @@ public abstract class Window extends JFrame {
     public Window(String title) {
         this.frame = new JFrame(title);
         this.init();
+        this.build();
     }
     
     public void display() {
@@ -25,4 +26,5 @@ public abstract class Window extends JFrame {
     }
     
     protected abstract void init();
+    protected abstract void build();
 }
