@@ -18,5 +18,8 @@ public abstract class Window extends JFrame {
         this.frame = new JFrame(title);
     }
     
-    public abstract void display();
+    public void display() {
+        this.frame.pack();
+        this.frame.setVisible(true);
+    }
 }

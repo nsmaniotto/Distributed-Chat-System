@@ -17,10 +17,4 @@ public class ChatWindow extends Window {
     public ChatWindow() {
         super("IDChat");
     }
-    
-    @Override
-    public void display() {
-        this.frame.pack();
-        this.frame.setVisible(true);
-    }
 }
