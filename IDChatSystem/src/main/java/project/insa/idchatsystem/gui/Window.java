@@ -16,10 +16,13 @@ public abstract class Window extends JFrame {
     
     public Window(String title) {
         this.frame = new JFrame(title);
+        this.init();
     }
     
     public void display() {
-        this.frame.pack();
+        //this.frame.pack(); // causes main frame to fit its content
         this.frame.setVisible(true);
     }
+    
+    protected abstract void init();
 }

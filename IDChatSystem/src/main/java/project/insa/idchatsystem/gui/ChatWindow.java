@@ -12,9 +12,26 @@ import javax.swing.*;
  * @author nsmaniotto
  */
 public class ChatWindow extends Window {
-    private JFrame chatFrame = new JFrame("IDChat");
+    /* BEGIN: variables declaration */
+    private JPanel userPanel = null;
+    private JPanel chatPanel = null;
+    /* END: variables declarations */
     
     public ChatWindow() {
         super("IDChat");
+    }
+    
+    @Override
+    protected void init() {
+        /* BEGIN: frame initialization */
+        this.frame.setSize(600,400);
+        this.frame.setLocationRelativeTo(null);
+        this.setResizable(false); // Not resizable for now
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        /* END: frame initialization */
+        
+        /* BEGIN: variables initialization */
+        
+        /* END: variables initialization */
     }
 }
