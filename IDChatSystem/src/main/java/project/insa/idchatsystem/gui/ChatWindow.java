@@ -50,6 +50,16 @@ public class ChatWindow extends Window {
         this.changeUsernameButton = new JButton();
         this.changeUsernameButton.setText("edit");
         
+        this.conversationTabs = new JTabbedPane();
+        this.conversationTabs.setPreferredSize(new Dimension(200, 525));
+        this.conversationTabs.setBackground(new java.awt.Color(153, 153, 255));
+        //this.recentConversationsTab.setViewportView(this.recentConversationsTab);
+        
+        this.recentConversationsTab = new JScrollPane();
+        this.onlineUsersTab = new JScrollPane();
+        this.offlineUsersTab = new JScrollPane();
+        this.allUsersTab = new JScrollPane();
+        
         this.chatPanel = new JPanel();
         this.chatPanel.setPreferredSize(new Dimension(600, HEIGHT));
         this.chatPanel.setBackground(new java.awt.Color(202, 246, 250));
@@ -65,14 +75,12 @@ public class ChatWindow extends Window {
         this.userInfoPanel.add(this.changeUsernameButton, BorderLayout.EAST);
         
         
-        
-        /*
-        this.recentConversationsTab.setViewportView(this.recentConversationsPanel);
+        this.userPanel.add(this.conversationTabs);
         
         this.conversationTabs.addTab("Recent", this.recentConversationsTab);
         this.conversationTabs.addTab("Online", this.onlineUsersTab);
         this.conversationTabs.addTab("Offline", this.offlineUsersTab);
-        this.conversationTabs.addTab("All", this.allUsersTab);*/
+        //this.conversationTabs.addTab("All", this.allUsersTab); // Maybe later
         /* END: userPanel build */
         
         /* BEGIN: frame build */
