@@ -34,6 +34,7 @@ public class ChatWindow extends Window {
         this.frame.setLocationRelativeTo(null);
         this.setResizable(false); // Not resizable for now
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.initLookAndFeel();
         /* END: frame initialization */
         
         /* BEGIN: variables initialization */
