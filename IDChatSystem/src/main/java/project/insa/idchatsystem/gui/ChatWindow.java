@@ -88,4 +88,10 @@ public class ChatWindow extends Window {
         this.frame.add(this.chatPanel,BorderLayout.EAST);
         /* END: frame build */
     }
+    
+    public void displayUsername(String username, int id) {
+        if(this.usernameLabel != null) {
+            this.usernameLabel.setText(username + " #" + id);
+        }
+    }
 }
