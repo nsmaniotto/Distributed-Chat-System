@@ -42,7 +42,7 @@ public class ChatWindow extends Window {
         this.userPanel.setBackground(new java.awt.Color(23, 237, 237));
         
         this.userInfoPanel = new JPanel();
-        this.userInfoPanel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        this.userInfoPanel.setMaximumSize(new Dimension(200, HEIGHT));
         this.userInfoPanel.setBackground(new java.awt.Color(227, 250, 252));
         
         this.usernameLabel = new JLabel("AAAAA#xx", JLabel.LEFT);
@@ -59,10 +59,11 @@ public class ChatWindow extends Window {
     @Override
     protected void build() {
         /* BEGIN: userPanel build */
+        this.userPanel.add(this.userInfoPanel, BorderLayout.NORTH);
+        
         this.userInfoPanel.add(this.usernameLabel, BorderLayout.WEST);
         this.userInfoPanel.add(this.changeUsernameButton, BorderLayout.EAST);
         
-        this.userPanel.add(this.userInfoPanel, BorderLayout.NORTH);
         
         
         /*
