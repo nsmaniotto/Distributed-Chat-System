@@ -1,7 +1,11 @@
 package project.insa.idchatsystem.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import javax.swing.*;
 
 /**
@@ -27,24 +31,28 @@ public class ChatWindow extends Window {
     }
     
     @Override
-    protected void init() {
+    protected void init() {        
         /* BEGIN: frame initialization */
         this.frame.setSize(800,600);
-        this.frame.setLayout(new BorderLayout());
+        this.frame.setLayout(new GridBagLayout());
         this.frame.setLocationRelativeTo(null);
         this.setResizable(false); // Not resizable for now
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.initLookAndFeel();
+        this.frame.getContentPane().setBackground(Window.COLOR_SOFTWHITE);
         /* END: frame initialization */
         
         /* BEGIN: variables initialization */
-        this.userPanel = new JPanel();
-        this.userPanel.setPreferredSize(new Dimension(200, HEIGHT));
-        this.userPanel.setBackground(new java.awt.Color(23, 237, 237));
+        this.userPanel = new JPanel(new GridBagLayout());
         
-        this.userInfoPanel = new JPanel();
-        this.userInfoPanel.setMaximumSize(new Dimension(200, HEIGHT));
-        this.userInfoPanel.setBackground(new java.awt.Color(227, 250, 252));
+        this.userInfoPanel = new JPanel(new GridLayout(2,0));
+        this.userInfoPanel.setBorder(BorderFactory.createEmptyBorder(
+                10, //top
+                10, //left
+                10, //bottom
+                10) //right
+                );
+        this.userInfoPanel.setBackground(Window.COLOR_SOFTWHITE);
         
         this.usernameLabel = new JLabel("AAAAA#xx", JLabel.LEFT);
         
@@ -52,8 +60,7 @@ public class ChatWindow extends Window {
         this.changeUsernameButton.setText("edit");
         
         this.conversationTabs = new JTabbedPane();
-        this.conversationTabs.setPreferredSize(new Dimension(200, 525));
-        this.conversationTabs.setBackground(new java.awt.Color(153, 153, 255));
+        this.conversationTabs.setPreferredSize(new Dimension(200, 500));
         //this.recentConversationsTab.setViewportView(this.recentConversationsTab);
         
         this.recentConversationsTab = new JScrollPane();
@@ -63,20 +70,30 @@ public class ChatWindow extends Window {
         
         this.chatPanel = new JPanel();
         this.chatPanel.setPreferredSize(new Dimension(600, HEIGHT));
-        this.chatPanel.setBackground(new java.awt.Color(202, 246, 250));
+        this.chatPanel.setBackground(Window.COLOR_SOFTWHITE);
         /* END: variables initialization */
     }
     
     @Override
     protected void build() {
         /* BEGIN: userPanel build */
-        this.userPanel.add(this.userInfoPanel, BorderLayout.NORTH);
+        GridBagConstraints userInfoPanelConstraints = new GridBagConstraints();
+        userInfoPanelConstraints.gridx = 0;
+        userInfoPanelConstraints.gridy = 0;
+        userInfoPanelConstraints.fill = GridBagConstraints.HORIZONTAL;
+        userInfoPanelConstraints.anchor = GridBagConstraints.NORTH;
+        this.userPanel.add(this.userInfoPanel, userInfoPanelConstraints);
+        this.userPanel.add(this.userInfoPanel, userInfoPanelConstraints);
         
-        this.userInfoPanel.add(this.usernameLabel, BorderLayout.WEST);
-        this.userInfoPanel.add(this.changeUsernameButton, BorderLayout.EAST);
+        this.userInfoPanel.add(this.usernameLabel);
+        this.userInfoPanel.add(this.changeUsernameButton);
         
-        
-        this.userPanel.add(this.conversationTabs);
+        GridBagConstraints conversationTabsConstraints = new GridBagConstraints();
+        conversationTabsConstraints.gridx = 0;
+        conversationTabsConstraints.gridy = 1;
+        conversationTabsConstraints.fill = GridBagConstraints.BOTH;
+        conversationTabsConstraints.anchor = GridBagConstraints.SOUTH;
+        this.userPanel.add(this.conversationTabs, conversationTabsConstraints);
         
         this.conversationTabs.addTab("Recent", this.recentConversationsTab);
         this.conversationTabs.addTab("Online", this.onlineUsersTab);
@@ -85,8 +102,17 @@ public class ChatWindow extends Window {
         /* END: userPanel build */
         
         /* BEGIN: frame build */
-        this.frame.add(this.userPanel,BorderLayout.WEST);
-        this.frame.add(this.chatPanel,BorderLayout.EAST);
+        GridBagConstraints userPanelConstraints = new GridBagConstraints();
+        userPanelConstraints.gridx = 0;
+        userPanelConstraints.gridy = 0;
+        userPanelConstraints.fill = GridBagConstraints.VERTICAL;
+        this.frame.getContentPane().add(this.userPanel, userPanelConstraints);
+        
+        GridBagConstraints chatPanelConstraints = new GridBagConstraints();
+        chatPanelConstraints.gridx = 1;
+        chatPanelConstraints.gridy = 0;
+        chatPanelConstraints.fill = GridBagConstraints.BOTH;
+        this.frame.getContentPane().add(this.chatPanel, chatPanelConstraints);
         /* END: frame build */
     }
     
