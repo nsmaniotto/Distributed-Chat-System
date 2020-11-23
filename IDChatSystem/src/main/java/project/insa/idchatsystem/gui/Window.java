@@ -5,6 +5,7 @@
  */
 package project.insa.idchatsystem.gui;
 
+import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
@@ -13,7 +14,13 @@ import javax.swing.UIManager;
  * @author nsmaniotto
  */
 public abstract class Window extends JFrame {
+    /* BEGIN: constants definitions */
+    protected static final Color COLOR_SOFTWHITE = new Color(236, 240, 241);
+    /* END: constants definitions */
+    
+    /* BEGIN: graphical components declaration */
     protected JFrame frame = null;
+    /* END: graphical components declaration */
     
     public Window(String title) {
         this.frame = new JFrame(title);
