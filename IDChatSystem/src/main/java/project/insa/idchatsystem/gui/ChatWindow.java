@@ -2,6 +2,7 @@ package project.insa.idchatsystem.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import javax.swing.*;
 
 /**
@@ -43,6 +44,7 @@ public class ChatWindow extends Window {
         this.userPanel.setBackground(new java.awt.Color(23, 237, 237));
         
         this.userInfoPanel = new JPanel();
+        this.userInfoPanel.setLayout(new GridLayout(2,0));
         this.userInfoPanel.setMaximumSize(new Dimension(200, HEIGHT));
         this.userInfoPanel.setBackground(new java.awt.Color(227, 250, 252));
         
@@ -72,8 +74,8 @@ public class ChatWindow extends Window {
         /* BEGIN: userPanel build */
         this.userPanel.add(this.userInfoPanel, BorderLayout.NORTH);
         
-        this.userInfoPanel.add(this.usernameLabel, BorderLayout.WEST);
-        this.userInfoPanel.add(this.changeUsernameButton, BorderLayout.EAST);
+        this.userInfoPanel.add(this.usernameLabel);
+        this.userInfoPanel.add(this.changeUsernameButton);
         
         
         this.userPanel.add(this.conversationTabs);
