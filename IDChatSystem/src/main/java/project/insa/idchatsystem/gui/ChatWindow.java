@@ -1,6 +1,5 @@
 package project.insa.idchatsystem.gui;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -60,7 +59,7 @@ public class ChatWindow extends Window {
         this.changeUsernameButton.setText("edit");
         
         this.conversationTabs = new JTabbedPane();
-        this.conversationTabs.setPreferredSize(new Dimension(200, 500));
+        this.conversationTabs.setPreferredSize(new Dimension(200, HEIGHT));
         //this.recentConversationsTab.setViewportView(this.recentConversationsTab);
         
         this.recentConversationsTab = new JScrollPane();
@@ -69,8 +68,7 @@ public class ChatWindow extends Window {
         this.allUsersTab = new JScrollPane();
         
         this.chatPanel = new JPanel();
-        this.chatPanel.setPreferredSize(new Dimension(600, HEIGHT));
-        this.chatPanel.setBackground(Window.COLOR_SOFTWHITE);
+        this.chatPanel.setBackground(Color.LIGHT_GRAY/*Window.COLOR_SOFTWHITE*/);
         /* END: variables initialization */
     }
     
@@ -79,7 +77,8 @@ public class ChatWindow extends Window {
         /* BEGIN: userPanel build */
         GridBagConstraints userInfoPanelConstraints = new GridBagConstraints();
         userInfoPanelConstraints.gridx = 0;
-        userInfoPanelConstraints.gridy = 0;
+        userInfoPanelConstraints.weightx = 1.0;
+        userInfoPanelConstraints.weighty = 0; // Fixed height
         userInfoPanelConstraints.fill = GridBagConstraints.HORIZONTAL;
         userInfoPanelConstraints.anchor = GridBagConstraints.NORTH;
         this.userPanel.add(this.userInfoPanel, userInfoPanelConstraints);
@@ -91,6 +90,8 @@ public class ChatWindow extends Window {
         GridBagConstraints conversationTabsConstraints = new GridBagConstraints();
         conversationTabsConstraints.gridx = 0;
         conversationTabsConstraints.gridy = 1;
+        conversationTabsConstraints.weightx = 1.0;
+        conversationTabsConstraints.weighty = 1.0;
         conversationTabsConstraints.fill = GridBagConstraints.BOTH;
         conversationTabsConstraints.anchor = GridBagConstraints.SOUTH;
         this.userPanel.add(this.conversationTabs, conversationTabsConstraints);
@@ -105,12 +106,16 @@ public class ChatWindow extends Window {
         GridBagConstraints userPanelConstraints = new GridBagConstraints();
         userPanelConstraints.gridx = 0;
         userPanelConstraints.gridy = 0;
-        userPanelConstraints.fill = GridBagConstraints.VERTICAL;
+        userPanelConstraints.weightx = 0.0; // Fixed width
+        userPanelConstraints.weighty = 1.0;
+        userPanelConstraints.fill = GridBagConstraints.BOTH;
         this.frame.getContentPane().add(this.userPanel, userPanelConstraints);
         
         GridBagConstraints chatPanelConstraints = new GridBagConstraints();
         chatPanelConstraints.gridx = 1;
         chatPanelConstraints.gridy = 0;
+        chatPanelConstraints.weightx = 1.0;
+        chatPanelConstraints.weighty = 1.0;
         chatPanelConstraints.fill = GridBagConstraints.BOTH;
         this.frame.getContentPane().add(this.chatPanel, chatPanelConstraints);
         /* END: frame build */
