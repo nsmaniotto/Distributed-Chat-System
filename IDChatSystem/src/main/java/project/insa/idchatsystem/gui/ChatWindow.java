@@ -35,7 +35,6 @@ public class ChatWindow extends Window {
         this.frame.setSize(800,600);
         this.frame.setLayout(new GridBagLayout());
         this.frame.setLocationRelativeTo(null);
-        this.setResizable(false); // Not resizable for now
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.initLookAndFeel();
         this.frame.getContentPane().setBackground(Window.COLOR_SOFTWHITE);
