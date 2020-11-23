@@ -39,6 +39,7 @@ public class ChatWindow extends Window {
         this.setResizable(false); // Not resizable for now
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.initLookAndFeel();
+        this.frame.getContentPane().setBackground(Window.COLOR_SOFTWHITE);
         /* END: frame initialization */
         
         /* BEGIN: variables initialization */
@@ -60,7 +61,6 @@ public class ChatWindow extends Window {
         
         this.conversationTabs = new JTabbedPane();
         this.conversationTabs.setPreferredSize(new Dimension(200, 500));
-        this.conversationTabs.setBackground(new Color(153, 153, 255));
         //this.recentConversationsTab.setViewportView(this.recentConversationsTab);
         
         this.recentConversationsTab = new JScrollPane();
@@ -70,7 +70,7 @@ public class ChatWindow extends Window {
         
         this.chatPanel = new JPanel();
         this.chatPanel.setPreferredSize(new Dimension(600, HEIGHT));
-        this.chatPanel.setBackground(new java.awt.Color(202, 246, 250));
+        this.chatPanel.setBackground(Window.COLOR_SOFTWHITE);
         /* END: variables initialization */
     }
     
