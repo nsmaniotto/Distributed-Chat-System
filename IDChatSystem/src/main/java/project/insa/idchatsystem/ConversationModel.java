@@ -27,7 +27,7 @@ class ConversationModel implements ConversationObservable, Runnable {
         // Do not start any thread because the handler doe not require one
     }
 
-    /**
+   /**
      * Constructor called to instantiate a conversation with a correspondent
      *
      * @param id1 : int - id of the current user
