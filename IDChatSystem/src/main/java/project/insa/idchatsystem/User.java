@@ -67,4 +67,9 @@ class User {
     public Timestamp get_lastSeen() {
 		return this.lastSeen;
 	}
+	/*********************Utilities methods*****************************/
+    @Override
+    public String toString() {
+        return String.format("User %s ; id %d ; ipAddress %s ; lastSeen %s",this.username,this.id,this.ipAddress,this.lastSeen.toString());
+    }
 }
