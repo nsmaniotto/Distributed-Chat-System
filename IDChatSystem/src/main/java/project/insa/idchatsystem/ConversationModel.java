@@ -1,22 +1,33 @@
 
 package project.insa.idchatsystem;
 
-import javax.swing.JList;
+import java.awt.List;
+import java.util.ArrayList;
 
 class ConversationModel implements ConversationObservable {
     private boolean isOpen;
-    private AgentController agentController;
     private User correspondent;
-    private JList<Message> history;
-    private JList<ConversationModel> conversationChildren;
+    private ArrayList<Message> history;
+    private ArrayList<ConversationModel> conversationChildren;
     private String networkType;
 
+    /**
+     * Constructor called to instantiate the conversationHandler
+     *
+     * @param id1 : int - id of the current user
+     */
     public ConversationModel(int id1) {
-
+        this.isOpen = false;
+        this.correspondent = null; // Because this constructor is for the handler
+        this.history = null; // Because this constructor is for the handler
+        this.conversationChildren = new ArrayList<ConversationModel>();
+        this.networkType = "none"; // Not applicable
+        
+        //TODO Start the handler thread
     }
 
     public ConversationModel(int id1, int id2, String mode) {
-
+        
     }
 
     private void storeMessage(Message message) {
