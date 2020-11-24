@@ -1,10 +1,10 @@
 
 package project.insa.idchatsystem;
 
-import java.awt.List;
 import java.util.ArrayList;
 
-class ConversationModel implements ConversationObservable {
+class ConversationModel implements ConversationObservable, Runnable {
+    private int id1;
     private boolean isOpen;
     private User correspondent;
     private ArrayList<Message> history;
@@ -17,17 +17,57 @@ class ConversationModel implements ConversationObservable {
      * @param id1 : int - id of the current user
      */
     public ConversationModel(int id1) {
+        this.id1 = id1;
         this.isOpen = false;
         this.correspondent = null; // Because this constructor is for the handler
         this.history = null; // Because this constructor is for the handler
         this.conversationChildren = new ArrayList<ConversationModel>();
         this.networkType = "none"; // Not applicable
         
-        //TODO Start the handler thread
+        // Do not start any thread because the handler doe not require one
     }
 
+    /**
+     * Constructor called to instantiate a conversation with a correspondent
+     *
+     * @param id1 : int - id of the current user
+     * @param id2 : int - id of the correspondent
+     * @param mode : String - type of the communication : local/distant
+     */
     public ConversationModel(int id1, int id2, String mode) {
+        this.id1 = id1;
         
+        this.isOpen = false;
+        
+        //TODO retrieve User using id2
+        this.correspondent = new User();
+        
+        //TODO retrieve past messages
+        this.history = new ArrayList<>();
+        
+        this.conversationChildren = null; // Because a conversation has no children
+        
+        this.networkType = mode;
+        
+        //TODO create sockets tobe able to communicate
+        
+        
+        this.run();
+    }
+    
+    @Override
+    public void run() {
+        System.out.println("child created");
+    }
+    
+    public void createConversation(int id2, String mode) {
+        // Verify if 'this' is the conversation handler
+        if(this.correspondent != null) {
+            // Verify that there is no current conversation with this correspondent (id2)
+            if(this.conversationChildren != null) {
+                this.conversationChildren.add(new ConversationModel(this.id1, id2, mode));
+            }
+        }
     }
 
     private void storeMessage(Message message) {
