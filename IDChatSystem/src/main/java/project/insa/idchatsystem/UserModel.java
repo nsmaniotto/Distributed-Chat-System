@@ -10,30 +10,48 @@ import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.UnknownHostException;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.regex.*;
 
 class UserModel implements Runnable {
     private String networkMode;
-    private HashMap<Integer,User> users;
-    protected MulticastSocket socket = null;
+    private final HashMap<Integer,User> users;
     //Format of UDP packets : username,id,ipAddress with :
     // - username : max 25 letters
     // - id : between 0 and 1 000 000 > 100 000 -> between 1 and 7 digits
     // - ipAdress : maximum 3*4 + 3 = 15 characters
-    // Result = 25 + 7 + 15 = 47 character -> we will round this number to 50 characters
-    protected byte[] buf = new byte[256];
-    int port_broadcast = 4000;
+    // Result = 25 + 7 + 15 = 47 character -> we will take 256 characters
+    protected byte[] in_buf = new byte[256];
+    protected byte[] out_buf = new byte[256];
+    private final int in_port_broadcast = 4000;
+    private final int out_port_broadcast = 4001;
+    private InetAddress group;
+    private MulticastSocket socket;
 
-    public UserModel(String networkMode, int id) throws UnknownHostException {//TODO : revoir si exception à gérer plus haut ou pas
+    public UserModel(String networkMode, int id)  {
         this.networkMode = networkMode;
         this.users = new HashMap<Integer,User>();
         User.init_current_user(id);
-
-        InetAddress group = null;
         try {
-            group = InetAddress.getByName("230.0.0.0");
+            this.group = InetAddress.getByName("230.0.0.0");
         } catch (UnknownHostException e) {
             e.printStackTrace();
+        }
+        //Init broadcast -> in socket
+        try {
+            socket = new MulticastSocket(in_port_broadcast);
+            socket.setSoTimeout(0);//infinite timeout to block on receive
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Mutlicast socket in error");
+        }
+        //init in -> broadcast socket
+        try {
+            socket = new MulticastSocket(out_port_broadcast);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Mutlicast socket out error");
         }
     }
 
@@ -59,12 +77,26 @@ class UserModel implements Runnable {
         return this.users;
     }
 
-    public void diffuseNewUsername(String username, int id) {
-        
+    public void diffuseNewUsername(String username) throws Uninitialized {
+        User.set_current_username(username);
+        String response = User.current_user_transfer_string();
+        DatagramPacket outPacket = new DatagramPacket(response.getBytes(), response.length());
+        try {
+            this.socket.send(outPacket);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public boolean checkAvailable(String username, int id) {
-        return false;   
+    public boolean checkAvailable(String username) {//TODO : prototype to be modified in the class diagram
+        for (Map.Entry<Integer, User> integerUserEntry : this.users.entrySet()) {
+            Map.Entry map_entry = (Map.Entry) integerUserEntry;
+            User user = (User) map_entry.getValue();
+            if (user.get_username().equals(username)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
@@ -72,17 +104,10 @@ class UserModel implements Runnable {
         //Création des objets pour communiquer sur le réseau de login
         //Création des objets pour envoyer et recevoir de l'UDP en broadcast (multicast ici pour éviter de trop utiliser de ressources) des communications
         try {
-            socket = new MulticastSocket(port_broadcast);
-            socket.setSoTimeout(0);//infinite timeout to block on receive
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Mutlicast socket error");
-        }
-        Pattern pattern_new_host = Pattern.compile("(?<username>[A-Za-z_.]+),(?<id>[0-9]+),(?<ip>[0-9]+[.][0-9]+[.][0-9]+[.][0-9]+)");
-        try {
             socket.joinGroup(group);
+            Pattern pattern_new_host = Pattern.compile("(?<username>[A-Za-z_.]+),(?<id>[0-9]+),(?<ip>[0-9]+[.][0-9]+[.][0-9]+[.][0-9]+)");
             while (true) {
-                DatagramPacket packet = new DatagramPacket(buf, buf.length);
+                DatagramPacket packet = new DatagramPacket(in_buf, in_buf.length);
                 socket.receive(packet);
                 String received = new String(packet.getData(), 0, packet.getLength());
                 //Extraction of the informations of the packet thanks to a regex and named group

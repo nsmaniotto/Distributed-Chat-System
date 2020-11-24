@@ -61,6 +61,9 @@ class User {
         }
         return User.current_ipAddress;
     }
+    public static String current_user_transfer_string() {
+        return String.format("%s,%d,%s",User.current_username,User.current_id,User.current_ipAddress);
+    }
 
     /***********************Other users methods***************************/
     public User(String username, int id, String ipAddress) {
@@ -84,6 +87,9 @@ class User {
 
     public Timestamp get_lastSeen() {
         return this.lastSeen;
+    }
+    public String transfer_string() {
+        return String.format("%s,%d,%s",this.username,this.id,this.ipAddress);
     }
 
     /*********************Utilities methods*****************************/
