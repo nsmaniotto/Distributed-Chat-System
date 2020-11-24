@@ -23,8 +23,8 @@ class ConversationModel implements ConversationObservable, Runnable {
         this.history = null; // Because this constructor is for the handler
         this.conversationChildren = new ArrayList<ConversationModel>();
         this.networkType = "none"; // Not applicable
-        
-        // Do not start any thread because the handler doe not require one
+                
+        this.run();
     }
 
    /**
@@ -49,15 +49,46 @@ class ConversationModel implements ConversationObservable, Runnable {
         
         this.networkType = mode;
         
-        //TODO create sockets tobe able to communicate
         
+        //Notify the view in order to draw the conversation shortcut
         
         this.run();
     }
     
     @Override
     public void run() {
-        System.out.println("child created");
+        //TODO if this is the handler  then listen on the socket for incoming datas
+        //TODO initialize the socket to be able to receive
+        //TODO listen on this socket
+        
+        //TODO time to times : send a message saying we are still online, recurring scheduled call
+    }
+    
+    /**
+     * Method making the handler opening a specific conversation
+     *
+     * @param id2 : int - id of the correspondent
+     */
+    public void open(int id2) {
+        //TODO retrieve the correspondent corresponding to id2
+        
+        //TODO check if it is different from the current conversation
+        //TODO close the current conversation
+        //TODO affect the conversation to currentConversation
+        //TODO call open() on the correspondent instance
+    }
+    
+    /**
+     * Method making the conversation to open itself
+     *
+     */
+    private void open() {
+        this.isOpen = true;
+        
+        // Load pasts messages
+        this.loadConversation();
+        
+        //TODO notify the client view to show, passing 'this' as an argument
     }
     
     public void createConversation(int id2, String mode) {
