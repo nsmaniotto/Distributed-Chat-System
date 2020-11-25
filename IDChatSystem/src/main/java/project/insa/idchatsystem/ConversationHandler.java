@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Random;
 
 /**
  * Based on Singleton pattern, a conversation handler is here to collect
@@ -22,9 +24,9 @@ public class ConversationHandler implements ConversationObservable, Runnable {
     private ArrayList<User> users; // Copy of UserModel's hashmap to identify every user
 
     private ServerSocket handlerSocket; // Acts as a server listening for incoming connection requests
-    private int port;
+    private Integer port;
     
-    private ConversationHandler(int socketPort) {
+    private ConversationHandler(Integer socketPort) {
         this.port = socketPort;
         this.conversations = new ArrayList<>();
     }
@@ -67,7 +69,8 @@ public class ConversationHandler implements ConversationObservable, Runnable {
                     if(newConversation == null) {
                         // We do not have a current conversation instance for this correpsondent
                         // Generate a free port
-                        int redirectingPort = this.generateFreePort();
+                        Integer redirectingPort = this.generateFreePort();
+                        
                         // Instanciate a new conversation with the given redirecting port and socket
                         Conversation newConversation = new Conversation(correspondent, conversationSocket, redirectingPort);
                         // Add a new conversation to our array list, used later for port generation
@@ -118,6 +121,37 @@ public class ConversationHandler implements ConversationObservable, Runnable {
         }
         
         return null;
+    }
+    
+    /**
+     * Generate a port that is not already taken by checking taken port in conversations
+     *
+     * @return Integer - free port
+     */
+    private Integer generateFreePort() {
+        Integer i = 0;
+        Integer[] takenPorts = new Integer[this.conversations.size() + 1]; // +1 for the handler port
+        
+        // Fill this array with already taken ports
+        takenPorts[0] = this.port;
+        
+        for(Conversation conversation : this.conversations) {
+            i++;
+            
+            takenPorts[i] = conversation.getPort();
+        }
+        
+        // Pick a random port and see if it is available
+        boolean isTaken = true;
+        Integer randomPort = null;
+        
+        do {
+            randomPort = (new Random()).nextInt(65536 - 1025) + 1025; // 1025 inclusive, 65536 exclusive
+            
+            isTaken = (Arrays.asList(takenPorts).indexOf(randomPort) != -1);
+        } while(isTaken);
+        
+        return randomPort;
     }
     
     /**
