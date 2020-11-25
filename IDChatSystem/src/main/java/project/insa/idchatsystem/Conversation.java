@@ -1,11 +1,12 @@
 
 package project.insa.idchatsystem;
 
+import java.net.Socket;
 import java.util.ArrayList;
 
 class Conversation implements ConversationObservable, Runnable {
-    private int socket;
-    private int port;
+    private Socket socket;
+    private Integer port;
     private boolean isOpen;
     private User correspondent;
     private ArrayList<Message> history;
@@ -14,10 +15,10 @@ class Conversation implements ConversationObservable, Runnable {
      * Initialize a conversation with a given correspondent
      *
      * @param correspondent : User - reference of the correspondent
-     * @param socket : int - Socket on which the conversation is
-     * @param redirectingPort : int - port that the socket WILL use
+     * @param socket : Integer - Socket on which the conversation is
+     * @param redirectingPort : Integer - port that the socket WILL use
      */
-    public Conversation(User correspondent, int socket, int redirectingPort) {
+    public Conversation(User correspondent, Socket socket, Integer redirectingPort) {
         this.socket = socket;
         this.port = redirectingPort;
         this.isOpen = false;
@@ -36,7 +37,7 @@ class Conversation implements ConversationObservable, Runnable {
         //TODO load past messages
     }
     
-    public void redirect(int socket, int redirectingPort) {
+    public void redirect(Socket socket, Integer redirectingPort) {
         
     }
     
@@ -103,5 +104,9 @@ class Conversation implements ConversationObservable, Runnable {
     /* GETTERS/SETTERS */
     public User getCorrespondent() {
         return this.correspondent;
+    }
+    
+    public Integer getPort() {
+        return this.port;
     }
 }
