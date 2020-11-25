@@ -2,11 +2,11 @@
 package project.insa.idchatsystem;
 
 class ClientController extends AgentController {
-    private UserModel localUserModel;
+    private LocalUserModel localUserModel;
     private ClientView clientView;
-    private UserModel centralizedUserModel;
+    private DistantUserModel centralizedUserModel;
     
     public ClientController(int id) {
-        
+        this.localUserModel = new LocalUserModel(id);
     }
 }

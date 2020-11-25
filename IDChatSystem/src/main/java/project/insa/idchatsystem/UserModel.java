@@ -1,53 +1,20 @@
-
 package project.insa.idchatsystem;
 
-import javax.swing.JList;
+import project.insa.idchatsystem.Exceptions.Uninitialized;
 
-class UserModel implements ObservableUserModel {
-    private String networkMode;
-    private ClientController clientController;
-    private JList<User> users;
+import java.util.HashMap;
+import java.util.Map;
 
-    public UserModel(String networkMode, int id) {
-        
-    }
+public interface UserModel {
+    void setUsername(String newUserName);
 
-    public void setUsername(String newUserName) {
-        
-    }
+    void addOnlineUser(User user) ;
 
-    public void addOnlineUser(User user) {
-        
-    }
+    void removeOnlineUser(User user);
 
-    public void removeOnlineUser(User user) {
-        
-    }
+    HashMap<Integer,User> getOnlineUsers();
 
-    public User getOnlineUsers() {
-        return null;
-    }
+    void diffuseNewUsername();
 
-    public void difuseNewUsername(String username, int id) {
-        
-    }
-
-    public boolean checkAvailable(String username, int id) {
-        return false;   
-    }
-
-    @Override
-    public void addObserver() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void deleteObserver() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void notifyObservers() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    boolean checkAvailable(String username);
 }

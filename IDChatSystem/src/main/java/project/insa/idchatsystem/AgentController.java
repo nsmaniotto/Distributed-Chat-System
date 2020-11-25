@@ -1,7 +1,7 @@
 
 package project.insa.idchatsystem;
 
-class AgentController {
+abstract class AgentController {
     private ConversationModel conversationHandler;
     
     public AgentController() {
