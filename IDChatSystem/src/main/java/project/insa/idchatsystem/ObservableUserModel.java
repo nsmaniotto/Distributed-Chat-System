@@ -2,11 +2,11 @@
 package project.insa.idchatsystem;
 
 interface ObservableUserModel {
-    //public UsersStatusObserver usersStatusObserver; // To be declared later
     
-    public void addObserver();
+    public void addObserver(UsersStatusObserver obs);
 
-    public void deleteObserver();
+    public void deleteObserver(UsersStatusObserver obs);
 
-    public void notifyObservers();
+    public void notifyNewUserObservers(User user);
+    public void notifyDisconnectedObservers(User user);
 }
