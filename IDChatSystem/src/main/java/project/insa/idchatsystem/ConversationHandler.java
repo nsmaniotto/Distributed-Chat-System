@@ -6,8 +6,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Based on Singleton pattern, a conversation handler is here to collect
@@ -23,12 +24,18 @@ public class ConversationHandler implements ConversationObservable, Runnable {
     
     private ArrayList<User> users; // Copy of UserModel's hashmap to identify every user
 
+    private ExecutorService conversationThreadPool;
     private ServerSocket handlerSocket; // Acts as a server listening for incoming connection requests
     private Integer port;
     
     private ConversationHandler(Integer socketPort) {
         this.port = socketPort;
+        
         this.conversations = new ArrayList<>();
+        this.users = new ArrayList<>(); // Empty for now
+        
+        // Create an open ended thread-pool for our conversations which are threads
+        this.conversationThreadPool = Executors.newCachedThreadPool();
     }
      
     /**
@@ -66,20 +73,22 @@ public class ConversationHandler implements ConversationObservable, Runnable {
                     //TODO Check if we arleady have a conversation instance with this correspondent
                     Conversation newConversation = this.findConversationByCorrespondent(correspondent);
 
+                    // If we do not have a current conversation instance for this correspondent
                     if(newConversation == null) {
-                        // We do not have a current conversation instance for this correpsondent
                         // Generate a free port
                         Integer redirectingPort = this.generateFreePort();
                         
                         // Instanciate a new conversation with the given redirecting port and socket
-                        Conversation newConversation = new Conversation(correspondent, conversationSocket, redirectingPort);
-                        // Add a new conversation to our array list, used later for port generation
-                        // Create a new conversation instance for that socket,
-                        // and fork it in a background thread
-                        threadPool.submit(new ClientHandler(clientSocket));
+                        newConversation = new Conversation(correspondent, conversationSocket, redirectingPort);
+                        
+                        // Add this new conversation to our array list, used later for port generation
+                        this.conversations.add(newConversation);
+                        
+                        // Add this new conversation thread to our thread pool
+                        this.conversationThreadPool.submit(newConversation);
                     } else {
-                        // We have a conversation instance for this correspondent
-                        //TODO redirect to newConversation.port;
+                        // Redirect the communication on the conversation dedicated port
+                        newConversation.redirect(conversationSocket, newConversation.getPort());
                     }
                 } else {
                     // ERROR: no such user found
