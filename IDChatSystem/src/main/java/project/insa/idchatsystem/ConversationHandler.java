@@ -160,8 +160,15 @@ public class ConversationHandler implements ConversationObservable, Runnable {
                 this.currentConversation = conversation;
             } else {
                 // --> We want to initiate the communication with our correspondent
-                // Instantiate a socket that will send a request to the correspondent ConversatioNhandler
-                Socket conversationSocket = new Socket(InetAddress.getByName(correspondent.get_ipAddress()), this.port);
+                // Instantiate a socket that will send a request to the correspondent ConversationHandler
+                Socket conversationSocket = null;
+                
+                try {
+                    conversationSocket = new Socket(InetAddress.getByName(correspondent.get_ipAddress()), this.port);
+                } catch(IOException e) {
+                    System.out.println("EXCEPTION: CANNOT CREATE CONVERSATION SOCKET TOWARDS " + correspondent.get_ipAddress() + ":" + this.port + " (" + e + ")");
+                    System.exit(0);
+                }
                 
                 // Instantiate a new conversation with the given socket
                 conversation = new Conversation(correspondent, conversationSocket);
