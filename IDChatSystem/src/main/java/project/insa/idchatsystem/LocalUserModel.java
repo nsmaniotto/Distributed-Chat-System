@@ -7,23 +7,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-class LocalUserModel implements ObservableUserModel {
-    private String networkMode;
+class LocalUserModel implements ObservableUserModel,UserModel {
     private final HashMap<Integer,User> users;
-    protected byte[] out_buf = new byte[256];
-    private final int out_port_broadcast = 4001;
-    private LocalUserModelEmitter emitter;
-    private ArrayList<UsersStatusObserver> connected_user_observers;
+    private final LocalUserModelEmitter emitter;
+    private final ArrayList<UsersStatusObserver> connected_user_observers;
 
-    public LocalUserModel(String networkMode, int id)  {
-        this.networkMode = networkMode;
+    public LocalUserModel(int id)  {
         this.users = new HashMap<Integer,User>();
         User.init_current_user(id);
         new Thread(new LocalUserModelReceiver(this)).start();
         this.emitter = new LocalUserModelEmitter();
         this.connected_user_observers = new ArrayList<UsersStatusObserver>();
     }
-
+    @Override
     public void setUsername(String newUserName) {
         try {
             User.set_current_username(newUserName);
@@ -31,7 +27,7 @@ class LocalUserModel implements ObservableUserModel {
             uninitialized.printStackTrace();
         }
     }
-
+    @Override
     public void addOnlineUser(User user) {
         boolean new_user = this.users.containsKey(user.get_id());
         this.users.put(user.get_id(),user);//Replace automatically the previous version if already in the HashMap
@@ -40,7 +36,7 @@ class LocalUserModel implements ObservableUserModel {
             this.notifyNewUserObservers(user);
         }
     }
-
+    @Override
     public void removeOnlineUser(User user) {
         if(this.users.remove(user.get_id()) == null) {
             System.out.printf("%s is not connected%n",user.toString());
@@ -49,16 +45,16 @@ class LocalUserModel implements ObservableUserModel {
             this.notifyDisconnectedObservers(user);
         }
     }
-
+    @Override
     public HashMap<Integer,User> getOnlineUsers() {
         return this.users;
     }
-
-    public void diffuseNewUsername() throws Uninitialized {
+    @Override
+    public void diffuseNewUsername(){
         String response = User.current_user_transfer_string();
         this.emitter.diffuseNewUsername(response);
     }
-
+    @Override
     public boolean checkAvailable(String username) {
         for (Map.Entry<Integer, User> integerUserEntry : this.users.entrySet()) {
             User user = (User) ((Map.Entry) integerUserEntry).getValue();

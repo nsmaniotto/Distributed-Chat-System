@@ -24,7 +24,7 @@ class User {
         User.current_id = id;
         User.current_ipAddress = User.calculate_current_ip();
     }
-    private static String calculate_current_ip()  {
+    public static String calculate_current_ip()  {
         try(DatagramSocket socket = new DatagramSocket()){
             socket.connect(InetAddress.getByName("5.6.7.8"), 10000);
             return socket.getLocalAddress().getHostAddress();
