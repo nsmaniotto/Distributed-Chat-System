@@ -30,14 +30,10 @@ class Conversation implements ConversationObservable, Runnable {
     
     @Override
     public void run() {
-        // Redirect the connexion
+        // Redirect the connexion to a port allocated by the handler
         this.redirect(this.socket, this.port);
         
-        ////TODO if this is the handler  then listen on the socket for incoming datas
-        //TODO initialize the socket to be able to receive
-        //TODO listen on this socket
-        
-        //TODO time to times : send a message saying we are still online, recurring scheduled call
+        //TODO load past messages
     }
     
     public void redirect(int socket, int redirectingPort) {
@@ -45,30 +41,28 @@ class Conversation implements ConversationObservable, Runnable {
     }
     
     /**
-     * Method making the handler opening a specific conversation
-     *
-     * @param id2 : int - id of the correspondent
-     */
-    public void open(int id2) {
-        //TODO retrieve the correspondent corresponding to id2
-        
-        //TODO check if it is different from the current conversation
-        //TODO close the current conversation
-        //TODO affect the conversation to currentConversation
-        //TODO call open() on the correspondent instance
-    }
-    
-    /**
      * Method making the conversation to open itself
      *
      */
-    private void open() {
+    public void open() {
         this.isOpen = true;
         
         // Load pasts messages
         this.loadConversation();
         
         //TODO notify the client view to show, passing 'this' as an argument
+    }    
+    
+    /**
+     * Method making the conversation to close itself
+     *
+     */
+    public void close() {
+        this.isOpen = false;
+        
+        //TODO close socket unilaterally
+        
+        //TODO notify the client view to close this conversation
     }
     
     private void storeMessage(Message message) {
