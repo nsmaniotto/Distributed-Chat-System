@@ -99,4 +99,9 @@ class Conversation implements ConversationObservable, Runnable {
     public void notifyObservers() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    /* GETTERS/SETTERS */
+    public User getCorrespondent() {
+        return this.correspondent;
+    }
 }
