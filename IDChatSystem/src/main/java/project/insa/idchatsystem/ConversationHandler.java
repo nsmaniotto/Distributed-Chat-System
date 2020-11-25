@@ -58,7 +58,6 @@ public class ConversationHandler implements ConversationObservable, Runnable {
             System.exit(0);
         }
         
-        //TODO loop listening on this socket and accept then adding to array list or updating (redirect())
         // Waiting for prospective agent connections requests (not blocking thanks to threads use)
         try {
             while(!Thread.currentThread().isInterrupted()) {
@@ -70,7 +69,7 @@ public class ConversationHandler implements ConversationObservable, Runnable {
                 User correspondent = this.findUserByAddress(correspondentAddress);
 
                 if(correspondent != null) {
-                    //TODO Check if we arleady have a conversation instance with this correspondent
+                    // Check if we arleady have a conversation instance with this correspondent
                     Conversation newConversation = this.findConversationByCorrespondent(correspondent);
 
                     // If we do not have a current conversation instance for this correspondent
@@ -169,12 +168,22 @@ public class ConversationHandler implements ConversationObservable, Runnable {
      * @param correspondent : User - reference of the correspondent
      */
     public void open(User correspondent) {
-        //TODO check if it is different from the current conversation
-        //TODO check if this conversation exists (-> create or update)
-        //TODO close the current conversation
-        //TODO affect the conversation to currentConversation
-        //TODO accept and delegate redirecting to the conversation thread
-        //TODO call open() on the correspondent instance
+        // Check if the conversation we are trying to open is not the currently opened conversation
+        if(this.currentConversation.getCorrespondent() != correspondent) {
+            // Check if we arleady have a conversation instance with this correspondent
+            Conversation conversation = this.findConversationByCorrespondent(correspondent);
+            
+            // If we do have a current conversation instance for this correspondent
+            if(conversation != null) {
+                // Close the current conversation
+                this.currentConversation.close();
+                
+                // Set the opening conversation as our current conversation
+                this.currentConversation = conversation;
+            } else {
+                // ERROR: cannot open a none existing conversation
+            }
+        }
     }
     
     
