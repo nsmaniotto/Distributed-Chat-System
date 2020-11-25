@@ -2,6 +2,7 @@
 package project.insa.idchatsystem;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class ConversationHandler implements ConversationObservable, Runnable {
      * 
      * @return INSTANCE : ConversationHandler - single instance of this class
      */
-    public ConversationHandler getInstance() {
+    public static ConversationHandler getInstance() {
         return INSTANCE;
     }
     
@@ -74,27 +75,20 @@ public class ConversationHandler implements ConversationObservable, Runnable {
 
                     // If we do not have a current conversation instance for this correspondent
                     if(newConversation == null) {
-                        // Generate a free port
-                        Integer redirectingPort = this.generateFreePort();
+                        // Instantiate a new conversation with the given socket
+                        newConversation = new Conversation(correspondent, conversationSocket);
                         
-                        // Instanciate a new conversation with the given redirecting port and socket
-                        newConversation = new Conversation(correspondent, conversationSocket, redirectingPort);
-                        
-                        // Add this new conversation to our array list, used later for port generation
-                        this.conversations.add(newConversation);
-                        
-                        // Add this new conversation thread to our thread pool
-                        this.conversationThreadPool.submit(newConversation);
+                        this.addConversation(newConversation);
                     } else {
-                        // Redirect the communication on the conversation dedicated port
-                        newConversation.redirect(conversationSocket, newConversation.getPort());
+                        // Update the conversation socket
+                        newConversation.setSocket(conversationSocket);
                     }
                 } else {
                     // ERROR: no such user found
                 }            
             }
         } catch(IOException e) {
-            System.out.println("Exception '" + e + "' lors de l'attente d'un socket client");
+            System.out.println("EXCEPTION WHILE WAITING FOR INCOMING CONNECTION REQUESTS (" + e + ")");
             System.exit(0);
         }
     }
@@ -132,34 +126,16 @@ public class ConversationHandler implements ConversationObservable, Runnable {
     }
     
     /**
-     * Generate a port that is not already taken by checking taken port in conversations
+     * Add a new conversation to our array and thread pool
      *
-     * @return Integer - free port
+     * @param newConversation : Conversation - conversation to add
      */
-    private Integer generateFreePort() {
-        Integer i = 0;
-        Integer[] takenPorts = new Integer[this.conversations.size() + 1]; // +1 for the handler port
-        
-        // Fill this array with already taken ports
-        takenPorts[0] = this.port;
-        
-        for(Conversation conversation : this.conversations) {
-            i++;
-            
-            takenPorts[i] = conversation.getPort();
-        }
-        
-        // Pick a random port and see if it is available
-        boolean isTaken = true;
-        Integer randomPort = null;
-        
-        do {
-            randomPort = (new Random()).nextInt(65536 - 1025) + 1025; // 1025 inclusive, 65536 exclusive
-            
-            isTaken = (Arrays.asList(takenPorts).indexOf(randomPort) != -1);
-        } while(isTaken);
-        
-        return randomPort;
+    private void addConversation(Conversation newConversation) {
+        // Add this new conversation to our array list, used for conversation search 
+        this.conversations.add(newConversation);
+
+        // Add this new conversation thread to our thread pool
+        this.conversationThreadPool.submit(newConversation);
     }
     
     /**
@@ -170,19 +146,34 @@ public class ConversationHandler implements ConversationObservable, Runnable {
     public void open(User correspondent) {
         // Check if the conversation we are trying to open is not the currently opened conversation
         if(this.currentConversation.getCorrespondent() != correspondent) {
-            // Check if we arleady have a conversation instance with this correspondent
+            // Check if we aleady have a conversation instance with this correspondent
             Conversation conversation = this.findConversationByCorrespondent(correspondent);
             
-            // If we do have a current conversation instance for this correspondent
-            if(conversation != null) {
-                // Close the current conversation
+            // Close the current conversation
+            if(this.currentConversation != null) {
                 this.currentConversation.close();
-                
+            }
+            
+            // If we do have a conversation instance for this correspondent
+            if(conversation != null) {
                 // Set the opening conversation as our current conversation
                 this.currentConversation = conversation;
             } else {
-                // ERROR: cannot open a none existing conversation
+                // --> We want to initiate the communication with our correspondent
+                // Instantiate a socket that will send a request to the correspondent ConversatioNhandler
+                Socket conversationSocket = new Socket(InetAddress.getByName(correspondent.get_ipAddress()), this.port);
+                
+                // Instantiate a new conversation with the given socket
+                conversation = new Conversation(correspondent, conversationSocket);
+
+                this.addConversation(conversation);
+
+                // Set the opening conversation as our current conversation
+                this.currentConversation = conversation;
             }
+            
+            // Open the new current conversation
+            this.currentConversation.open();
         }
     }
     
