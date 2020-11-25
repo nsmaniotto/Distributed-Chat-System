@@ -6,21 +6,18 @@ import java.util.ArrayList;
 
 class Conversation implements ConversationObservable, Runnable {
     private Socket socket;
-    private Integer port;
     private boolean isOpen;
     private User correspondent;
     private ArrayList<Message> history;
 
    /**
-     * Initialize a conversation with a given correspondent
+     * Initialize a passive conversation with a given correspondent
      *
      * @param correspondent : User - reference of the correspondent
      * @param socket : Integer - Socket on which the conversation is
-     * @param redirectingPort : Integer - port that the socket WILL use
      */
-    public Conversation(User correspondent, Socket socket, Integer redirectingPort) {
+    public Conversation(User correspondent, Socket socket) {
         this.socket = socket;
-        this.port = redirectingPort;
         this.isOpen = false;
         
         this.correspondent = correspondent;
@@ -31,14 +28,9 @@ class Conversation implements ConversationObservable, Runnable {
     
     @Override
     public void run() {
-        // Redirect the connexion to a port allocated by the handler
-        this.redirect(this.socket, this.port);
+        this.loadConversation();
         
-        //TODO load past messages
-    }
-    
-    public void redirect(Socket socket, Integer redirectingPort) {
-        
+        //TODO listen on the current socket
     }
     
     /**
@@ -106,7 +98,7 @@ class Conversation implements ConversationObservable, Runnable {
         return this.correspondent;
     }
     
-    public Integer getPort() {
-        return this.port;
+    public void setSocket(Socket newSocket) {
+        this.socket = newSocket;
     }
 }
