@@ -58,7 +58,14 @@ class Conversation implements ConversationObservable, Runnable {
     public void close() {
         this.isOpen = false;
         
-        //TODO close socket unilaterally
+        // Close socket unilaterally
+        try {
+            this.socket.close();
+        }
+        catch(IOException e) {
+            System.out.println("EXCEPTION WHILE CLOSING THE SOCKET (" + e + ")");
+            System.exit(0);
+        }
         
         //TODO notify the client view to close this conversation
     }
