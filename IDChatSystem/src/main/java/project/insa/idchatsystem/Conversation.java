@@ -1,7 +1,9 @@
 
 package project.insa.idchatsystem;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -32,7 +34,8 @@ class Conversation implements ConversationObservable, Runnable {
     public void run() {
         this.loadConversation();
         
-        //TODO listen on the current socket
+        // Listen on the current socket
+        this.listen();
     }
     
     /**
@@ -75,6 +78,23 @@ class Conversation implements ConversationObservable, Runnable {
     public void onReceive(Data data) {
 
     }
+    
+    /**
+     * Listening on the current socket to retrieve messages
+     * 
+     */
+    private void listen() {
+        BufferedReader inputStream = null;
+        
+        //Getting the input stream
+        try {
+            inputStream = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+        }
+        catch(IOException e) {
+            System.out.println("EXCEPTION WHILE RETRIEVING THE INPUT STREAM (" + e + ")");
+            System.exit(0);
+        }
+    }
 
     /**
      * Send a given message to the communication socket
@@ -92,10 +112,10 @@ class Conversation implements ConversationObservable, Runnable {
             System.exit(0);
         }        
         
-        //TODO send message through the dedicated socket
+        // Send message through the dedicated socket
         outputStreamLink.println(message.toStream());
         
-        //TODO store the message in the local database
+        // Store the message in the local database
         this.storeMessage(message);
         
         //TODO display the newly sent message using client view notification
