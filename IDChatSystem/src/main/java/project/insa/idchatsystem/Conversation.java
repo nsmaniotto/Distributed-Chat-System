@@ -92,9 +92,11 @@ class Conversation implements ConversationObservable, Runnable {
             System.exit(0);
         }        
         
-        //TODO send message trhough the dedicated socket
+        //TODO send message through the dedicated socket
+        outputStreamLink.println(message.toStream());
         
         //TODO store the message in the local database
+        this.storeMessage(message);
         
         //TODO display the newly sent message using client view notification
     }
