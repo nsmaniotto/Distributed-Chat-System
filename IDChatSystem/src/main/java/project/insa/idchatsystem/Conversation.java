@@ -1,6 +1,8 @@
 
 package project.insa.idchatsystem;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -10,7 +12,7 @@ class Conversation implements ConversationObservable, Runnable {
     private User correspondent;
     private ArrayList<Message> history;
 
-   /**
+    /**
      * Initialize a passive conversation with a given correspondent
      *
      * @param correspondent : User - reference of the correspondent
@@ -74,8 +76,17 @@ class Conversation implements ConversationObservable, Runnable {
 
     }
 
-    private void send(Data data) {
-
+    /**
+     * Send a given message to the communication socket
+     *
+     * @param message : Message - message we want to send
+     */
+    private void send(Message message) {
+        //TODO send message trhough the dedicated socket
+        
+        //TODO store the message in the local database
+        
+        //TODO display the newly sent message using client view notification
     }
 
     @Override
