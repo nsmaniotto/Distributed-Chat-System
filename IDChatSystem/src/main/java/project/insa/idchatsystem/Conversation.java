@@ -77,7 +77,14 @@ class Conversation implements ConversationObservable, Runnable {
 
     
     private void onReceive(String input) {
-
+        //TODO generate a Message instance from the given input
+        
+        //TODO store the new message
+        
+        //TODO check whether this conversation is opened
+            //TODO notify the client view in order to display the new message
+            //OR
+            //TODO notify the client view to show a notification from this.correspondent
     }
     
     /**
