@@ -75,16 +75,18 @@ class Conversation implements ConversationObservable, Runnable {
 
     }
 
-    public void onReceive(Data data) {
+    
+    private void onReceive(String input) {
 
     }
     
     /**
-     * Listening on the current socket to retrieve messages
+     * Listening on the current socket for incoming messages
      * 
      */
     private void listen() {
         BufferedReader inputStream = null;
+        String inputBuffer = null;
         
         //Getting the input stream
         try {
@@ -93,6 +95,17 @@ class Conversation implements ConversationObservable, Runnable {
         catch(IOException e) {
             System.out.println("EXCEPTION WHILE RETRIEVING THE INPUT STREAM (" + e + ")");
             System.exit(0);
+        }
+        
+        // Continuously listen the input stream
+        try {
+            while((inputBuffer = inputStream.readLine()) != null) {
+                // We received a new message
+                this.onReceive(inputBuffer);
+            }
+        }
+        catch(IOException e) {
+            // Connection lost with the correspondent
         }
     }
 
