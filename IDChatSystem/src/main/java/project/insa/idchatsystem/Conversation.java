@@ -82,6 +82,16 @@ class Conversation implements ConversationObservable, Runnable {
      * @param message : Message - message we want to send
      */
     private void send(Message message) {
+        PrintWriter outputStreamLink = null;
+
+	try {
+            outputStreamLink = new PrintWriter(this.socket.getOutputStream(),true);
+        }
+        catch(IOException e) {
+            System.out.println("EXCEPTION WHILE RETRIEVING THE SOCKET OUTPUT STREAM (" + e + ")");
+            System.exit(0);
+        }        
+        
         //TODO send message trhough the dedicated socket
         
         //TODO store the message in the local database
