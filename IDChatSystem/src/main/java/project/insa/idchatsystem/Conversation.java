@@ -1,6 +1,10 @@
 
 package project.insa.idchatsystem;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -10,7 +14,7 @@ class Conversation implements ConversationObservable, Runnable {
     private User correspondent;
     private ArrayList<Message> history;
 
-   /**
+    /**
      * Initialize a passive conversation with a given correspondent
      *
      * @param correspondent : User - reference of the correspondent
@@ -30,7 +34,8 @@ class Conversation implements ConversationObservable, Runnable {
     public void run() {
         this.loadConversation();
         
-        //TODO listen on the current socket
+        // Listen on the current socket
+        this.listen();
     }
     
     /**
@@ -53,7 +58,14 @@ class Conversation implements ConversationObservable, Runnable {
     public void close() {
         this.isOpen = false;
         
-        //TODO close socket unilaterally
+        // Close socket unilaterally
+        try {
+            this.socket.close();
+        }
+        catch(IOException e) {
+            System.out.println("EXCEPTION WHILE CLOSING THE SOCKET (" + e + ")");
+            System.exit(0);
+        }
         
         //TODO notify the client view to close this conversation
     }
@@ -70,12 +82,74 @@ class Conversation implements ConversationObservable, Runnable {
 
     }
 
-    public void onReceive(Data data) {
-
+    
+    private void onReceive(String input) {
+        // Generate a Message instance from the given input
+        Message newMessage = new Message(input);
+        
+        // Store the new message
+        this.storeMessage(newMessage);
+        
+        // Check whether this conversation is opened or not
+        if(this.isOpen) {
+            //TODO notify the client view in order to display the new message
+        } else {
+            //TODO notify the client view to show a notification from this.correspondent
+        }
+    }
+    
+    /**
+     * Listening on the current socket for incoming messages
+     * 
+     */
+    private void listen() {
+        BufferedReader inputStream = null;
+        String inputBuffer = null;
+        
+        //Getting the input stream
+        try {
+            inputStream = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+        }
+        catch(IOException e) {
+            System.out.println("EXCEPTION WHILE RETRIEVING THE INPUT STREAM (" + e + ")");
+            System.exit(0);
+        }
+        
+        // Continuously listen the input stream
+        try {
+            while((inputBuffer = inputStream.readLine()) != null) {
+                // We received a new message
+                this.onReceive(inputBuffer);
+            }
+        }
+        catch(IOException e) {
+            // Connection lost with the correspondent
+        }
     }
 
-    private void send(Data data) {
+    /**
+     * Send a given message to the communication socket
+     *
+     * @param message : Message - message we want to send
+     */
+    private void send(Message message) {
+        PrintWriter outputStreamLink = null;
 
+	try {
+            outputStreamLink = new PrintWriter(this.socket.getOutputStream(),true);
+        }
+        catch(IOException e) {
+            System.out.println("EXCEPTION WHILE RETRIEVING THE SOCKET OUTPUT STREAM (" + e + ")");
+            System.exit(0);
+        }        
+        
+        // Send message through the dedicated socket
+        outputStreamLink.println(message.toStream());
+        
+        // Store the message in the local database
+        this.storeMessage(message);
+        
+        //TODO display the newly sent message using client view notification
     }
 
     @Override
