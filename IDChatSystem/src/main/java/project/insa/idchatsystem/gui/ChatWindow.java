@@ -86,6 +86,14 @@ public class ChatWindow extends Window {
         this.correspondentPanel.setBackground(Color.white);
         
         this.correspondentInfoLabel = new JLabel("BBBBB#yy", JLabel.LEFT);
+        
+        this.chatScrollPane = new JScrollPane();
+        this.chatPanel.setBackground(Color.GRAY/*Window.COLOR_SOFTWHITE*/);
+        
+        this.chatHistoryPanel = new JPanel();
+        this.chatHistoryPanel.setLayout(new BoxLayout(this.chatHistoryPanel, BoxLayout.Y_AXIS));
+        
+        
         /* END: variables initialization */
     }
     
