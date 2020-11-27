@@ -118,6 +118,18 @@ public class ChatWindow extends Window {
         //this.conversationTabs.addTab("All", this.allUsersTab); // Maybe later
         /* END: userPanel build */
         
+        /* BEGIN: chatPanel build */
+        GridBagConstraints correspondentPanelConstraints = new GridBagConstraints();
+        correspondentPanelConstraints.gridx = 0;
+        correspondentPanelConstraints.weightx = 1.0;
+        correspondentPanelConstraints.weighty = 0; // Fixed height
+        correspondentPanelConstraints.fill = GridBagConstraints.HORIZONTAL;
+        correspondentPanelConstraints.anchor = GridBagConstraints.NORTH;
+        this.chatPanel.add(this.correspondentPanel, correspondentPanelConstraints);
+        
+        this.correspondentPanel.add(this.correspondentInfoLabel);
+        /* END: chatPanel build */
+        
         /* BEGIN: frame build */
         GridBagConstraints userPanelConstraints = new GridBagConstraints();
         userPanelConstraints.gridx = 0;
