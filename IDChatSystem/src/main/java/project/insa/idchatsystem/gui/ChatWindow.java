@@ -73,7 +73,7 @@ public class ChatWindow extends Window {
         this.offlineUsersTab = new JScrollPane();
         this.allUsersTab = new JScrollPane();
         
-        this.chatPanel = new JPanel();
+        this.chatPanel = new JPanel(new GridBagLayout());
         this.chatPanel.setBackground(Color.LIGHT_GRAY/*Window.COLOR_SOFTWHITE*/);
         
         this.correspondentPanel = new JPanel();
