@@ -32,7 +32,7 @@ class Message extends Data {
     }
 
     public Timestamp generateTimeStamp() {
-        return null;
+        return ( new Timestamp(System.currentTimeMillis()) );
     }
     
     /**
