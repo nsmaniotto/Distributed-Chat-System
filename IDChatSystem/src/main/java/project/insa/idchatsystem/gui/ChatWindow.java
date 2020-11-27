@@ -99,7 +99,6 @@ public class ChatWindow extends Window {
         userInfoPanelConstraints.fill = GridBagConstraints.HORIZONTAL;
         userInfoPanelConstraints.anchor = GridBagConstraints.NORTH;
         this.userPanel.add(this.userInfoPanel, userInfoPanelConstraints);
-        this.userPanel.add(this.userInfoPanel, userInfoPanelConstraints);
         
         this.userInfoPanel.add(this.usernameLabel);
         this.userInfoPanel.add(this.changeUsernameButton);
