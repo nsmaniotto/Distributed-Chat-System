@@ -74,6 +74,13 @@ public class ChatWindow extends Window {
         this.allUsersTab = new JScrollPane();
         
         this.chatPanel = new JPanel(new GridBagLayout());
+        this.chatPanel.setBorder(BorderFactory.createEmptyBorder(
+                0, //top
+                1, //left
+                0, //bottom
+                1) //right
+                );
+        
         this.chatPanel.setBackground(Color.LIGHT_GRAY/*Window.COLOR_SOFTWHITE*/);
         
         this.correspondentPanel = new JPanel();
