@@ -23,6 +23,13 @@ public class ChatWindow extends Window {
             private JScrollPane offlineUsersTab = null;
             private JScrollPane allUsersTab = null;
     private JPanel chatPanel = null;
+        private JPanel correspondentPanel = null;
+            private JLabel correspondentInfoLabel = null;
+        private JScrollPane chatScrollPane = null;
+            private JPanel chatHistoryPanel = null;
+        private JPanel chatFormPanel = null;
+            private JTextField chatTextInputField = null;
+            private JButton chatSendButton = null;
     /* END: variables declarations */
     
     public ChatWindow() {
