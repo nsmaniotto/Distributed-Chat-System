@@ -75,6 +75,17 @@ public class ChatWindow extends Window {
         
         this.chatPanel = new JPanel();
         this.chatPanel.setBackground(Color.LIGHT_GRAY/*Window.COLOR_SOFTWHITE*/);
+        
+        this.correspondentPanel = new JPanel();
+        this.correspondentPanel.setBorder(BorderFactory.createEmptyBorder(
+                10, //top
+                10, //left
+                10, //bottom
+                10) //right
+                );
+        this.correspondentPanel.setBackground(Color.white);
+        
+        this.correspondentInfoLabel = new JLabel("BBBBB#yy", JLabel.LEFT);
         /* END: variables initialization */
     }
     
