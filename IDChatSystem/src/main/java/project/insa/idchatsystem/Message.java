@@ -26,8 +26,9 @@ class Message extends Data {
             this.timestamp = new Timestamp(Long.parseLong(matcher.group(1)));
             this.text = matcher.group(2);
         } else {
-            this.timestamp = new Timestamp(0);
-            this.text = "ERROR: MESSAGE COULD NOT BE DETERMINED";
+            this.timestamp = this.generateTimeStamp();
+            this.text = stream;
+            //this.text = "ERROR: MESSAGE COULD NOT BE DETERMINED";
         }
     }
 
@@ -44,5 +45,10 @@ class Message extends Data {
         String stream = this.timestamp.toString() + ";" + this.text; // For now, files are not considered
                 
         return stream;
+    }
+    
+    /* GETTERS/SETTERS */
+    public String getText() {
+        return this.text;
     }
 }
