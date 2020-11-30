@@ -166,6 +166,15 @@ public class ChatWindow extends Window {
         this.chatPanel.add(this.chatScrollPane, chatScrollPaneConstraints);
         
         this.chatScrollPane.setViewportView(this.chatHistoryPanel);
+        
+        GridBagConstraints chatFormPanelConstraints = new GridBagConstraints();
+        chatFormPanelConstraints.gridx = 0;
+        chatFormPanelConstraints.gridy = 2;
+        chatFormPanelConstraints.weightx = 1.0;
+        chatFormPanelConstraints.weighty = 0; // Fixed height
+        chatFormPanelConstraints.fill = GridBagConstraints.HORIZONTAL;
+        chatFormPanelConstraints.anchor = GridBagConstraints.SOUTH;
+        this.chatPanel.add(this.chatFormPanel, chatFormPanelConstraints);
         /* END: chatPanel build */
         
         /* BEGIN: frame build */
