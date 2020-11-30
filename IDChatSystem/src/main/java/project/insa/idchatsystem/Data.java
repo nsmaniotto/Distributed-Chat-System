@@ -1,7 +1,7 @@
 
 package project.insa.idchatsystem;
 
-class Data {
+public class Data {
   private User source;
 
   private User destination;

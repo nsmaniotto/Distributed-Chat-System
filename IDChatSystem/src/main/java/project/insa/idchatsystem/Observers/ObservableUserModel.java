@@ -1,7 +1,9 @@
 
-package project.insa.idchatsystem;
+package project.insa.idchatsystem.Observers;
 
-interface ObservableUserModel {
+import project.insa.idchatsystem.User;
+
+public interface ObservableUserModel {
     
     public void addObserver(UsersStatusObserver obs);
 

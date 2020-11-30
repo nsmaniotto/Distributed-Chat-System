@@ -1,5 +1,10 @@
 
-package project.insa.idchatsystem;
+package project.insa.idchatsystem.Conversation;
+
+import project.insa.idchatsystem.Observers.ConversationObservable;
+import project.insa.idchatsystem.Data;
+import project.insa.idchatsystem.Message;
+import project.insa.idchatsystem.User;
 
 import java.io.BufferedReader;
 import java.io.IOException;

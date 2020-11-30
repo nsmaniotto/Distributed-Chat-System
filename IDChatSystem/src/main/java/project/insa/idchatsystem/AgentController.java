@@ -1,7 +1,9 @@
 
 package project.insa.idchatsystem;
 
-abstract class AgentController {
+import project.insa.idchatsystem.Conversation.ConversationHandler;
+
+public abstract class AgentController {
     private ConversationHandler conversationHandler;
     
     public AgentController() {

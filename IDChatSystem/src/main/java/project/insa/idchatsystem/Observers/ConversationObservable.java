@@ -1,7 +1,7 @@
 
-package project.insa.idchatsystem;
+package project.insa.idchatsystem.Observers;
 
-interface ConversationObservable {
+public interface ConversationObservable {
     public void addObserver();
 
     public void deleteObserver();

@@ -1,4 +1,7 @@
-package project.insa.idchatsystem;
+package project.insa.idchatsystem.logins.server_mode;
+
+import project.insa.idchatsystem.User;
+import project.insa.idchatsystem.logins.UserModelEmitter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -23,6 +26,11 @@ public class DistantUserModelEmitter extends UserModelEmitter {
     public void diffuseNewUsername(String updatedUserString) {
         this.last_user_updated_string = updatedUserString;
         this.diffuse();
+    }
+    public void disconnect(int id){
+        assert out != null;
+        String disconnected_str = String.format("%d,disconnected",id);
+        out.println(disconnected_str);
     }
     @Override
     public void diffuse(){

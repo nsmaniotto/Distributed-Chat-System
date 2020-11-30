@@ -1,4 +1,6 @@
-package project.insa.idchatsystem;
+package project.insa.idchatsystem.logins.local_mode.presentiel;
+
+import project.insa.idchatsystem.logins.UserModelEmitter;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -6,9 +8,8 @@ import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.UnknownHostException;
 
-public class LocalUserModelEmitter extends UserModelEmitter{
+public class LocalUserModelEmitter extends UserModelEmitter {
     private MulticastSocket socket;
-    private String last_user_updated_string;
     public LocalUserModelEmitter(){
         this.last_user_updated_string = "";
         try {
@@ -28,12 +29,24 @@ public class LocalUserModelEmitter extends UserModelEmitter{
             e.printStackTrace();
         }
     }
-    public void diffuse(){
-        DatagramPacket outPacket = new DatagramPacket(last_user_updated_string.getBytes(), last_user_updated_string.length());
+    private void sendBroadcast(String msg) {
+        DatagramPacket outPacket = new DatagramPacket(msg.getBytes(), msg.length());
         try {
             this.socket.send(outPacket);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    public void diffuse(){
+        this.sendBroadcast(last_user_updated_string);
+    }
+
+    public void disconnect(int id) {
+        String disconnected_str = String.format("%d,disconnected",id);
+        this.sendBroadcast(disconnected_str);
+    }
+    @Override
+    public void stopperEmission(){
+        this.emission = false;
     }
 }

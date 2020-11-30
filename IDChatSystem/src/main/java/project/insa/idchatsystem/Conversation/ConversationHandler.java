@@ -1,13 +1,15 @@
 
-package project.insa.idchatsystem;
+package project.insa.idchatsystem.Conversation;
+
+import project.insa.idchatsystem.Observers.ConversationObservable;
+import project.insa.idchatsystem.User;
+import project.insa.idchatsystem.Observers.UsersStatusObserver;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -18,7 +20,7 @@ import java.util.concurrent.Executors;
  *
  * @author nsmaniotto
  */
-public class ConversationHandler implements ConversationObservable, Runnable {
+public class ConversationHandler implements ConversationObservable, UsersStatusObserver, Runnable {
     private static ConversationHandler INSTANCE = new ConversationHandler(1234); //TODO change port
     private ArrayList<Conversation> conversations;
     private Conversation currentConversation;
@@ -200,4 +202,5 @@ public class ConversationHandler implements ConversationObservable, Runnable {
     public void notifyObservers() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
 }
