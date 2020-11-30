@@ -175,6 +175,14 @@ public class ChatWindow extends Window {
         chatFormPanelConstraints.fill = GridBagConstraints.HORIZONTAL;
         chatFormPanelConstraints.anchor = GridBagConstraints.SOUTH;
         this.chatPanel.add(this.chatFormPanel, chatFormPanelConstraints);
+        
+        
+        GridBagConstraints chatTextInputFieldConstraints = new GridBagConstraints();
+        chatTextInputFieldConstraints.gridx = 0;
+        chatTextInputFieldConstraints.weightx = 1.0;
+        chatTextInputFieldConstraints.fill = GridBagConstraints.HORIZONTAL;
+        chatTextInputFieldConstraints.anchor = GridBagConstraints.WEST;
+        this.chatFormPanel.add(this.chatTextInputField, chatTextInputFieldConstraints);
         /* END: chatPanel build */
         
         /* BEGIN: frame build */
