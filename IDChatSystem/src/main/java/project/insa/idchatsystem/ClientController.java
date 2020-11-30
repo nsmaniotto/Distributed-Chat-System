@@ -7,6 +7,7 @@ class ClientController extends AgentController {
     private DistantUserModel centralizedUserModel;
     
     public ClientController(int id) {
+
         this.localUserModel = new LocalUserModel(id);
     }
 }

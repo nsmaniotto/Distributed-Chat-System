@@ -1,55 +1,20 @@
 package project.insa.idchatsystem;
 
-import java.util.HashMap;
-
-public class DistantUserModel  implements ObservableUserModel,UserModel {
-    @Override
-    public void addObserver(UsersStatusObserver obs) {
-
+public class DistantUserModel  extends UserModel {
+    private final DistantUserModelEmitter emitter;
+    public DistantUserModel(int id) {
+        super(id);
+        new Thread(new DistantUserModelReceiver(this)).start();
+        this.emitter = new DistantUserModelEmitter();
     }
-
-    @Override
-    public void deleteObserver(UsersStatusObserver obs) {
-
-    }
-
-    @Override
-    public void notifyNewUserObservers(User user) {
-
-    }
-
-    @Override
-    public void notifyDisconnectedObservers(User user) {
-
-    }
-
-    @Override
-    public void setUsername(String newUserName) {
-
-    }
-
-    @Override
-    public void addOnlineUser(User user) {
-
-    }
-
-    @Override
-    public void removeOnlineUser(User user) {
-
-    }
-
-    @Override
-    public HashMap<Integer, User> getOnlineUsers() {
-        return null;
-    }
-
-    @Override
     public void diffuseNewUsername() {
+        String response = User.current_user_transfer_string();
+        this.emitter.diffuseNewUsername(response);
 
     }
 
     @Override
     public boolean checkAvailable(String username) {
-        return false;
+        return super.checkAvailable(username);
     }
 }

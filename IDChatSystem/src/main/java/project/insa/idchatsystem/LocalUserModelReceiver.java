@@ -54,8 +54,6 @@ public class LocalUserModelReceiver implements Runnable {
                     this.model.addOnlineUser(new_user);//Add or refresh informations of the user based on the id
                 }
             }
-            //socket.leaveGroup(group);
-            //socket.close();
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Cannot join multicast group");
