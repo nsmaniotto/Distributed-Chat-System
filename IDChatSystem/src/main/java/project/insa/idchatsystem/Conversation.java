@@ -11,8 +11,8 @@ import java.util.ArrayList;
 class Conversation implements ConversationObservable, Runnable {
     private Socket socket;
     private boolean isOpen;
-    private User correspondent;
-    private ArrayList<Message> history;
+    private final User correspondent;
+    private final ArrayList<Message> history;
 
     /**
      * Initialize a passive conversation with a given correspondent
@@ -132,10 +132,10 @@ class Conversation implements ConversationObservable, Runnable {
      *
      * @param message : Message - message we want to send
      */
-    private void send(Message message) {
+    public void send(Message message) {
         PrintWriter outputStreamLink = null;
-
-	try {
+        
+        try {
             outputStreamLink = new PrintWriter(this.socket.getOutputStream(),true);
         }
         catch(IOException e) {
