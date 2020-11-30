@@ -100,7 +100,19 @@ public class ChatWindow extends Window {
         this.chatHistoryPanel = new JPanel();
         this.chatHistoryPanel.setLayout(new BoxLayout(this.chatHistoryPanel, BoxLayout.Y_AXIS));
         
+        this.chatFormPanel = new JPanel(new GridBagLayout());
+        this.chatFormPanel.setBorder(BorderFactory.createEmptyBorder(
+                10, //top
+                10, //left
+                10, //bottom
+                10) //right
+                );
+        this.chatFormPanel.setBackground(Window.COLOR_SOFTWHITE);
         
+        this.chatTextInputField = new JTextField();
+        
+        this.chatSendButton = new JButton("SEND");
+            
         /* END: variables initialization */
     }
     
