@@ -1,6 +1,8 @@
 
 package project.insa.idchatsystem.Conversation;
 
+import project.insa.idchatsystem.Message;
+import project.insa.idchatsystem.Observers.ConversationHandlerObserver;
 import project.insa.idchatsystem.Observers.ConversationObservable;
 import project.insa.idchatsystem.User;
 import project.insa.idchatsystem.Observers.UsersStatusObserver;
@@ -20,7 +22,7 @@ import java.util.concurrent.Executors;
  *
  * @author nsmaniotto
  */
-public class ConversationHandler implements UsersStatusObserver, Runnable {
+public class ConversationHandler implements UsersStatusObserver, Runnable,ConversationHandlerObserver {
     private static ConversationHandler INSTANCE = new ConversationHandler(1234); //TODO change port
     private ArrayList<Conversation> conversations;
     private Conversation currentConversation;
@@ -30,8 +32,10 @@ public class ConversationHandler implements UsersStatusObserver, Runnable {
     private ExecutorService conversationThreadPool;
     private ServerSocket handlerSocket; // Acts as a server listening for incoming connection requests
     private Integer port;
+    private ArrayList<ConversationHandlerObserver> liste_observers;
     
     public ConversationHandler(Integer socketPort) {
+        this.liste_observers = new ArrayList<>();
         this.port = socketPort;
         
         this.conversations = new ArrayList<>();
@@ -189,19 +193,8 @@ public class ConversationHandler implements UsersStatusObserver, Runnable {
     
     
 
-    @Override
-    public void addObserver(Obser) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void deleteObserver() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void notifyObservers() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void addObserver(ConversationHandlerObserver obs) {
+        this.liste_observers.add(obs);
     }
 
     @Override
@@ -212,5 +205,15 @@ public class ConversationHandler implements UsersStatusObserver, Runnable {
     @Override
     public void onlineUser(User user) {
 
+    }
+
+    @Override
+    public void newMessageRcv(Message message) {
+        this.liste_observers.forEach((o)->o.newMessageRcv(message));
+    }
+
+    @Override
+    public void newMessageSent(Message message) {
+        this.liste_observers.forEach((o)->o.newMessageSent(message));
     }
 }

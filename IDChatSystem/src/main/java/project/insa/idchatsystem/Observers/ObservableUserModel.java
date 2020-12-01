@@ -5,9 +5,9 @@ import project.insa.idchatsystem.User;
 
 public interface ObservableUserModel {
     
-    public void addObserver(UsersStatusObserver obs);
+    public void addUserModelObserver(UsersStatusObserver obs);
 
-    public void deleteObserver(UsersStatusObserver obs);
+    public void deleteUserModelObserver(UsersStatusObserver obs);
 
     public void notifyNewUserObservers(User user);
     public void notifyDisconnectedObservers(User user);

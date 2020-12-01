@@ -19,6 +19,7 @@ class Conversation implements ConversationObservable, Runnable {
     private boolean isOpen;
     private User correspondent;
     private ArrayList<Message> history;
+    private ConversationHandlerObserver conversation_observer_handler;
 
     /**
      * Initialize a passive conversation with a given correspondent
@@ -159,23 +160,23 @@ class Conversation implements ConversationObservable, Runnable {
     }
 
     @Override
-    public void addObserver(ConversationHandlerObserver obs) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void addConversationObserver(ConversationHandlerObserver obs) {
+        this.conversation_observer_handler = obs;
     }
 
     @Override
-    public void deleteObserver(ConversationHandlerObserver obs) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void deleteConversationObserver(ConversationHandlerObserver obs) {
+        this.conversation_observer_handler = null;
     }
 
     @Override
-    public void notifyObserversSent() {
-
+    public void notifyObserversSent(Message message) {
+        this.conversation_observer_handler.newMessageSent(message);
     }
 
     @Override
-    public void notifyObserversRcv() {
-
+    public void notifyObserversRcv(Message message) {
+        this.conversation_observer_handler.newMessageRcv(message);
     }
     
     /* GETTERS/SETTERS */
