@@ -87,6 +87,8 @@ class Conversation implements ConversationObservable, Runnable {
         // Generate a Message instance from the given input
         Message newMessage = new Message(input);
         
+        System.out.println("Reveived from " + this.correspondent.get_username() + " : " + newMessage.getText());
+        
         // Store the new message
         this.storeMessage(newMessage);
         
@@ -133,6 +135,8 @@ class Conversation implements ConversationObservable, Runnable {
      * @param message : Message - message we want to send
      */
     public void send(Message message) {
+        System.out.println("Sending to " + this.correspondent.get_username() + " : " + message.getText());
+        
         PrintWriter outputStreamLink = null;
         
         try {
