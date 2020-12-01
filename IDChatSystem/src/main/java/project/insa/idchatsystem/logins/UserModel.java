@@ -81,13 +81,13 @@ public abstract class UserModel implements ObservableUserModel {
     public void notifyNewUserObservers(User user) {
         for (UsersStatusObserver obs :
                 this.connected_user_observers) {
-            obs.onlineUser(this,user);
+            obs.onlineUser(user);
         }
     }
     public void notifyDisconnectedObservers(User user) {
         for (UsersStatusObserver obs :
                 this.connected_user_observers) {
-            obs.offlineUser(this,user);
+            obs.offlineUser(user);
         }
     }
 

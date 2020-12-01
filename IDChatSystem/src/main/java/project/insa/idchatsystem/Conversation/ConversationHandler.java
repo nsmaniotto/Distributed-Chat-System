@@ -20,7 +20,7 @@ import java.util.concurrent.Executors;
  *
  * @author nsmaniotto
  */
-public class ConversationHandler implements ConversationObservable, UsersStatusObserver, Runnable {
+public class ConversationHandler implements UsersStatusObserver, Runnable {
     private static ConversationHandler INSTANCE = new ConversationHandler(1234); //TODO change port
     private ArrayList<Conversation> conversations;
     private Conversation currentConversation;
@@ -78,6 +78,7 @@ public class ConversationHandler implements ConversationObservable, UsersStatusO
                     // If we do not have a current conversation instance for this correspondent
                     if(newConversation == null) {
                         // Instantiate a new conversation with the given socket
+                        //TODO : transmettre en paramètres les observeurs à notifier
                         newConversation = new Conversation(correspondent, conversationSocket);
                         
                         this.addConversation(newConversation);
@@ -203,4 +204,13 @@ public class ConversationHandler implements ConversationObservable, UsersStatusO
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public void offlineUser(User user) {
+
+    }
+
+    @Override
+    public void onlineUser(User user) {
+
+    }
 }
