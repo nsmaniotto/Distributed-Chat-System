@@ -197,12 +197,12 @@ public class ConversationHandler implements ConversationHandlerObserver, Runnabl
     /* CONVERSATION HANDLER OBSERVER METHODS */
     
     @Override
-    public void newMessageRcv(Message message) {
+    public void newMessageReceived(Message receivedMessage) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void newMessageSent(Message message) {
+    public void newMessageSent(Message sentMessage) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
