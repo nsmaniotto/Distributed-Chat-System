@@ -19,6 +19,7 @@ public class Conversation implements ConversationObservable, Runnable {
     private boolean isOpen;
     private final User correspondent;
     private final ArrayList<Message> history;
+    private final ArrayList<ConversationHandlerObserver> observers;
 
     /**
      * Initialize a passive conversation with a given correspondent
@@ -34,6 +35,9 @@ public class Conversation implements ConversationObservable, Runnable {
         
         // Empty for now, will be loaded later
         this.history = new ArrayList<>();
+        
+        // Empty for now
+        this.observers = new ArrayList<>();
     }
     
     @Override
@@ -165,23 +169,27 @@ public class Conversation implements ConversationObservable, Runnable {
     /* CONVERSATION OBSERVER METHODS */
 
     @Override
-    public void addObserver(ConversationHandlerObserver obs) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void addObserver(ConversationHandlerObserver observer) {
+        this.observers.add(observer);
     }
 
     @Override
-    public void deleteObserver(ConversationHandlerObserver obs) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void deleteObserver(ConversationHandlerObserver observer) {
+        this.observers.remove(observer);
     }
 
     @Override
-    public void notifyObserversSent() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void notifyObserversSentMessage(Message sentMessage) {
+        for(ConversationHandlerObserver observer : this.observers) {
+            observer.newMessageSent(sentMessage);
+        }
     }
 
     @Override
-    public void notifyObserversRcv() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void notifyObserversReceivedMessage(Message receivedMessage) {
+        for(ConversationHandlerObserver observer : this.observers) {
+            observer.newMessageReceived(receivedMessage);
+        }
     }
     
     /* GETTERS/SETTERS */
