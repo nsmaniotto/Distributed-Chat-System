@@ -22,7 +22,7 @@ import java.util.concurrent.Executors;
  *
  * @author nsmaniotto
  */
-public class ConversationHandler implements UsersStatusObserver, Runnable,ConversationHandlerObserver {
+public class ConversationHandler implements Runnable,ConversationHandlerObserver {
     private static ConversationHandler INSTANCE = new ConversationHandler(1234); //TODO change port
     private ArrayList<Conversation> conversations;
     private Conversation currentConversation;
@@ -196,13 +196,9 @@ public class ConversationHandler implements UsersStatusObserver, Runnable,Conver
     public void addObserver(ConversationHandlerObserver obs) {
         this.liste_observers.add(obs);
     }
-
-    @Override
     public void offlineUser(User user) {
 
     }
-
-    @Override
     public void onlineUser(User user) {
 
     }
