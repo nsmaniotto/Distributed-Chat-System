@@ -6,7 +6,7 @@ import project.insa.idchatsystem.Exceptions.Uninitialized;
 import java.net.*;
 import java.sql.Timestamp;
 
-class User {
+public class User {
 
     private final String username;
 

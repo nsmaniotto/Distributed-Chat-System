@@ -1,7 +1,7 @@
 
 package project.insa.idchatsystem;
 
-class Main {
+public class Main {
     public Main(int argc, String argv) {
         
     }

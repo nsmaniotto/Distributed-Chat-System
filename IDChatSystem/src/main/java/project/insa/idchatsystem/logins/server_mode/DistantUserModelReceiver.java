@@ -1,9 +1,10 @@
-package project.insa.idchatsystem;
+package project.insa.idchatsystem.logins.server_mode;
+
+import project.insa.idchatsystem.User;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

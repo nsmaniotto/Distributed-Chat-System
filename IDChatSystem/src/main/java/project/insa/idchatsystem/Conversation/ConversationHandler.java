@@ -1,5 +1,7 @@
 
-package project.insa.idchatsystem;
+package project.insa.idchatsystem.Conversation;
+
+import project.insa.idchatsystem.User;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -8,6 +10,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import project.insa.idchatsystem.Message;
+import project.insa.idchatsystem.Observers.ConversationHandlerObserver;
 
 /**
  * Based on Singleton pattern, a conversation handler is here to collect
@@ -16,9 +20,9 @@ import java.util.concurrent.Executors;
  *
  * @author nsmaniotto
  */
-public class ConversationHandler implements ConversationObservable, Runnable {
-    private static final ConversationHandler INSTANCE = new ConversationHandler(1234); //TODO change port
-    private final ArrayList<Conversation> conversations;
+public class ConversationHandler implements ConversationHandlerObserver, Runnable {
+    private static ConversationHandler INSTANCE = new ConversationHandler(1234); //TODO change port
+    private ArrayList<Conversation> conversations;
     private Conversation currentConversation;
     
     private final ArrayList<User> users; // Copy of UserModel's hashmap to identify every user
@@ -27,7 +31,7 @@ public class ConversationHandler implements ConversationObservable, Runnable {
     private ServerSocket handlerSocket; // Acts as a server listening for incoming connection requests
     private final Integer port;
     
-    private ConversationHandler(Integer socketPort) {
+    public ConversationHandler(Integer socketPort) {
         this.port = socketPort;
         
         this.conversations = new ArrayList<>();
@@ -75,6 +79,7 @@ public class ConversationHandler implements ConversationObservable, Runnable {
                     // If we do not have a current conversation instance for this correspondent
                     if(newConversation == null) {
                         // Instantiate a new conversation with the given socket
+                        //TODO : transmettre en paramètres les observeurs à notifier
                         newConversation = new Conversation(correspondent, conversationSocket);
                         
                         this.addConversation(newConversation);
@@ -189,25 +194,15 @@ public class ConversationHandler implements ConversationObservable, Runnable {
         this.users.add(newUser);
     }
     
-    /* CONVERSATION OBSERVER METHODS */
+    /* CONVERSATION HANDLER OBSERVER METHODS */
     
     @Override
-    public void addObserver(Object conversationObserver) {
+    public void newMessageRcv(Message message) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void deleteObserver(Object conversationObserver) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void notifyObserversNewMessageSent(Message sentMessage) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void notifyObserversNewMessageReceived(Message receivedMessage) {
+    public void newMessageSent(Message message) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

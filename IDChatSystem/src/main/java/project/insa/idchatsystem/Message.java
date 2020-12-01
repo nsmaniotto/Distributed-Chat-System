@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class Message extends Data {
+public class Message extends Data {
     private String text;
     private ArrayList<File> files;
     private Timestamp timestamp;

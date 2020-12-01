@@ -1,14 +1,19 @@
-package project.insa.idchatsystem;
+package project.insa.idchatsystem.logins;
 
 import project.insa.idchatsystem.Exceptions.Uninitialized;
+import project.insa.idchatsystem.Observers.ObservableUserModel;
+import project.insa.idchatsystem.Observers.UsersStatusObserver;
+import project.insa.idchatsystem.User;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class UserModel implements ObservableUserModel{
-    private HashMap<Integer,User> users;
+public abstract class UserModel implements ObservableUserModel {
+    private HashMap<Integer, User> users;
     private ArrayList<UsersStatusObserver> connected_user_observers;
+    private long limite_tolerance_ss_nouvelles = 10000;
     public UserModel(int id) {
         User.init_current_user(id);
         this.users = new HashMap<Integer,User>();
@@ -30,18 +35,32 @@ public abstract class UserModel implements ObservableUserModel{
             this.notifyNewUserObservers(user);
         }
     }
-    public void removeOnlineUser(User user) {
-        if(this.users.remove(user.get_id()) == null) {
-            System.out.printf("%s is not connected%n",user.toString());
+    public void removeOnlineUser(int id) {
+        User removed_user = this.users.remove(id);
+        if(removed_user == null) {
+            System.out.printf("%d was not connected%n",id);
         }
         else {
-            this.notifyDisconnectedObservers(user);
+            this.notifyDisconnectedObservers(removed_user);
         }
     }
+    protected void checkUserStillActive() {
+        long time = System.currentTimeMillis();
+        ArrayList<Integer> toRemove = new ArrayList<>();
+        this.users.forEach((k,v) -> {
+            if(time-v.get_lastSeen().getTime() > limite_tolerance_ss_nouvelles) {
+                toRemove.add(k);
+            }
+        });
+        for (int index :toRemove) {
+            this.removeOnlineUser(index);
+        }
+    }
+    abstract public void disconnect();
     public HashMap<Integer,User> getOnlineUsers() {
         return this.users;
     }
-    public boolean checkAvailable(String username) {
+    public boolean checkLocallyAvailable(String username) {
         for (Map.Entry<Integer, User> integerUserEntry : this.users.entrySet()) {
             User user = (User) ((Map.Entry) integerUserEntry).getValue();
             if (user.get_username().equals(username)) {
@@ -50,7 +69,7 @@ public abstract class UserModel implements ObservableUserModel{
         }
         return true;
     }
-
+    abstract public boolean checkavailable(String username);
     public void addObserver(UsersStatusObserver obs) {
         this.connected_user_observers.add(obs);
     }
@@ -62,15 +81,16 @@ public abstract class UserModel implements ObservableUserModel{
     public void notifyNewUserObservers(User user) {
         for (UsersStatusObserver obs :
                 this.connected_user_observers) {
-            obs.onlineUser(this,user);
+            obs.onlineUser(user);
         }
     }
     public void notifyDisconnectedObservers(User user) {
         for (UsersStatusObserver obs :
                 this.connected_user_observers) {
-            obs.offlineUser(this,user);
+            obs.offlineUser(user);
         }
     }
 
-    abstract void diffuseNewUsername();
+    protected abstract void diffuseNewUsername();
+    public abstract void stopperEmission();
 }

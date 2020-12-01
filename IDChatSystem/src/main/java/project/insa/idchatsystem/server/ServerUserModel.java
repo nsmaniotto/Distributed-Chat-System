@@ -1,7 +1,9 @@
 
-package project.insa.idchatsystem;
+package project.insa.idchatsystem.server;
 
-class ServerUserModel {
+import project.insa.idchatsystem.User;
+
+public class ServerUserModel {
     private ServerController serverController;
     private User users;
 

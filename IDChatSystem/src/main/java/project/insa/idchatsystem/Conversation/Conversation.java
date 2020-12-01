@@ -1,5 +1,11 @@
 
-package project.insa.idchatsystem;
+package project.insa.idchatsystem.Conversation;
+
+import project.insa.idchatsystem.Observers.ConversationHandlerObserver;
+import project.insa.idchatsystem.Observers.ConversationObservable;
+import project.insa.idchatsystem.Data;
+import project.insa.idchatsystem.Message;
+import project.insa.idchatsystem.User;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,7 +14,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 
-class Conversation implements ConversationObservable, Runnable {
+public class Conversation implements ConversationObservable, Runnable {
     private Socket socket;
     private boolean isOpen;
     private final User correspondent;
@@ -159,22 +165,22 @@ class Conversation implements ConversationObservable, Runnable {
     /* CONVERSATION OBSERVER METHODS */
 
     @Override
-    public void addObserver(Object conversationObserver) {
+    public void addObserver(ConversationHandlerObserver obs) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void deleteObserver(Object conversationObserver) {
+    public void deleteObserver(ConversationHandlerObserver obs) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void notifyObserversNewMessageSent(Message sentMessage) {
+    public void notifyObserversSent() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void notifyObserversNewMessageReceived(Message receivedMessage) {
+    public void notifyObserversRcv() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
