@@ -1,13 +1,13 @@
 
 package project.insa.idchatsystem.Observers;
 
-import project.insa.idchatsystem.Conversation.ConversationHandler;
+import project.insa.idchatsystem.Message;
 
 public interface ConversationObservable {
-    public void addObserver(ConversationHandlerObserver obs);
+    public void addObserver(ConversationHandlerObserver observer);
 
-    public void deleteObserver(ConversationHandlerObserver obs);
+    public void deleteObserver(ConversationHandlerObserver observer);
 
-    public void notifyObserversSent();
-    public void notifyObserversRcv();
+    public void notifyObserversSentMessage(Message sentMessage);
+    public void notifyObserversReceivedMessage(Message receivedMessage);
 }
