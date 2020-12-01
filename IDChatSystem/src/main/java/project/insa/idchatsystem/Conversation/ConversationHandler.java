@@ -5,7 +5,6 @@ import project.insa.idchatsystem.Message;
 import project.insa.idchatsystem.Observers.ConversationHandlerObserver;
 import project.insa.idchatsystem.Observers.ConversationObservable;
 import project.insa.idchatsystem.User;
-import project.insa.idchatsystem.Observers.UsersStatusObserver;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -22,20 +21,19 @@ import java.util.concurrent.Executors;
  *
  * @author nsmaniotto
  */
-public class ConversationHandler implements Runnable,ConversationHandlerObserver {
+public class ConversationHandler implements ConversationHandlerObserver, Runnable {
     private static ConversationHandler INSTANCE = new ConversationHandler(1234); //TODO change port
     private ArrayList<Conversation> conversations;
     private Conversation currentConversation;
     
-    private ArrayList<User> users; // Copy of UserModel's hashmap to identify every user
+    private final ArrayList<User> users; // Copy of UserModel's hashmap to identify every user
 
-    private ExecutorService conversationThreadPool;
+    private final ExecutorService conversationThreadPool;
     private ServerSocket handlerSocket; // Acts as a server listening for incoming connection requests
     private Integer port;
-    private ArrayList<ConversationHandlerObserver> liste_observers;
+    private ArrayList<ConversationHandlerObserver> observers;
     
     public ConversationHandler(Integer socketPort) {
-        this.liste_observers = new ArrayList<>();
         this.port = socketPort;
         
         this.conversations = new ArrayList<>();
@@ -43,6 +41,9 @@ public class ConversationHandler implements Runnable,ConversationHandlerObserver
         
         // Create an open ended thread-pool for our conversations which are threads
         this.conversationThreadPool = Executors.newCachedThreadPool();
+        
+        // Empty for now
+        this.observers = new ArrayList<>();
     }
      
     /**
@@ -72,9 +73,10 @@ public class ConversationHandler implements Runnable,ConversationHandlerObserver
                 Socket conversationSocket = this.handlerSocket.accept();
 
                 // Retrieve correspondent informations thanks to its address
-                String correspondentAddress = conversationSocket.getRemoteSocketAddress().toString();
-                User correspondent = this.findUserByAddress(correspondentAddress);
-
+                //String correspondentAddress = conversationSocket.getRemoteSocketAddress().toString(); // Address like '/127.0.0.1:53818'
+                InetAddress correspondentAddress = conversationSocket.getInetAddress(); // Address like '/127.0.0.1'
+                User correspondent = this.findUserByAddress(correspondentAddress.toString());
+                
                 if(correspondent != null) {
                     // Check if we arleady have a conversation instance with this correspondent
                     Conversation newConversation = this.findConversationByCorrespondent(correspondent);
@@ -92,6 +94,7 @@ public class ConversationHandler implements Runnable,ConversationHandlerObserver
                     }
                 } else {
                     // ERROR: no such user found
+                    System.out.println("ERROR: no such user found when creating a conversation");
                 }            
             }
         } catch(IOException e) {
@@ -151,65 +154,72 @@ public class ConversationHandler implements Runnable,ConversationHandlerObserver
      * @param correspondent : User - reference of the correspondent
      */
     public void open(User correspondent) {
-        // Check if the conversation we are trying to open is not the currently opened conversation
-        if(this.currentConversation.getCorrespondent() != correspondent) {
-            // Check if we aleady have a conversation instance with this correspondent
-            Conversation conversation = this.findConversationByCorrespondent(correspondent);
-            
-            // Close the current conversation
+        // Check if we aleady have a conversation instance with this correspondent
+        Conversation conversation = this.findConversationByCorrespondent(correspondent);
+        
+        if(conversation == null) {
+            // --> We want to initiate the communication with our correspondent
+            // Instantiate a socket that will send a request to the correspondent ConversationHandler
+            Socket conversationSocket = null;
+
+            try {
+                conversationSocket = new Socket(InetAddress.getByName(correspondent.get_ipAddress()), this.port);
+            } catch(IOException e) {
+                System.out.println("EXCEPTION: CANNOT CREATE CONVERSATION SOCKET TOWARDS " + correspondent.get_ipAddress() + ":" + this.port + " (" + e + ")");
+                System.exit(0);
+            }
+
+            // Instantiate a new conversation with the given socket
+            conversation = new Conversation(correspondent, conversationSocket);
+
+            this.addConversation(conversation);
+        }
+        
+        if(conversation != this.currentConversation) {
+            // Close the previous conversation
             if(this.currentConversation != null) {
                 this.currentConversation.close();
             }
-            
-            // If we do have a conversation instance for this correspondent
-            if(conversation != null) {
-                // Set the opening conversation as our current conversation
-                this.currentConversation = conversation;
-            } else {
-                // --> We want to initiate the communication with our correspondent
-                // Instantiate a socket that will send a request to the correspondent ConversationHandler
-                Socket conversationSocket = null;
-                
-                try {
-                    conversationSocket = new Socket(InetAddress.getByName(correspondent.get_ipAddress()), this.port);
-                } catch(IOException e) {
-                    System.out.println("EXCEPTION: CANNOT CREATE CONVERSATION SOCKET TOWARDS " + correspondent.get_ipAddress() + ":" + this.port + " (" + e + ")");
-                    System.exit(0);
-                }
-                
-                // Instantiate a new conversation with the given socket
-                conversation = new Conversation(correspondent, conversationSocket);
 
-                this.addConversation(conversation);
-
-                // Set the opening conversation as our current conversation
-                this.currentConversation = conversation;
-            }
+            // Set the opening conversation as our current conversation
+            this.currentConversation = conversation;
             
             // Open the new current conversation
             this.currentConversation.open();
         }
     }
     
-    
-
-    public void addObserver(ConversationHandlerObserver obs) {
-        this.liste_observers.add(obs);
+    public void addObserver(ConversationHandlerObserver observer) {
+        this.observers.add(observer);
     }
+    
     public void offlineUser(User user) {
 
     }
-    public void onlineUser(User user) {
-
+    
+    /**
+     * Method called to keep track of all the user, will be replaced by listeners later
+     * 
+     * @param newUser 
+     */
+    public void addKnownUser(User newUser) {
+        this.users.add(newUser);
+    }
+    
+    /* CONVERSATION HANDLER OBSERVER METHODS */
+    
+    @Override
+    public void newMessageReceived(Message receivedMessage) {
+        this.observers.forEach( observer -> observer.newMessageReceived(receivedMessage) );
     }
 
     @Override
-    public void newMessageRcv(Message message) {
-        this.liste_observers.forEach((o)->o.newMessageRcv(message));
+    public void newMessageSent(Message sentMessage) {
+        this.observers.forEach( observer -> observer.newMessageSent(sentMessage) );
     }
-
-    @Override
-    public void newMessageSent(Message message) {
-        this.liste_observers.forEach((o)->o.newMessageSent(message));
+    
+    /* GETTERS/SETTERS */
+    public Conversation getCurrentConversation() {
+        return this.currentConversation;
     }
 }

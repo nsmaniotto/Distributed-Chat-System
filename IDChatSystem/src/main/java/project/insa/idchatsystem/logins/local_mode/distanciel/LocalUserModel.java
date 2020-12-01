@@ -5,6 +5,7 @@ import project.insa.idchatsystem.User;
 import project.insa.idchatsystem.logins.UserModel;
 
 import java.util.ArrayList;
+import project.insa.idchatsystem.Observers.UsersStatusObserver;
 
 public class LocalUserModel extends UserModel {
     private final LocalUserModelEmitter emitter;
@@ -48,5 +49,15 @@ public class LocalUserModel extends UserModel {
     @Override
     public boolean checkavailable(String username) {
         return this.checkLocallyAvailable(username);
+    }
+
+    @Override
+    public void addUserModelObserver(UsersStatusObserver obs) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void deleteUserModelObserver(UsersStatusObserver obs) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
