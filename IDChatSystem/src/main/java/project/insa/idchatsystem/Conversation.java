@@ -155,19 +155,26 @@ class Conversation implements ConversationObservable, Runnable {
         
         //TODO display the newly sent message using client view notification
     }
+    
+    /* CONVERSATION OBSERVER METHODS */
 
     @Override
-    public void addObserver() {
+    public void addObserver(Object conversationObserver) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void deleteObserver() {
+    public void deleteObserver(Object conversationObserver) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void notifyObservers() {
+    public void notifyObserversNewMessageSent(Message sentMessage) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void notifyObserversNewMessageReceived(Message receivedMessage) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
