@@ -31,7 +31,7 @@ public class ConversationHandler implements UsersStatusObserver, Runnable {
     private ServerSocket handlerSocket; // Acts as a server listening for incoming connection requests
     private Integer port;
     
-    private ConversationHandler(Integer socketPort) {
+    public ConversationHandler(Integer socketPort) {
         this.port = socketPort;
         
         this.conversations = new ArrayList<>();
@@ -190,7 +190,7 @@ public class ConversationHandler implements UsersStatusObserver, Runnable {
     
 
     @Override
-    public void addObserver() {
+    public void addObserver(Obser) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -3,10 +3,11 @@ package project.insa.idchatsystem.gui;
 import project.insa.idchatsystem.Message;
 import project.insa.idchatsystem.User;
 
-public class View {
+public class View implements Runnable {
     private LoginWindow login_window;
     private ChatWindow chat_window;
-    public View() {
+    @Override
+    public void run() {
         this.login_window = new LoginWindow();
     }
     public void loginOk() {
