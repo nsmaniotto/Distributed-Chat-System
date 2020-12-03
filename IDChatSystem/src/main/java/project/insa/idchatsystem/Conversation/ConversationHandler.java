@@ -143,6 +143,9 @@ public class ConversationHandler implements ConversationHandlerObserver, Runnabl
     private void addConversation(Conversation newConversation) {
         // Add this new conversation to our array list, used for conversation search 
         this.conversations.add(newConversation);
+        
+        // Add 'this' reference as an observer in order to process future events
+        newConversation.addConversationObserver(this);
 
         // Add this new conversation thread to our thread pool
         this.conversationThreadPool.submit(newConversation);
