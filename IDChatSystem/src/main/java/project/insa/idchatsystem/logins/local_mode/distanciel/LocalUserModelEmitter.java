@@ -32,6 +32,7 @@ public class LocalUserModelEmitter extends UserModelEmitter {
         }
     }
     public void askUpdate() {
+        //ask to the other users to send their infos
         this.sendBroadcast("update");
     }
     public String getState(){
