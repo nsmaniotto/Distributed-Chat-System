@@ -10,10 +10,13 @@ import project.insa.idchatsystem.Observers.UsersStatusObserver;
 
 public class LocalUserModel extends UserModel {
     private final LocalUserModelEmitter emitter;
+    private ArrayList<UsersStatusObserver> observers;
     public LocalUserModel(int id, int receiver_port, int emitter_port, ArrayList<Integer> others)  {
         super(id);
+        observers = new ArrayList<>();
         new Thread(new LocalUserModelReceiver(this,receiver_port)).start();
         this.emitter = new LocalUserModelEmitter(emitter_port,others);
+        this.setUsername(String.format("--user%d",id));
         new Thread(this.emitter).start();
         new Thread(() -> {
             while(true){
@@ -60,11 +63,32 @@ public class LocalUserModel extends UserModel {
 
     @Override
     public void addUserModelObserver(UsersStatusObserver obs) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.printf("%s\n",obs.toString());
+        this.observers.add(obs);
     }
 
     @Override
     public void deleteUserModelObserver(UsersStatusObserver obs) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int index = this.observers.indexOf(obs);
+        if(index != -1)
+            this.observers.remove(index);
+        else
+            System.out.println("Object not an observer stored");
+    }
+
+    @Override
+    public void notifyNewUserObservers(User user)  {
+        for (UsersStatusObserver obs :
+                this.observers) {
+            obs.onlineUser(user);
+        }
+    }
+
+    @Override
+    public void notifyDisconnectedObservers(User user) {
+        for (UsersStatusObserver obs :
+                this.observers) {
+            obs.offlineUser(user);
+        }
     }
 }

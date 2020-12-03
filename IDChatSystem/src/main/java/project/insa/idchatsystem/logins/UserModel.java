@@ -12,12 +12,10 @@ import java.util.Map;
 
 public abstract class UserModel implements ObservableUserModel {
     private HashMap<Integer, User> users;
-    private ArrayList<UsersStatusObserver> connected_user_observers;
     private long limite_tolerance_ss_nouvelles = 10000;
     public UserModel(int id) {
         User.init_current_user(id);
         this.users = new HashMap<Integer,User>();
-        this.connected_user_observers = new ArrayList<UsersStatusObserver>();
     }
     public void setUsername(String newUserName) {
         try {
@@ -30,8 +28,9 @@ public abstract class UserModel implements ObservableUserModel {
     public void addOnlineUser(User user) {
         boolean new_user = this.users.containsKey(user.get_id());
         this.users.put(user.get_id(),user);//Replace automatically the previous version if already in the HashMap
-        if(new_user) {
+        if(!new_user) {
             //notify observers
+            System.out.printf("NEW USER : %s\n",user.toString());
             this.notifyNewUserObservers(user);
         }
     }
@@ -70,26 +69,12 @@ public abstract class UserModel implements ObservableUserModel {
         return true;
     }
     abstract public boolean checkavailable(String username);
-    public void addUserModelObserver(UsersStatusObserver obs) {
-        this.connected_user_observers.add(obs);
-    }
+    public abstract void addUserModelObserver(UsersStatusObserver obs);
 
-    public void deleteUserModelObserver(UsersStatusObserver obs) {
-        this.connected_user_observers.remove(obs);
-    }
+    public abstract void deleteUserModelObserver(UsersStatusObserver obs);
 
-    public void notifyNewUserObservers(User user) {
-        for (UsersStatusObserver obs :
-                this.connected_user_observers) {
-            obs.onlineUser(user);
-        }
-    }
-    public void notifyDisconnectedObservers(User user) {
-        for (UsersStatusObserver obs :
-                this.connected_user_observers) {
-            obs.offlineUser(user);
-        }
-    }
+    public abstract void notifyNewUserObservers(User user);
+    public abstract void notifyDisconnectedObservers(User user);
 
     protected abstract void diffuseNewUsername();
     public abstract void stopperEmission();
