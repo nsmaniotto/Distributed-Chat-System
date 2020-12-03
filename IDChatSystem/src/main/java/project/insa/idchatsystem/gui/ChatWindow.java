@@ -1,5 +1,6 @@
 package project.insa.idchatsystem.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -225,7 +226,11 @@ public class ChatWindow extends Window {
      * @deprecated - to be implemented
      */
     public void displayMessage(Message message) {
-        //TODO
+        //TODO Generate the graphical instance
+        JPanel messageInstancePanel = this.generateDisplayedMessage(message);
+        
+        //TODO Add the instance to the display conversation
+        this.chatHistoryPanel.add(messageInstancePanel);
     }
     
     /**
@@ -236,5 +241,30 @@ public class ChatWindow extends Window {
      */
     public void displayNotification(Message message) {
         //TODO
+    }
+    
+    /**
+     * Create a graphical instance which will be displayed, based on the given message
+     * 
+     * @param message : Message - message from which will be generated the graphical instance
+     * @return corresponding displayed message
+     */
+    private JPanel generateDisplayedMessage(Message message) {
+        JPanel messagePanel = new JPanel(new BorderLayout());
+        messagePanel.setBorder(BorderFactory.createEmptyBorder(
+                10, //top
+                5, //left
+                10, //bottom
+                5) //right
+                );
+        messagePanel.setBackground(Window.COLOR_SOFTWHITE);
+        
+        JLabel messageTextLabel = new JLabel(message.getText());
+        JLabel messageTimestampLabel = new JLabel(message.getTimestamp());
+        
+        messagePanel.add(messageTextLabel, BorderLayout.LINE_START);
+        messagePanel.add(messageTimestampLabel, BorderLayout.LINE_END);
+        
+        return messagePanel;
     }
 }
