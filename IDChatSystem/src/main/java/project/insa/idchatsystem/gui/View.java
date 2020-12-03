@@ -30,4 +30,15 @@ public class View implements Runnable {
         assert this.chat_window != null : "Vous n'êtes pas login";
 
     }
+    
+    /**
+     * Relay the message treatment and display to the chat window
+     * 
+     * @param message : Message - message to be displayed
+     */
+    public void displayMessage(Message message) {
+        assert this.chat_window != null : "You are not logged in";
+        
+        this.chat_window.displayMessage(message);
+    }
 }
