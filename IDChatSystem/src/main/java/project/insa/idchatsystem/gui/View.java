@@ -12,6 +12,7 @@ public class View implements Runnable {
     }
     public void loginOk() {
         this.chat_window = new ChatWindow();
+        this.chat_window.display();
     }
     public void offlineUser(User user){
         assert this.chat_window != null : "Vous n'êtes pas login";
