@@ -15,23 +15,23 @@ import project.insa.idchatsystem.Message;
  */
 public class ChatWindow extends Window {
     /* BEGIN: variables declaration */
-    private JPanel userPanel = null;
-        private JPanel userInfoPanel = null;
-            private JLabel usernameLabel = null;
-            private JButton changeUsernameButton = null;
-        private JTabbedPane conversationTabs = null;
-            private JScrollPane recentConversationsTab = null;
-            private JScrollPane onlineUsersTab = null;
-            private JScrollPane offlineUsersTab = null;
-            private JScrollPane allUsersTab = null;
-    private JPanel chatPanel = null;
-        private JPanel correspondentPanel = null;
-            private JLabel correspondentInfoLabel = null;
-        private JScrollPane chatScrollPane = null;
-            private JPanel chatHistoryPanel = null;
-        private JPanel chatFormPanel = null;
-            private JTextField chatTextInputField = null;
-            private JButton chatSendButton = null;
+    private JPanel userPanel;
+        private JPanel userInfoPanel;
+            private JLabel usernameLabel;
+            private JButton changeUsernameButton;
+        private JTabbedPane conversationTabs;
+            private JScrollPane recentConversationsTab;
+            private JScrollPane onlineUsersTab;
+            private JScrollPane offlineUsersTab;
+            private JScrollPane allUsersTab;
+    private JPanel chatPanel;
+        private JPanel correspondentPanel;
+            private JLabel correspondentInfoLabel;
+        private JScrollPane chatScrollPane;
+            private JPanel chatHistoryPanel;
+        private JPanel chatFormPanel;
+            private JTextField chatTextInputField;
+            private JButton chatSendButton;
     /* END: variables declarations */
     
     public ChatWindow() {
@@ -96,8 +96,8 @@ public class ChatWindow extends Window {
         
         this.correspondentInfoLabel = new JLabel("BBBBB#yy", JLabel.LEFT);
         
-        this.chatScrollPane = new JScrollPane();
-        this.chatPanel.setBackground(Color.GRAY/*Window.COLOR_SOFTWHITE*/);
+        this.chatScrollPane = new JScrollPane(this.chatHistoryPanel);
+        this.chatScrollPane.setBackground(Color.GRAY/*Window.COLOR_SOFTWHITE*/);
         
         this.chatHistoryPanel = new JPanel();
         this.chatHistoryPanel.setLayout(new BoxLayout(this.chatHistoryPanel, BoxLayout.Y_AXIS));
