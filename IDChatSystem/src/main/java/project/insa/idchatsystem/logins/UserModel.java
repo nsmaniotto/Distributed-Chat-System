@@ -70,11 +70,11 @@ public abstract class UserModel implements ObservableUserModel {
         return true;
     }
     abstract public boolean checkavailable(String username);
-    public void addObserver(UsersStatusObserver obs) {
+    public void addUserModelObserver(UsersStatusObserver obs) {
         this.connected_user_observers.add(obs);
     }
 
-    public void deleteObserver(UsersStatusObserver obs) {
+    public void deleteUserModelObserver(UsersStatusObserver obs) {
         this.connected_user_observers.remove(obs);
     }
 

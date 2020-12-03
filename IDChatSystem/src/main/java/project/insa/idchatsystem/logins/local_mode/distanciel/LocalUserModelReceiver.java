@@ -34,6 +34,7 @@ public class LocalUserModelReceiver implements Runnable {
         try {
             Pattern pattern_new_host = Pattern.compile("(?<username>[A-Za-z_.0-9]+),(?<id>[0-9]+),(?<ip>[0-9]+[.][0-9]+[.][0-9]+[.][0-9]+)");
             Pattern pattern_disconnected = Pattern.compile("(?<id>[0-9]+),disconnected");
+            Pattern pattern_update = Pattern.compile("update");
             while (true) {
                 DatagramPacket packet = new DatagramPacket(in_buf, in_buf.length);
                 socket.receive(packet);
@@ -49,6 +50,11 @@ public class LocalUserModelReceiver implements Runnable {
                 while (m.find()){
                     System.out.printf("User %s disconnection signal\n",m.group("id"));
                     this.model.removeOnlineUser(Integer.parseInt(m.group("id")));//Add or refresh informations of the user based on the id
+                }
+                m = pattern_update.matcher(received);
+                while (m.find()){
+                    System.out.print("Received ask for update\n");
+                    this.model.diffuseNewUsername();//Add or refresh informations of the user based on the id
                 }
             }
         } catch (IOException e) {

@@ -1,6 +1,7 @@
 package project.insa.idchatsystem.logins.local_mode.distanciel;
 
 import project.insa.idchatsystem.Exceptions.Uninitialized;
+import project.insa.idchatsystem.Observers.UsersStatusObserver;
 import project.insa.idchatsystem.User;
 import project.insa.idchatsystem.logins.UserModel;
 
@@ -47,6 +48,12 @@ public class LocalUserModel extends UserModel {
 
     @Override
     public boolean checkavailable(String username) {
+        this.emitter.askUpdate();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return this.checkLocallyAvailable(username);
     }
 }

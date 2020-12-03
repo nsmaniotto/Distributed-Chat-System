@@ -31,6 +31,9 @@ public class LocalUserModelEmitter extends UserModelEmitter {
             }
         }
     }
+    public void askUpdate() {
+        this.sendBroadcast("update");
+    }
     public String getState(){
         return this.state;
     }

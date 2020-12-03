@@ -190,8 +190,6 @@ public class ConversationHandler implements Runnable,ConversationHandlerObserver
             this.currentConversation.open();
         }
     }
-    
-    
 
     public void addObserver(ConversationHandlerObserver obs) {
         this.liste_observers.add(obs);
