@@ -1,6 +1,7 @@
 package project.insa.idchatsystem.logins.server_mode;
 
 import project.insa.idchatsystem.Exceptions.Uninitialized;
+import project.insa.idchatsystem.Observers.UsersStatusObserver;
 import project.insa.idchatsystem.User;
 import project.insa.idchatsystem.logins.UserModel;
 
@@ -36,4 +37,14 @@ public class DistantUserModel  extends UserModel {
         this.emitter.stopperEmission();
     }
     //conflit table local données sur le réseau
+
+    @Override
+    public void addUserModelObserver(UsersStatusObserver obs) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void deleteUserModelObserver(UsersStatusObserver obs) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

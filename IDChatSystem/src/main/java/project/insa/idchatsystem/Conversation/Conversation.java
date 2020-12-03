@@ -14,12 +14,12 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 
-class Conversation implements ConversationObservable, Runnable {
+public class Conversation implements ConversationObservable, Runnable {
     private Socket socket;
     private boolean isOpen;
-    private User correspondent;
-    private ArrayList<Message> history;
-    private ConversationHandlerObserver conversation_observer_handler;
+    private final User correspondent;
+    private final ArrayList<Message> history;
+    private ConversationHandlerObserver conversationHandlerObserver;
 
     /**
      * Initialize a passive conversation with a given correspondent
@@ -35,6 +35,8 @@ class Conversation implements ConversationObservable, Runnable {
         
         // Empty for now, will be loaded later
         this.history = new ArrayList<>();
+        
+        this.conversationHandlerObserver = null;
     }
     
     @Override
@@ -94,6 +96,8 @@ class Conversation implements ConversationObservable, Runnable {
         // Generate a Message instance from the given input
         Message newMessage = new Message(input);
         
+        System.out.println("Reveived from " + this.correspondent.get_username() + " : " + newMessage.getText());
+        
         // Store the new message
         this.storeMessage(newMessage);
         
@@ -139,10 +143,12 @@ class Conversation implements ConversationObservable, Runnable {
      *
      * @param message : Message - message we want to send
      */
-    private void send(Message message) {
+    public void send(Message message) {
+        System.out.println("Sending to " + this.correspondent.get_username() + " : " + message.getText());
+        
         PrintWriter outputStreamLink = null;
-
-	try {
+        
+        try {
             outputStreamLink = new PrintWriter(this.socket.getOutputStream(),true);
         }
         catch(IOException e) {
@@ -158,25 +164,31 @@ class Conversation implements ConversationObservable, Runnable {
         
         //TODO display the newly sent message using client view notification
     }
+    
+    /* CONVERSATION OBSERVER METHODS */
 
     @Override
-    public void addConversationObserver(ConversationHandlerObserver obs) {
-        this.conversation_observer_handler = obs;
+    public void addConversationObserver(ConversationHandlerObserver observer) {
+        this.conversationHandlerObserver = observer;
     }
 
     @Override
-    public void deleteConversationObserver(ConversationHandlerObserver obs) {
-        this.conversation_observer_handler = null;
+    public void deleteConversationObserver(ConversationHandlerObserver observer) {
+        this.conversationHandlerObserver = null;
     }
 
     @Override
-    public void notifyObserversSent(Message message) {
-        this.conversation_observer_handler.newMessageSent(message);
+    public void notifyObserversSentMessage(Message sentMessage) {
+        if(this.conversationHandlerObserver != null) {
+            this.conversationHandlerObserver.newMessageSent(sentMessage);
+        }
     }
 
     @Override
-    public void notifyObserversRcv(Message message) {
-        this.conversation_observer_handler.newMessageRcv(message);
+    public void notifyObserversReceivedMessage(Message receivedMessage) {
+        if(this.conversationHandlerObserver != null) {
+            this.conversationHandlerObserver.newMessageReceived(receivedMessage);
+        }
     }
     
     /* GETTERS/SETTERS */

@@ -4,6 +4,6 @@ package project.insa.idchatsystem.Observers;
 import project.insa.idchatsystem.Message;
 
 public interface ConversationHandlerObserver {
-    public void newMessageRcv(Message message);
-    public void newMessageSent(Message message);
+    public void newMessageReceived(Message receivedMessage);
+    public void newMessageSent(Message sentMessage);
 }
