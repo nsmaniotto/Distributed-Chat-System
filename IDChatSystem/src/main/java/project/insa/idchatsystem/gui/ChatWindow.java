@@ -51,6 +51,7 @@ public class ChatWindow extends Window {
         
         /* BEGIN: variables initialization */
         this.userPanel = new JPanel(new GridBagLayout());
+        this.userPanel.setMinimumSize(new Dimension(200, HEIGHT));
         
         this.userInfoPanel = new JPanel(new GridLayout(2,0));
         this.userInfoPanel.setBorder(BorderFactory.createEmptyBorder(
