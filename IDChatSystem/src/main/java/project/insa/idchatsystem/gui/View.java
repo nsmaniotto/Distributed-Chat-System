@@ -22,14 +22,6 @@ public class View implements Runnable {
         assert this.chat_window != null : "Vous n'êtes pas login";
 
     }
-    public void newMessageRcv(Message message){
-        assert this.chat_window != null : "Vous n'êtes pas login";
-
-    }
-    public void newMessageSent(Message message){
-        assert this.chat_window != null : "Vous n'êtes pas login";
-
-    }
     
     /**
      * Relay the message treatment and display to the chat window
