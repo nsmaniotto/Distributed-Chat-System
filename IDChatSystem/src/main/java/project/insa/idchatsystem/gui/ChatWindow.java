@@ -6,6 +6,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import javax.swing.*;
+import project.insa.idchatsystem.Message;
 
 /**
  *
@@ -215,5 +216,15 @@ public class ChatWindow extends Window {
         if(this.usernameLabel != null) {
             this.usernameLabel.setText(username + " #" + id);
         }
+    }
+    
+    /**
+     * Treat and display the message according to its data
+     * 
+     * @param message 
+     * @deprecated - to be implemented
+     */
+    public void displayMessage(Message message) {
+        //TODO
     }
 }
