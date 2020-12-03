@@ -51,4 +51,8 @@ public class Message extends Data {
     public String getText() {
         return this.text;
     }
+    
+    public String getTimestamp() {
+        return this.timestamp.toString();
+    }
 }
