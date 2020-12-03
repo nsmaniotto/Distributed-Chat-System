@@ -141,7 +141,7 @@ public class Conversation implements ConversationObservable, Runnable {
     /**
      * Send a given message to the communication socket
      *
-     * @param message : Message - message we want to send
+     * @param message : Message - message we want to send and display
      */
     public void send(Message message) {
         System.out.println("Sending to " + this.correspondent.get_username() + " : " + message.getText());
@@ -162,7 +162,8 @@ public class Conversation implements ConversationObservable, Runnable {
         // Store the message in the local database
         this.storeMessage(message);
         
-        //TODO display the newly sent message using client view notification
+        // Notify the handler that a new message has been sent
+        this.notifyObserversSentMessage(message);
     }
     
     /* CONVERSATION OBSERVER METHODS */
