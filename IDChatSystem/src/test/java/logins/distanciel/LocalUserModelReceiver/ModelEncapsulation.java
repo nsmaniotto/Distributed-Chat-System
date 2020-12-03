@@ -1,7 +1,7 @@
 package logins.distanciel.LocalUserModelReceiver;
 
 import project.insa.idchatsystem.logins.local_mode.distanciel.LocalUserModel;
-import project.insa.idchatsystem.User;
+import project.insa.idchatsystem.User.distanciel.User;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

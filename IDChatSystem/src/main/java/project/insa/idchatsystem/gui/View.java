@@ -1,7 +1,7 @@
 package project.insa.idchatsystem.gui;
 
 import project.insa.idchatsystem.Message;
-import project.insa.idchatsystem.User;
+import project.insa.idchatsystem.User.distanciel.User;
 
 public class View implements Runnable {
     private LoginWindow login_window;

@@ -2,11 +2,10 @@ package project.insa.idchatsystem.logins.local_mode.distanciel;
 
 import project.insa.idchatsystem.Exceptions.Uninitialized;
 import project.insa.idchatsystem.Observers.UsersStatusObserver;
-import project.insa.idchatsystem.User;
+import project.insa.idchatsystem.User.distanciel.User;
 import project.insa.idchatsystem.logins.UserModel;
 
 import java.util.ArrayList;
-import project.insa.idchatsystem.Observers.UsersStatusObserver;
 
 public class LocalUserModel extends UserModel {
     private final LocalUserModelEmitter emitter;

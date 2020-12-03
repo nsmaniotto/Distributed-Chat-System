@@ -1,7 +1,7 @@
 
 package project.insa.idchatsystem.server;
 
-import project.insa.idchatsystem.User;
+import project.insa.idchatsystem.User.distanciel.User;
 
 public class ServerUserModel {
     private ServerController serverController;

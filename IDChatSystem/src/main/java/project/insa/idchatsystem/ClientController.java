@@ -1,13 +1,9 @@
 
 package project.insa.idchatsystem;
 
-import project.insa.idchatsystem.Conversation.ConversationHandler;
 import project.insa.idchatsystem.Observers.ConversationHandlerObserver;
 import project.insa.idchatsystem.Observers.UsersStatusObserver;
-import project.insa.idchatsystem.gui.ChatWindow;
-import project.insa.idchatsystem.gui.View;
-import project.insa.idchatsystem.logins.server_mode.DistantUserModel;
-import project.insa.idchatsystem.logins.local_mode.distanciel.LocalUserModel;
+import project.insa.idchatsystem.User.distanciel.User;
 
 public class ClientController implements ConversationHandlerObserver, UsersStatusObserver {
     /*private final ConversationHandler conversationHandler;

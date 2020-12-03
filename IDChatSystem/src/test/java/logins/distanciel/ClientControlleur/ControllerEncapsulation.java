@@ -4,7 +4,7 @@ import project.insa.idchatsystem.Conversation.ConversationHandler;
 import project.insa.idchatsystem.Message;
 import project.insa.idchatsystem.Observers.ConversationHandlerObserver;
 import project.insa.idchatsystem.Observers.UsersStatusObserver;
-import project.insa.idchatsystem.User;
+import project.insa.idchatsystem.User.distanciel.User;
 import project.insa.idchatsystem.logins.local_mode.distanciel.LocalUserModel;
 
 import java.util.ArrayList;
@@ -14,13 +14,18 @@ public class ControllerEncapsulation implements ConversationHandlerObserver, Use
     private LocalUserModel localUserModel;
     //private DistantUserModel centralizedUserModel;
 
-    public ControllerEncapsulation(int id, int usermodel_receiver_port, int usermodel_emitter_port, ArrayList<Integer> others,int handler_port) {
+    public ControllerEncapsulation(int id, int usermodel_receiver_port, int usermodel_emitter_port, ArrayList<Integer> others) {
         this.localUserModel = new LocalUserModel(id,usermodel_receiver_port,usermodel_emitter_port,others);
-        this.conversationHandler = new ConversationHandler(handler_port);
+        this.conversationHandler = ConversationHandler.getInstance();
         this.conversationHandler.addObserver(this);
         this.localUserModel.addUserModelObserver(this);
     }
-
+    public void startConversation(int id){
+        User user = this.localUserModel.getOnlineUsers().get(id);
+        System.out.println(user);
+        this.conversationHandler.open(user);
+        this.conversationHandler.getCurrentConversation().send(new Message("raclette et tartiflette seront au menu"));
+    }
     @Override
     public void offlineUser(User user) {
         System.out.printf("OFFLINE USER : %s\n",user.toString());

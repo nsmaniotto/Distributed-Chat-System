@@ -1,5 +1,4 @@
-
-package project.insa.idchatsystem;
+package project.insa.idchatsystem.User.presentiel;
 
 import project.insa.idchatsystem.Exceptions.Uninitialized;
 
@@ -62,7 +61,7 @@ public class User {
         return User.current_ipAddress;
     }
     public static String current_user_transfer_string() {
-        return String.format("%s,%d,%s",User.current_username,User.current_id,User.current_ipAddress);
+        return String.format("%s,%d,%s", User.current_username, User.current_id, User.current_ipAddress);
     }
 
     /***********************Other users methods***************************/
@@ -111,3 +110,5 @@ public class User {
             return false;
     }
 }
+
+

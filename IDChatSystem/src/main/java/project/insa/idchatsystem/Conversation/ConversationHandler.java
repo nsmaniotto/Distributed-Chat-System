@@ -3,9 +3,7 @@ package project.insa.idchatsystem.Conversation;
 
 import project.insa.idchatsystem.Message;
 import project.insa.idchatsystem.Observers.ConversationHandlerObserver;
-import project.insa.idchatsystem.Observers.ConversationObservable;
-import project.insa.idchatsystem.User;
-import project.insa.idchatsystem.Observers.UsersStatusObserver;
+import project.insa.idchatsystem.User.distanciel.User;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -167,6 +165,7 @@ public class ConversationHandler implements ConversationHandlerObserver, Runnabl
                 conversationSocket = new Socket(InetAddress.getByName(correspondent.get_ipAddress()), this.port);
             } catch(IOException e) {
                 System.out.println("EXCEPTION: CANNOT CREATE CONVERSATION SOCKET TOWARDS " + correspondent.get_ipAddress() + ":" + this.port + " (" + e + ")");
+                System.out.println("Check that  all handlers listen on the same port");
                 System.exit(0);
             }
 

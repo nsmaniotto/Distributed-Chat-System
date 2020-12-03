@@ -1,6 +1,6 @@
 package project.insa.idchatsystem.logins.server_mode;
 
-import project.insa.idchatsystem.User;
+import project.insa.idchatsystem.User.distanciel.User;
 import project.insa.idchatsystem.logins.UserModelEmitter;
 
 import java.io.IOException;

@@ -5,7 +5,7 @@ import project.insa.idchatsystem.Observers.ConversationHandlerObserver;
 import project.insa.idchatsystem.Observers.ConversationObservable;
 import project.insa.idchatsystem.Data;
 import project.insa.idchatsystem.Message;
-import project.insa.idchatsystem.User;
+import project.insa.idchatsystem.User.distanciel.User;
 
 import java.io.BufferedReader;
 import java.io.IOException;

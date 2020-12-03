@@ -1,6 +1,6 @@
 package project.insa.idchatsystem.logins.local_mode.presentiel;
 
-import project.insa.idchatsystem.User;
+import project.insa.idchatsystem.User.distanciel.User;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

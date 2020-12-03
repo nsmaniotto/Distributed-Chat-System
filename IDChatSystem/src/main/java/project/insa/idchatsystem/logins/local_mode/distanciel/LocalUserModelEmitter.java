@@ -19,7 +19,6 @@ public class LocalUserModelEmitter extends UserModelEmitter {
         this.last_user_updated_string = "";
     }
     private void sendBroadcast(String msg) {
-        System.out.printf("SENT %s\n",msg);
         for(int port:this.liste_ports_others) {
             DatagramPacket outPacket = new DatagramPacket(msg.getBytes(),
                     msg.length(),

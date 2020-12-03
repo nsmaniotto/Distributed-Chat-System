@@ -3,7 +3,7 @@ package project.insa.idchatsystem.logins.local_mode.presentiel;
 
 import project.insa.idchatsystem.Exceptions.Uninitialized;
 import project.insa.idchatsystem.Observers.UsersStatusObserver;
-import project.insa.idchatsystem.User;
+import project.insa.idchatsystem.User.distanciel.User;
 import project.insa.idchatsystem.logins.UserModel;
 
 public class LocalUserModel extends UserModel {

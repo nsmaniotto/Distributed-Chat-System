@@ -1,6 +1,6 @@
 package logins.distanciel.LocalUserModel.testAddUser;
 
-import project.insa.idchatsystem.User;
+import project.insa.idchatsystem.User.distanciel.User;
 import project.insa.idchatsystem.logins.local_mode.distanciel.LocalUserModel;
 
 import java.util.ArrayList;

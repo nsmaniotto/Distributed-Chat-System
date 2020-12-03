@@ -1,6 +1,6 @@
 package project.insa.idchatsystem.logins.local_mode.distanciel;
 
-import project.insa.idchatsystem.User;
+import project.insa.idchatsystem.User.distanciel.User;
 
 import java.io.IOException;
 import java.net.*;
@@ -39,11 +39,11 @@ public class LocalUserModelReceiver implements Runnable {
                 DatagramPacket packet = new DatagramPacket(in_buf, in_buf.length);
                 socket.receive(packet);
                 String received = new String(packet.getData(), 0, packet.getLength());
-                System.out.printf("Received %s\n",received);
+                //System.out.printf("Received %s\n",received);
                 //Extraction of the informations of the packet thanks to a regex and named group
                 Matcher m = pattern_new_host.matcher(received);
                 while (m.find()){
-                    System.out.println("NEW USER");
+                    //System.out.println("NEW USER");
                     User new_user = new User(m.group("username"),Integer.parseInt(m.group("id")),m.group("ip"));
                     this.model.addOnlineUser(new_user);//Add or refresh informations of the user based on the id
                 }

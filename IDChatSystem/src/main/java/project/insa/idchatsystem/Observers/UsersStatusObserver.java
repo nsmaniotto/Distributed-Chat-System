@@ -1,7 +1,7 @@
 
 package project.insa.idchatsystem.Observers;
 
-import project.insa.idchatsystem.User;
+import project.insa.idchatsystem.User.distanciel.User;
 
 public interface UsersStatusObserver {
     public void offlineUser(User user) ;

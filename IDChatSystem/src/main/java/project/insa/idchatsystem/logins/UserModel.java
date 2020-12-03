@@ -3,9 +3,8 @@ package project.insa.idchatsystem.logins;
 import project.insa.idchatsystem.Exceptions.Uninitialized;
 import project.insa.idchatsystem.Observers.ObservableUserModel;
 import project.insa.idchatsystem.Observers.UsersStatusObserver;
-import project.insa.idchatsystem.User;
+import project.insa.idchatsystem.User.distanciel.User;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +29,6 @@ public abstract class UserModel implements ObservableUserModel {
         this.users.put(user.get_id(),user);//Replace automatically the previous version if already in the HashMap
         if(!new_user) {
             //notify observers
-            System.out.printf("NEW USER : %s\n",user.toString());
             this.notifyNewUserObservers(user);
         }
     }
