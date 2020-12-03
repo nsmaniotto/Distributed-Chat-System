@@ -227,4 +227,14 @@ public class ChatWindow extends Window {
     public void displayMessage(Message message) {
         //TODO
     }
+    
+    /**
+     * Treat and display of a notification according to the given message
+     * 
+     * @param message : Message - message based on which the notification will be built
+     * @deprecated - to be implemented
+     */
+    public void displayNotification(Message message) {
+        //TODO
+    }
 }
