@@ -108,7 +108,6 @@ public class ChatWindow extends Window {
                 10, //bottom
                 10) //right
                 );
-        this.chatHistoryPanel.add(this.generateDisplayedMessage(new Message("1;test")));
         
         this.chatFormPanel = new JPanel(new GridBagLayout());
         this.chatFormPanel.setBorder(BorderFactory.createEmptyBorder(
