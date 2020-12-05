@@ -102,6 +102,13 @@ public class ChatWindow extends Window {
         
         this.chatHistoryPanel = new JPanel();
         this.chatHistoryPanel.setLayout(new BoxLayout(this.chatHistoryPanel, BoxLayout.Y_AXIS));
+        this.chatHistoryPanel.setBorder(BorderFactory.createEmptyBorder(
+                10, //top
+                10, //left
+                10, //bottom
+                10) //right
+                );
+        this.chatHistoryPanel.setBackground(Color.red);
         
         this.chatFormPanel = new JPanel(new GridBagLayout());
         this.chatFormPanel.setBorder(BorderFactory.createEmptyBorder(
@@ -224,7 +231,6 @@ public class ChatWindow extends Window {
      * Treat and display the message according to its data
      * 
      * @param message 
-     * @deprecated - to be implemented
      */
     public void displayMessage(Message message) {
         //TODO Generate the graphical instance
@@ -251,7 +257,7 @@ public class ChatWindow extends Window {
      * @return corresponding displayed message
      */
     private JPanel generateDisplayedMessage(Message message) {
-        JPanel messagePanel = new JPanel(new BorderLayout());
+        JPanel messagePanel = new JPanel(new GridBagLayout());
         messagePanel.setBorder(BorderFactory.createEmptyBorder(
                 10, //top
                 5, //left
@@ -260,11 +266,25 @@ public class ChatWindow extends Window {
                 );
         messagePanel.setBackground(Window.COLOR_SOFTWHITE);
         
+        // text area
         JLabel messageTextLabel = new JLabel(message.getText());
-        JLabel messageTimestampLabel = new JLabel(message.getTimestamp());
+        GridBagConstraints messageTextLabelConstraints = new GridBagConstraints();
+        messageTextLabelConstraints.gridx = 0;
+        messageTextLabelConstraints.weightx = 1.0;
+        messageTextLabelConstraints.weighty = 1.0;
+        messageTextLabelConstraints.fill = GridBagConstraints.HORIZONTAL;
         
-        messagePanel.add(messageTextLabel, BorderLayout.LINE_START);
-        messagePanel.add(messageTimestampLabel, BorderLayout.LINE_END);
+        messagePanel.add(messageTextLabel, messageTextLabelConstraints);
+        
+        // timestamp area
+        JLabel messageTimestampLabel = new JLabel(message.getTimestamp());
+        GridBagConstraints messageTimestampLabelConstraints = new GridBagConstraints();
+        messageTimestampLabelConstraints.gridx = 1;
+        messageTimestampLabelConstraints.weightx = 0;
+        messageTimestampLabelConstraints.weighty = 1.0;
+        messageTimestampLabelConstraints.fill = GridBagConstraints.NONE;
+        
+        messagePanel.add(messageTimestampLabel, messageTimestampLabelConstraints);
         
         return messagePanel;
     }
