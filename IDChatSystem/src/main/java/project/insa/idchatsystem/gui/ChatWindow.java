@@ -108,7 +108,7 @@ public class ChatWindow extends Window {
                 10, //bottom
                 10) //right
                 );
-        this.chatHistoryPanel.setBackground(Color.red);
+        this.chatHistoryPanel.add(this.generateDisplayedMessage(new Message("1;test")));
         
         this.chatFormPanel = new JPanel(new GridBagLayout());
         this.chatFormPanel.setBorder(BorderFactory.createEmptyBorder(
@@ -264,7 +264,6 @@ public class ChatWindow extends Window {
                 10, //bottom
                 5) //right
                 );
-        messagePanel.setBackground(Window.COLOR_SOFTWHITE);
         
         // text area
         JLabel messageTextLabel = new JLabel(message.getText());
