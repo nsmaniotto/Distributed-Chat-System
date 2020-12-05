@@ -12,6 +12,7 @@ public class View implements Runnable {
     }
     public void loginOk() {
         this.chat_window = new ChatWindow();
+        this.chat_window.display();
     }
     public void offlineUser(User user){
         assert this.chat_window != null : "Vous n'êtes pas login";
@@ -22,12 +23,26 @@ public class View implements Runnable {
         assert this.chat_window != null : "Vous n'êtes pas login";
 
     }
-    public void newMessageRcv(Message message){
-        assert this.chat_window != null : "Vous n'êtes pas login";
-
+    
+    /**
+     * Relay the message treatment and display to the chat window
+     * 
+     * @param message : Message - message to be displayed
+     */
+    public void displayMessage(Message message) {
+        assert this.chat_window != null : "You are not logged in";
+        
+        this.chat_window.displayMessage(message);
     }
-    public void newMessageSent(Message message){
-        assert this.chat_window != null : "Vous n'êtes pas login";
-
+    
+    /**
+     * Relay the notification treatment and display to the chat window
+     * 
+     * @param message : Message - message of which the current user must be notified
+     */
+    public void displayNotification(Message message) {
+        assert this.chat_window != null : "You are not logged in";
+        
+        this.chat_window.displayNotification(message);
     }
 }

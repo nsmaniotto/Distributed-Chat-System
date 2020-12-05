@@ -51,9 +51,14 @@ public class Message extends Data {
     public String getText() {
         return this.text;
     }
+    
+    public String getTimestamp() {
+        return this.timestamp.toString();
+    }
 
     @Override
     public String toString() {
         return String.format("%s, %s",this.text,this.timestamp.toString());
     }
+    
 }

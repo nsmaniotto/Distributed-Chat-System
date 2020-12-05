@@ -91,7 +91,11 @@ public class Conversation implements ConversationObservable, Runnable {
 
     }
 
-    
+    /**
+     * Building and treating a new message according to given input
+     * 
+     * @param input : String - received stream
+     */
     private void onReceive(String input) {
         // Generate a Message instance from the given input
         Message newMessage = new Message(input);
@@ -101,12 +105,15 @@ public class Conversation implements ConversationObservable, Runnable {
         // Store the new message
         this.storeMessage(newMessage);
         
+        // Notify the handler that a message has been received and must be treated 
+        this.notifyObserversReceivedMessage(newMessage);
+        
         // Check whether this conversation is opened or not
-        if(this.isOpen) {
+        /*if(this.isOpen) {
             //TODO notify the client view in order to display the new message
         } else {
             //TODO notify the client view to show a notification from this.correspondent
-        }
+        }*/
     }
     
     /**
@@ -141,7 +148,7 @@ public class Conversation implements ConversationObservable, Runnable {
     /**
      * Send a given message to the communication socket
      *
-     * @param message : Message - message we want to send
+     * @param message : Message - message we want to send and display
      */
     public void send(Message message) {
         System.out.println("Sending to " + this.correspondent.get_username() + " : " + message.getText());
@@ -162,7 +169,8 @@ public class Conversation implements ConversationObservable, Runnable {
         // Store the message in the local database
         this.storeMessage(message);
         
-        //TODO display the newly sent message using client view notification
+        // Notify the handler that a new message has been sent
+        this.notifyObserversSentMessage(message);
     }
     
     /* CONVERSATION OBSERVER METHODS */

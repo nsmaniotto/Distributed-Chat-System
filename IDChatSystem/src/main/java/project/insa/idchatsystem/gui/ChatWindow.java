@@ -1,11 +1,13 @@
 package project.insa.idchatsystem.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import javax.swing.*;
+import project.insa.idchatsystem.Message;
 
 /**
  *
@@ -13,23 +15,23 @@ import javax.swing.*;
  */
 public class ChatWindow extends Window {
     /* BEGIN: variables declaration */
-    private JPanel userPanel = null;
-        private JPanel userInfoPanel = null;
-            private JLabel usernameLabel = null;
-            private JButton changeUsernameButton = null;
-        private JTabbedPane conversationTabs = null;
-            private JScrollPane recentConversationsTab = null;
-            private JScrollPane onlineUsersTab = null;
-            private JScrollPane offlineUsersTab = null;
-            private JScrollPane allUsersTab = null;
-    private JPanel chatPanel = null;
-        private JPanel correspondentPanel = null;
-            private JLabel correspondentInfoLabel = null;
-        private JScrollPane chatScrollPane = null;
-            private JPanel chatHistoryPanel = null;
-        private JPanel chatFormPanel = null;
-            private JTextField chatTextInputField = null;
-            private JButton chatSendButton = null;
+    private JPanel userPanel;
+        private JPanel userInfoPanel;
+            private JLabel usernameLabel;
+            private JButton changeUsernameButton;
+        private JTabbedPane conversationTabs;
+            private JScrollPane recentConversationsTab;
+            private JScrollPane onlineUsersTab;
+            private JScrollPane offlineUsersTab;
+            private JScrollPane allUsersTab;
+    private JPanel chatPanel;
+        private JPanel correspondentPanel;
+            private JLabel correspondentInfoLabel;
+        private JScrollPane chatScrollPane;
+            private JPanel chatHistoryPanel;
+        private JPanel chatFormPanel;
+            private JTextField chatTextInputField;
+            private JButton chatSendButton;
     /* END: variables declarations */
     
     public ChatWindow() {
@@ -49,6 +51,7 @@ public class ChatWindow extends Window {
         
         /* BEGIN: variables initialization */
         this.userPanel = new JPanel(new GridBagLayout());
+        this.userPanel.setMinimumSize(new Dimension(200, HEIGHT));
         
         this.userInfoPanel = new JPanel(new GridLayout(2,0));
         this.userInfoPanel.setBorder(BorderFactory.createEmptyBorder(
@@ -94,11 +97,17 @@ public class ChatWindow extends Window {
         
         this.correspondentInfoLabel = new JLabel("BBBBB#yy", JLabel.LEFT);
         
-        this.chatScrollPane = new JScrollPane();
-        this.chatPanel.setBackground(Color.GRAY/*Window.COLOR_SOFTWHITE*/);
+        this.chatScrollPane = new JScrollPane(this.chatHistoryPanel);
+        this.chatScrollPane.setBackground(Color.GRAY/*Window.COLOR_SOFTWHITE*/);
         
         this.chatHistoryPanel = new JPanel();
         this.chatHistoryPanel.setLayout(new BoxLayout(this.chatHistoryPanel, BoxLayout.Y_AXIS));
+        this.chatHistoryPanel.setBorder(BorderFactory.createEmptyBorder(
+                10, //top
+                10, //left
+                10, //bottom
+                10) //right
+                );
         
         this.chatFormPanel = new JPanel(new GridBagLayout());
         this.chatFormPanel.setBorder(BorderFactory.createEmptyBorder(
@@ -215,5 +224,66 @@ public class ChatWindow extends Window {
         if(this.usernameLabel != null) {
             this.usernameLabel.setText(username + " #" + id);
         }
+    }
+    
+    /**
+     * Treat and display the message according to its data
+     * 
+     * @param message 
+     */
+    public void displayMessage(Message message) {
+        //TODO Generate the graphical instance
+        JPanel messageInstancePanel = this.generateDisplayedMessage(message);
+        
+        //TODO Add the instance to the display conversation
+        this.chatHistoryPanel.add(messageInstancePanel);
+    }
+    
+    /**
+     * Treat and display of a notification according to the given message
+     * 
+     * @param message : Message - message based on which the notification will be built
+     * @deprecated - to be implemented
+     */
+    public void displayNotification(Message message) {
+        //TODO
+    }
+    
+    /**
+     * Create a graphical instance which will be displayed, based on the given message
+     * 
+     * @param message : Message - message from which will be generated the graphical instance
+     * @return corresponding displayed message
+     */
+    private JPanel generateDisplayedMessage(Message message) {
+        JPanel messagePanel = new JPanel(new GridBagLayout());
+        messagePanel.setBorder(BorderFactory.createEmptyBorder(
+                10, //top
+                5, //left
+                10, //bottom
+                5) //right
+                );
+        
+        // text area
+        JLabel messageTextLabel = new JLabel(message.getText());
+        GridBagConstraints messageTextLabelConstraints = new GridBagConstraints();
+        messageTextLabelConstraints.gridx = 0;
+        messageTextLabelConstraints.weightx = 1.0;
+        messageTextLabelConstraints.weighty = 1.0;
+        messageTextLabelConstraints.fill = GridBagConstraints.HORIZONTAL;
+        
+        messagePanel.add(messageTextLabel, messageTextLabelConstraints);
+        
+        // timestamp area
+        JLabel messageTimestampLabel = new JLabel(message.getTimestamp());
+        GridBagConstraints messageTimestampLabelConstraints = new GridBagConstraints();
+        messageTimestampLabelConstraints.gridx = 1;
+        messageTimestampLabelConstraints.weightx = 0;
+        messageTimestampLabelConstraints.weighty = 1.0;
+        messageTimestampLabelConstraints.fill = GridBagConstraints.NONE;
+        
+        messagePanel.add(messageTimestampLabel, messageTimestampLabelConstraints);
+        
+        return messagePanel;
     }
 }
