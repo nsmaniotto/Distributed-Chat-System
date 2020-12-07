@@ -20,9 +20,15 @@ public class LocalUserModelEmitter extends UserModelEmitter {
     }
     private void sendBroadcast(String msg) {
         for(int port:this.liste_ports_others) {
-            DatagramPacket outPacket = new DatagramPacket(msg.getBytes(),
-                    msg.length(),
-                    socket.getLocalAddress(),port);
+            DatagramPacket outPacket = null;
+            try {
+                outPacket = new DatagramPacket(msg.getBytes(),
+                        msg.length(),
+                        InetAddress.getByName("127.0.0.1"),port);
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+                System.out.print("Cannot find host\n");
+            }
             try {
                 this.socket.send(outPacket);
             } catch (IOException e) {

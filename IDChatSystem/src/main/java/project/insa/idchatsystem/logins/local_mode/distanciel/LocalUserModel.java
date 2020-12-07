@@ -29,6 +29,21 @@ public class LocalUserModel extends UserModel {
         }).start();
     }
     @Override
+    public void setUsername(String username) {
+        this.emitter.askUpdate();
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if(this.checkavailable(username)) {
+            super.setUsername(username);
+        }
+        else {
+            System.out.printf("Username %s already taken !\n",username);
+        }
+    }
+    @Override
     public void stopperEmission(){
         this.emitter.stopperEmission();
     }
