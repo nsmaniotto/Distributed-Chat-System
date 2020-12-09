@@ -54,4 +54,9 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
         */
         this.view.displayMessage(sentMessage);
     }
+    
+    /* GETTERS/SETTERS */
+    public ConversationHandler getConversationHandler() {
+        return this.conversationHandler;
+    }
 }
