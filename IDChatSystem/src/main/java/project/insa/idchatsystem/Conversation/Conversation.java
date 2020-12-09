@@ -56,8 +56,6 @@ public class Conversation implements ConversationObservable, Runnable {
         
         // Load pasts messages
         this.loadConversation();
-        
-        //TODO notify the client view to show, passing 'this' as an argument
     }    
     
     /**
@@ -75,8 +73,6 @@ public class Conversation implements ConversationObservable, Runnable {
             System.out.println("EXCEPTION WHILE CLOSING THE SOCKET (" + e + ")");
             System.exit(0);
         }
-        
-        //TODO notify the client view to close this conversation
     }
     
     private void storeMessage(Message message) {
@@ -100,20 +96,11 @@ public class Conversation implements ConversationObservable, Runnable {
         // Generate a Message instance from the given input
         Message newMessage = new Message(input);
         
-        System.out.println("Reveived from " + this.correspondent.get_username() + " : " + newMessage.getText());
-        
         // Store the new message
         this.storeMessage(newMessage);
         
         // Notify the handler that a message has been received and must be treated 
         this.notifyObserversReceivedMessage(newMessage);
-        
-        // Check whether this conversation is opened or not
-        /*if(this.isOpen) {
-            //TODO notify the client view in order to display the new message
-        } else {
-            //TODO notify the client view to show a notification from this.correspondent
-        }*/
     }
     
     /**

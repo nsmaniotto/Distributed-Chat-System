@@ -237,6 +237,7 @@ public class ChatWindow extends Window {
         
         //TODO Add the instance to the display conversation
         this.chatHistoryPanel.add(messageInstancePanel);
+        this.chatHistoryPanel.validate();
     }
     
     /**
