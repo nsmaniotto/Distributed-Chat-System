@@ -56,8 +56,6 @@ public class Conversation implements ConversationObservable, Runnable {
         
         // Load pasts messages
         this.loadConversation();
-        
-        //TODO notify the client view to show, passing 'this' as an argument
     }    
     
     /**
@@ -75,8 +73,6 @@ public class Conversation implements ConversationObservable, Runnable {
             System.out.println("EXCEPTION WHILE CLOSING THE SOCKET (" + e + ")");
             System.exit(0);
         }
-        
-        //TODO notify the client view to close this conversation
     }
     
     private void storeMessage(Message message) {
