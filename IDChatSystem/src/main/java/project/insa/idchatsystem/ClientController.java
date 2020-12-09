@@ -34,7 +34,7 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
 
     @Override
     public void onlineUser(User user) {
-
+        this.conversationHandler.addKnownUser(user);
     }
     
     /* CONVERSATION HANDLER OBSERVER METHODS */
