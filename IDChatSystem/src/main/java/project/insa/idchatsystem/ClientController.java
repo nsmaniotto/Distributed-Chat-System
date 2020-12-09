@@ -40,12 +40,18 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
     /* CONVERSATION HANDLER OBSERVER METHODS */
 
     @Override
-    public void newMessageReceived(Message receivedMessage) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void newMessageReceived(Message receivedMessage) {        
+        this.view.displayMessage(receivedMessage);
+        //TODO manage notifications when current conversation is not the same conversation as the message
+        //this.view.displayNotification(receivedMessage);
     }
 
     @Override
     public void newMessageSent(Message sentMessage) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        /* No need to check if this message is associated with the current conversation.
+            Because the message has just been sent, it means the opened conversation's 
+            correspondent is the same as the message's destination
+        */
+        this.view.displayMessage(sentMessage);
     }
 }
