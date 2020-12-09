@@ -5,7 +5,7 @@
  */
 package conversation;
 
-import java.util.Scanner;
+import project.insa.idchatsystem.ClientController;
 import project.insa.idchatsystem.Conversation.ConversationHandler;
 import project.insa.idchatsystem.Message;
 import project.insa.idchatsystem.User.distanciel.User;
@@ -16,15 +16,22 @@ import project.insa.idchatsystem.User.distanciel.User;
  */
 public class ClientTestRobin {
     public ClientTestRobin() {
-        ConversationHandler conversationHandler = ConversationHandler.getInstance();
-        //ClientView clientView = new ClientView();
+        int id = 20;
+        ClientController controller = new ClientController(id);
         
+        //ConversationHandler conversationHandler = ConversationHandler.getInstance();
+        ConversationHandler conversationHandler = controller.getConversationHandler();
+        //new Thread(conversationHandler).start();
         
         /* TESTING TCP COMMUNICATIONS */
-          
+        try {
+            Thread.sleep(1000);
+        } catch (Exception e) {
+            
+        }
         
         // Initialize our current user
-        User.init_current_user(456);
+        User.init_current_user(id);
         try {
             User.set_current_username("Robin");
         } catch (Exception e) {
@@ -32,22 +39,28 @@ public class ClientTestRobin {
         }
         
         
-        User user1 = new User("Nathan", 123, "127.0.0.1");
+        User user1 = new User("Nathan", 10, "127.0.0.1");
         
-        conversationHandler.addKnownUser(user1);
+        controller.onlineUser(user1);
+        //conversationHandler.addKnownUser(user1);
         
         conversationHandler.open(user1); // Sending a message to Nathan
         conversationHandler.getCurrentConversation().send(new Message("Hi Nathan !"));
         
-        String message;
-        
-        try ( Scanner scanner = new Scanner( System.in ) ) {
+        try {
+            Thread.sleep(1000);
+        } catch (Exception e) {
             
-            message = scanner.nextLine();
-            conversationHandler.getCurrentConversation().send(new Message(message));
-                
-            message = scanner.nextLine();
-            conversationHandler.getCurrentConversation().send(new Message(message));
         }
+        
+        conversationHandler.getCurrentConversation().send(new Message("Hello again !"));
+        
+        try {
+            Thread.sleep(1000);
+        } catch (Exception e) {
+            
+        }
+        
+        conversationHandler.getCurrentConversation().send(new Message(":-)"));
     }
 }
