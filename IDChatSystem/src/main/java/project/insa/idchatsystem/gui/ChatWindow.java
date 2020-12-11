@@ -312,6 +312,9 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
                 // Create a message based on the retrieved text
                 Message newMessage = new Message(messageInputText);
                 
+                // Clear text input
+                this.chatTextInputField.setText("");
+                
                 // Notify the view that there is a new message to be sent
                 this.notifyObserverSendingMessage(newMessage);
             }
