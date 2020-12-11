@@ -323,12 +323,12 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
     /* CHAT WINDOW OBSERVABLE METHODS */
 
     @Override
-    public void addViewObserver(ChatWindowObserver observer) {
+    public void addChatWindowObserver(ChatWindowObserver observer) {
         this.chatWindowObserver = observer;
     }
 
     @Override
-    public void deleteViewObserver(ChatWindowObserver observer) {
+    public void deleteChatWindowObserver(ChatWindowObserver observer) {
         this.chatWindowObserver = null;
     }
 

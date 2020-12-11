@@ -22,7 +22,7 @@ public class View implements Runnable, ChatWindowObserver {
     public void loginOk() {
         System.out.printf("Opening chat window\n");
         this.chat_window = new ChatWindow();
-        this.chat_window.addViewObserver(this);
+        this.chat_window.addChatWindowObserver(this);
         this.chat_window.display();
     }
     public void addObserver(ViewObserver observer){
@@ -65,10 +65,6 @@ public class View implements Runnable, ChatWindowObserver {
 
     public void checkUsernameAvailable(String username){
         
-    }
-
-    public void addChatWindowObserver(ChatWindowObserver observer) {
-        this.chatWindowObserver = observer;
     }
     
     /* CHAT WINDOW OBSERVER METHODS */
