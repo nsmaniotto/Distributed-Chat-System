@@ -10,8 +10,7 @@ import project.insa.idchatsystem.Observers.ChatWindowObserver;
 public class View implements Runnable, ChatWindowObserver {
     private LoginWindow login_window;
     private ChatWindow chat_window;
-    private ViewObserver viewObservers;
-    private ChatWindowObserver chatWindowObserver;
+    private ViewObserver viewObserver;
     
     @Override
     public void run() {
@@ -24,16 +23,16 @@ public class View implements Runnable, ChatWindowObserver {
         this.chat_window = new ChatWindow();
         this.chat_window.addChatWindowObserver(this);
         this.chat_window.display();
-        viewObservers.initialized();
+        this.viewObserver.initialized();
     }
     public void availableUsers(ArrayList<User> users) {
         // Ajouter les utilisateurs
     }
     public void addObserver(ViewObserver observer){
-        this.viewObservers = observer;
+        this.viewObserver = observer;
     }
     public boolean setUsername(String login) {
-        return this.viewObservers.newLogin(login);
+        return this.viewObserver.newLogin(login);
     }
     public void offlineUser(User user){
         assert this.chat_window != null : "Vous n'êtes pas login";
@@ -75,6 +74,6 @@ public class View implements Runnable, ChatWindowObserver {
 
     @Override
     public void newMessageSending(Message sendingMessage) {
-        this.chatWindowObserver.newMessageSending(sendingMessage);
+        this.viewObserver.newMessageSending(sendingMessage);
     }
 }
