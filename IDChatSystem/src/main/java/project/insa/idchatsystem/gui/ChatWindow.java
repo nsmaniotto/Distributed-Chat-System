@@ -39,7 +39,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
     /* END: variables declarations */
     
     /* OBSERVERS */
-    ChatWindowObserver chatWindowObserver;
+    private ChatWindowObserver chatWindowObserver;
             
     public ChatWindow() {
         super("IDChat");
