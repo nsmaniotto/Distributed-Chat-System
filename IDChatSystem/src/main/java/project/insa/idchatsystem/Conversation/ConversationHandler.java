@@ -30,13 +30,13 @@ public class ConversationHandler implements ConversationHandlerObserver, Runnabl
 
     private final ExecutorService conversationThreadPool;
     private ServerSocket handlerSocket; // Acts as a server listening for incoming connection requests
-    private int portEcoute;
-    private int portDest;
+    private int listenerPort;
+    private int destinationPort;
     private ArrayList<ConversationHandlerObserver> observers;
     
-    public ConversationHandler(int portEcoute, int portDest) {
-        this.portEcoute = portEcoute;
-        this.portDest = portDest;
+    public ConversationHandler(int listenerPort, int portDest) {
+        this.listenerPort = listenerPort;
+        this.destinationPort = portDest;
         
         this.conversations = new ArrayList<>();
         this.users = new ArrayList<>(); // Empty for now
@@ -65,10 +65,10 @@ public class ConversationHandler implements ConversationHandlerObserver, Runnabl
     public void run() {
         // Initializing the handler socket instance
         try {
-            this.handlerSocket = new ServerSocket(this.portEcoute);
+            this.handlerSocket = new ServerSocket(this.listenerPort);
         }
         catch(IOException e) {
-            System.out.println("EXCEPTION: CANNOT CREATE SOCKET ON PORT " + this.portEcoute + " (" + e + ")");
+            System.out.println("EXCEPTION: CANNOT CREATE SOCKET ON PORT " + this.listenerPort + " (" + e + ")");
             System.exit(0);
         }
         
@@ -172,9 +172,9 @@ public class ConversationHandler implements ConversationHandlerObserver, Runnabl
             Socket conversationSocket = null;
 
             try {
-                conversationSocket = new Socket(InetAddress.getByName(correspondent.get_ipAddress()), this.portDest);
+                conversationSocket = new Socket(InetAddress.getByName(correspondent.get_ipAddress()), this.destinationPort);
             } catch(IOException e) {
-                System.out.println("EXCEPTION: CANNOT CREATE CONVERSATION SOCKET TOWARDS " + correspondent.get_ipAddress() + ":" + this.portDest + " (" + e + ")");
+                System.out.println("EXCEPTION: CANNOT CREATE CONVERSATION SOCKET TOWARDS " + correspondent.get_ipAddress() + ":" + this.destinationPort + " (" + e + ")");
                 System.out.println("Check that  all handlers listen on the same port");
                 System.exit(0);
             }

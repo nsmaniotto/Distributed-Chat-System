@@ -25,7 +25,7 @@ public class ClientTestRobin {
         
         /* TESTING TCP COMMUNICATIONS */
         try {
-            Thread.sleep(5000);//waiting for input login
+            Thread.sleep(8000);//waiting for input login
         } catch (Exception ignored) {
             
         }
