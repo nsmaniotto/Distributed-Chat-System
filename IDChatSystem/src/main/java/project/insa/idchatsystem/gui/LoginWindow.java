@@ -17,11 +17,10 @@ public class LoginWindow extends Window {
 
     public LoginWindow() {
         super("Login");
-        this.setupInternalListeners();
     }
 
     @Override
-    protected void init() {
+    protected void initComponents() {
         /* BEGIN: frame initialization */
         this.frame.setLayout(new GridBagLayout());
         this.frame.setLocationRelativeTo(null);
@@ -39,7 +38,7 @@ public class LoginWindow extends Window {
         this.loginTextField = new JTextField();
     }
     @Override
-    protected void build() {
+    protected void buildFrame() {
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
         c.gridy = 0;
@@ -55,7 +54,9 @@ public class LoginWindow extends Window {
         this.frame.setMinimumSize(frame.getMinimumSize());
 
     }
-    public void setupInternalListeners(){
+    
+    @Override
+    protected void initListeners(){
         Window parent = this;
         //Check if login is available and if so close the window and start the app
         this.loginTextField.addKeyListener(new KeyAdapter() {

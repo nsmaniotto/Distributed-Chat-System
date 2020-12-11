@@ -46,7 +46,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
     }
     
     @Override
-    protected void init() {
+    protected void initComponents() {
         /* BEGIN: frame initialization */
         this.frame.setSize(800,600);
         this.frame.setLayout(new GridBagLayout());
@@ -133,7 +133,12 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
     }
     
     @Override
-    protected void build() {
+    protected void initListeners() {
+        
+    }
+    
+    @Override
+    protected void buildFrame() {
         /* BEGIN: userPanel build */
         GridBagConstraints userInfoPanelConstraints = new GridBagConstraints();
         userInfoPanelConstraints.gridx = 0;
