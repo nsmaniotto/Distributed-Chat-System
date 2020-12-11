@@ -12,7 +12,7 @@ import project.insa.idchatsystem.logins.local_mode.distanciel.LocalUserModel;
 
 import java.util.ArrayList;
 
-public class ClientController implements ConversationHandlerObserver, UsersStatusObserver, ViewObserver, ChatWindowObserver {
+public class ClientController implements ConversationHandlerObserver, UsersStatusObserver, ViewObserver {
     private View view;
     private final ConversationHandler conversationHandler;
     private final LocalUserModel localUserModel;
@@ -25,7 +25,6 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
         // View init
         this.view = new View();
         this.view.addObserver(this);
-        this.view.addChatWindowObserver(this);
         new Thread(view).start();
         
         // Conversation handler init
@@ -83,7 +82,6 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
         return this.localUserModel.setUsername(login);
     }
     
-    /* CHAT WINDOW OBSERVER METHODS */
     @Override
     public void newMessageSending(Message sendingMessage) {
         if(this.conversationHandler.getCurrentConversation() != null) {
