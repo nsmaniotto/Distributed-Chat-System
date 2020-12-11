@@ -20,7 +20,8 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
     private DistantUserModel centralizedUserModel;*/
     
     public ClientController(int id,
-                            int loginReceiverPort, int loginEmiterPort, ArrayList<Integer> loginBroadcast)
+                            int loginReceiverPort, int loginEmiterPort, ArrayList<Integer> loginBroadcast,
+                            int conversationSocketPortEcoute, int conversationSocketPortDest)
     {
         // View init
         this.view = new View();
@@ -29,14 +30,13 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
         new Thread(view).start();
         
         // Conversation handler init
-        this.conversationHandler = ConversationHandler.getInstance();
+        this.conversationHandler = ConversationHandler.getInstance(conversationSocketPortEcoute,conversationSocketPortDest);
         this.conversationHandler.addObserver(this);
         new Thread(conversationHandler).start();
 
         // At this stage, the login controller is running in the same thread as the ClientController but the reception and emission operates in two others
         this.localUserModel = new LocalUserModel(id,loginReceiverPort,loginEmiterPort,loginBroadcast);
         this.localUserModel.addUserModelObserver(this);
-
     }
 
     public LocalUserModel getLocalUserModel() {

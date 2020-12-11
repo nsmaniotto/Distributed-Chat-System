@@ -21,12 +21,12 @@ public class ClientTestRobin {
         int id = 20;
         ArrayList<Integer> arrayBroadCast = new ArrayList<Integer>();
         arrayBroadCast.add(2000);
-        ClientController controller = new ClientController(id,2001,2011,arrayBroadCast);
+        ClientController controller = new ClientController(id,2001,2011,arrayBroadCast,2501,2500);
         
         /* TESTING TCP COMMUNICATIONS */
         try {
             Thread.sleep(5000);//waiting for input login
-        } catch (Exception e) {
+        } catch (Exception ignored) {
             
         }
         User user = controller.getConversationHandler().getUsers().get(0);
@@ -35,7 +35,7 @@ public class ClientTestRobin {
         
         try {
             Thread.sleep(1000);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
             
         }
 

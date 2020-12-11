@@ -14,9 +14,11 @@ public class ControllerEncapsulation implements ConversationHandlerObserver, Use
     private LocalUserModel localUserModel;
     //private DistantUserModel centralizedUserModel;
 
-    public ControllerEncapsulation(int id, int usermodel_receiver_port, int usermodel_emitter_port, ArrayList<Integer> others) {
+    public ControllerEncapsulation(int id,
+                                   int usermodel_receiver_port, int usermodel_emitter_port, ArrayList<Integer> others,
+                                   int conversationSocketPortEcoute,int conversationSocketPortDest) {
         this.localUserModel = new LocalUserModel(id,usermodel_receiver_port,usermodel_emitter_port,others);
-        this.conversationHandler = ConversationHandler.getInstance();
+        this.conversationHandler = ConversationHandler.getInstance(conversationSocketPortEcoute,conversationSocketPortDest);
         this.conversationHandler.addObserver(this);
         this.localUserModel.addUserModelObserver(this);
     }

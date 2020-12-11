@@ -21,7 +21,8 @@ import java.util.concurrent.Executors;
  * @author nsmaniotto
  */
 public class ConversationHandler implements ConversationHandlerObserver, Runnable {
-    private static ConversationHandler INSTANCE = new ConversationHandler(1234); //TODO change port
+    private static boolean initialized = false;
+    private static ConversationHandler INSTANCE;
     private ArrayList<Conversation> conversations;
     private Conversation currentConversation;
     
@@ -29,11 +30,13 @@ public class ConversationHandler implements ConversationHandlerObserver, Runnabl
 
     private final ExecutorService conversationThreadPool;
     private ServerSocket handlerSocket; // Acts as a server listening for incoming connection requests
-    private Integer port;
+    private int portEcoute;
+    private int portDest;
     private ArrayList<ConversationHandlerObserver> observers;
     
-    public ConversationHandler(Integer socketPort) {
-        this.port = socketPort;
+    public ConversationHandler(int portEcoute, int portDest) {
+        this.portEcoute = portEcoute;
+        this.portDest = portDest;
         
         this.conversations = new ArrayList<>();
         this.users = new ArrayList<>(); // Empty for now
@@ -50,18 +53,22 @@ public class ConversationHandler implements ConversationHandlerObserver, Runnabl
      * 
      * @return INSTANCE : ConversationHandler - single instance of this class
      */
-    public static ConversationHandler getInstance() {
-        return INSTANCE;
+    public static ConversationHandler getInstance(int portEcoute,int portDest) {
+        if(!ConversationHandler.initialized){
+            ConversationHandler.INSTANCE = new ConversationHandler(portEcoute,portDest);
+            ConversationHandler.initialized = true;
+        }
+        return ConversationHandler.INSTANCE;
     }
     
     @Override
     public void run() {
         // Initializing the handler socket instance
         try {
-            this.handlerSocket = new ServerSocket(this.port);
+            this.handlerSocket = new ServerSocket(this.portEcoute);
         }
         catch(IOException e) {
-            System.out.println("EXCEPTION: CANNOT CREATE SOCKET ON PORT " + this.port + " (" + e + ")");
+            System.out.println("EXCEPTION: CANNOT CREATE SOCKET ON PORT " + this.portEcoute + " (" + e + ")");
             System.exit(0);
         }
         
@@ -165,9 +172,9 @@ public class ConversationHandler implements ConversationHandlerObserver, Runnabl
             Socket conversationSocket = null;
 
             try {
-                conversationSocket = new Socket(InetAddress.getByName(correspondent.get_ipAddress()), this.port);
+                conversationSocket = new Socket(InetAddress.getByName(correspondent.get_ipAddress()), this.portDest);
             } catch(IOException e) {
-                System.out.println("EXCEPTION: CANNOT CREATE CONVERSATION SOCKET TOWARDS " + correspondent.get_ipAddress() + ":" + this.port + " (" + e + ")");
+                System.out.println("EXCEPTION: CANNOT CREATE CONVERSATION SOCKET TOWARDS " + correspondent.get_ipAddress() + ":" + this.portDest + " (" + e + ")");
                 System.out.println("Check that  all handlers listen on the same port");
                 System.exit(0);
             }
