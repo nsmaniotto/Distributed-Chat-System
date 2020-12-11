@@ -2,12 +2,13 @@
 package project.insa.idchatsystem;
 
 import project.insa.idchatsystem.Conversation.ConversationHandler;
+import project.insa.idchatsystem.Observers.ChatWindowObserver;
 import project.insa.idchatsystem.Observers.ConversationHandlerObserver;
 import project.insa.idchatsystem.Observers.UsersStatusObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 import project.insa.idchatsystem.gui.View;
 
-public class ClientController implements ConversationHandlerObserver, UsersStatusObserver {
+public class ClientController implements ConversationHandlerObserver, UsersStatusObserver, ChatWindowObserver {
     private View view;
     private final ConversationHandler conversationHandler;
     /*private LocalUserModel localUserModel;
@@ -16,6 +17,7 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
     public ClientController(int id) {
         // View init
         this.view = new View();
+        this.view.addChatWindowObserver(this);
         new Thread(view).start();
         
         // Conversation handler init
@@ -58,5 +60,13 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
     /* GETTERS/SETTERS */
     public ConversationHandler getConversationHandler() {
         return this.conversationHandler;
+    }
+    
+    /* CHAT WINDOW OBSERVER METHODS */
+    @Override
+    public void newMessageSending(Message sendingMessage) {
+        if(this.conversationHandler.getCurrentConversation() != null) {
+            this.conversationHandler.getCurrentConversation().send(sendingMessage);
+        }
     }
 }
