@@ -8,6 +8,8 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import javax.swing.*;
 import project.insa.idchatsystem.Message;
 import project.insa.idchatsystem.Observers.ChatWindowObservable;
@@ -133,6 +135,20 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
     
     @Override
     protected void initListeners() {
+        ChatWindow chatWindowReference = this;
+        
+        // Chat input text field on ENTER
+        this.chatTextInputField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                int key = e.getKeyCode();
+                
+                if(key == KeyEvent.VK_ENTER){
+                    chatWindowReference.sendMessage();
+                }
+            }
+        });
+        
         // Chat send button on click
         this.chatSendButton.addActionListener(this);
     }
@@ -300,28 +316,34 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         return messagePanel;
     }
     
+    /* UTILITIES */
+    
+    private void sendMessage() {
+        // Retrieve text from input
+        String messageInputText = this.chatTextInputField.getText();
+
+        boolean isMessageEmpty = messageInputText.isBlank(); // To be later modified to support file sending
+
+        if(!isMessageEmpty) {
+            // Create a message based on the retrieved text
+            Message newMessage = new Message(messageInputText);
+
+            // Clear text input
+            this.chatTextInputField.setText("");
+
+            // Notify the view that there is a new message to be sent
+            this.notifyObserverSendingMessage(newMessage);
+        }
+    }
+    
     /* ACTION LISTENER METHODS */
     
     @Override
     public void actionPerformed(ActionEvent event) {
-        JButton button = (JButton) event.getSource();
+        Object sourceObject = event.getSource();
         
-        if(button == this.chatSendButton) {
-            // Retrieve text from input
-            String messageInputText = this.chatTextInputField.getText();
-            
-            boolean isMessageEmpty = messageInputText.isBlank(); // To be later modified to support file sending
-            
-            if(!isMessageEmpty) {
-                // Create a message based on the retrieved text
-                Message newMessage = new Message(messageInputText);
-                
-                // Clear text input
-                this.chatTextInputField.setText("");
-                
-                // Notify the view that there is a new message to be sent
-                this.notifyObserverSendingMessage(newMessage);
-            }
+        if(sourceObject == this.chatSendButton) {
+            this.sendMessage();
         }
     }
     
