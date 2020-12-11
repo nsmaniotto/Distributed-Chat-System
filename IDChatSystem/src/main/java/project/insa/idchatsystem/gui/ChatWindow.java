@@ -39,7 +39,7 @@ public class ChatWindow extends Window {
     }
     
     @Override
-    protected void init() {        
+    protected void init() {
         /* BEGIN: frame initialization */
         this.frame.setSize(800,600);
         this.frame.setLayout(new GridBagLayout());
@@ -48,11 +48,11 @@ public class ChatWindow extends Window {
         this.initLookAndFeel();
         this.frame.getContentPane().setBackground(Window.COLOR_SOFTWHITE);
         /* END: frame initialization */
-        
+
         /* BEGIN: variables initialization */
         this.userPanel = new JPanel(new GridBagLayout());
         this.userPanel.setMinimumSize(new Dimension(200, HEIGHT));
-        
+
         this.userInfoPanel = new JPanel(new GridLayout(2,0));
         this.userInfoPanel.setBorder(BorderFactory.createEmptyBorder(
                 10, //top
@@ -61,21 +61,21 @@ public class ChatWindow extends Window {
                 10) //right
                 );
         this.userInfoPanel.setBackground(Window.COLOR_SOFTWHITE);
-        
+
         this.usernameLabel = new JLabel("AAAAA#xx", JLabel.LEFT);
-        
+
         this.changeUsernameButton = new JButton();
         this.changeUsernameButton.setText("edit");
-        
+
         this.conversationTabs = new JTabbedPane();
         this.conversationTabs.setPreferredSize(new Dimension(200, HEIGHT));
         //this.recentConversationsTab.setViewportView(this.recentConversationsTab);
-        
+
         this.recentConversationsTab = new JScrollPane();
         this.onlineUsersTab = new JScrollPane();
         this.offlineUsersTab = new JScrollPane();
         this.allUsersTab = new JScrollPane();
-        
+
         this.chatPanel = new JPanel(new GridBagLayout());
         this.chatPanel.setBorder(BorderFactory.createEmptyBorder(
                 0, //top
@@ -83,9 +83,9 @@ public class ChatWindow extends Window {
                 0, //bottom
                 1) //right
                 );
-        
+
         this.chatPanel.setBackground(Color.LIGHT_GRAY/*Window.COLOR_SOFTWHITE*/);
-        
+
         this.correspondentPanel = new JPanel();
         this.correspondentPanel.setBorder(BorderFactory.createEmptyBorder(
                 10, //top
@@ -94,12 +94,12 @@ public class ChatWindow extends Window {
                 10) //right
                 );
         this.correspondentPanel.setBackground(Color.white);
-        
+
         this.correspondentInfoLabel = new JLabel("BBBBB#yy", JLabel.LEFT);
-        
+
         this.chatScrollPane = new JScrollPane(this.chatHistoryPanel);
         this.chatScrollPane.setBackground(Color.GRAY/*Window.COLOR_SOFTWHITE*/);
-        
+
         this.chatHistoryPanel = new JPanel();
         this.chatHistoryPanel.setLayout(new BoxLayout(this.chatHistoryPanel, BoxLayout.Y_AXIS));
         this.chatHistoryPanel.setBorder(BorderFactory.createEmptyBorder(
@@ -108,7 +108,7 @@ public class ChatWindow extends Window {
                 10, //bottom
                 10) //right
                 );
-        
+
         this.chatFormPanel = new JPanel(new GridBagLayout());
         this.chatFormPanel.setBorder(BorderFactory.createEmptyBorder(
                 10, //top
@@ -117,11 +117,11 @@ public class ChatWindow extends Window {
                 10) //right
                 );
         this.chatFormPanel.setBackground(Window.COLOR_SOFTWHITE);
-        
+
         this.chatTextInputField = new JTextField();
-        
+
         this.chatSendButton = new JButton("SEND");
-            
+
         /* END: variables initialization */
     }
     
@@ -135,10 +135,10 @@ public class ChatWindow extends Window {
         userInfoPanelConstraints.fill = GridBagConstraints.HORIZONTAL;
         userInfoPanelConstraints.anchor = GridBagConstraints.NORTH;
         this.userPanel.add(this.userInfoPanel, userInfoPanelConstraints);
-        
+
         this.userInfoPanel.add(this.usernameLabel);
         this.userInfoPanel.add(this.changeUsernameButton);
-        
+
         GridBagConstraints conversationTabsConstraints = new GridBagConstraints();
         conversationTabsConstraints.gridx = 0;
         conversationTabsConstraints.gridy = 1;
@@ -147,13 +147,13 @@ public class ChatWindow extends Window {
         conversationTabsConstraints.fill = GridBagConstraints.BOTH;
         conversationTabsConstraints.anchor = GridBagConstraints.SOUTH;
         this.userPanel.add(this.conversationTabs, conversationTabsConstraints);
-        
+
         this.conversationTabs.addTab("Recent", this.recentConversationsTab);
         this.conversationTabs.addTab("Online", this.onlineUsersTab);
         this.conversationTabs.addTab("Offline", this.offlineUsersTab);
         //this.conversationTabs.addTab("All", this.allUsersTab); // Maybe later
         /* END: userPanel build */
-        
+
         /* BEGIN: chatPanel build */
         GridBagConstraints correspondentPanelConstraints = new GridBagConstraints();
         correspondentPanelConstraints.gridx = 0;
@@ -162,9 +162,9 @@ public class ChatWindow extends Window {
         correspondentPanelConstraints.fill = GridBagConstraints.HORIZONTAL;
         correspondentPanelConstraints.anchor = GridBagConstraints.NORTH;
         this.chatPanel.add(this.correspondentPanel, correspondentPanelConstraints);
-        
+
         this.correspondentPanel.add(this.correspondentInfoLabel);
-        
+
         GridBagConstraints chatScrollPaneConstraints = new GridBagConstraints();
         chatScrollPaneConstraints.gridx = 0;
         chatScrollPaneConstraints.gridy = 1;
@@ -173,9 +173,9 @@ public class ChatWindow extends Window {
         chatScrollPaneConstraints.fill = GridBagConstraints.BOTH;
         chatScrollPaneConstraints.anchor = GridBagConstraints.CENTER;
         this.chatPanel.add(this.chatScrollPane, chatScrollPaneConstraints);
-        
+
         this.chatScrollPane.setViewportView(this.chatHistoryPanel);
-        
+
         GridBagConstraints chatFormPanelConstraints = new GridBagConstraints();
         chatFormPanelConstraints.gridx = 0;
         chatFormPanelConstraints.gridy = 2;
@@ -184,15 +184,15 @@ public class ChatWindow extends Window {
         chatFormPanelConstraints.fill = GridBagConstraints.HORIZONTAL;
         chatFormPanelConstraints.anchor = GridBagConstraints.SOUTH;
         this.chatPanel.add(this.chatFormPanel, chatFormPanelConstraints);
-        
-        
+
+
         GridBagConstraints chatTextInputFieldConstraints = new GridBagConstraints();
         chatTextInputFieldConstraints.gridx = 0;
         chatTextInputFieldConstraints.weightx = 1.0;
         chatTextInputFieldConstraints.fill = GridBagConstraints.HORIZONTAL;
         chatTextInputFieldConstraints.anchor = GridBagConstraints.WEST;
         this.chatFormPanel.add(this.chatTextInputField, chatTextInputFieldConstraints);
-        
+
         GridBagConstraints chatSendButtonConstraints = new GridBagConstraints();
         chatSendButtonConstraints.gridx = 1;
         chatSendButtonConstraints.weightx = 0.0;
@@ -200,7 +200,7 @@ public class ChatWindow extends Window {
         chatSendButtonConstraints.anchor = GridBagConstraints.EAST;
         this.chatFormPanel.add(this.chatSendButton, chatSendButtonConstraints);
         /* END: chatPanel build */
-        
+
         /* BEGIN: frame build */
         GridBagConstraints userPanelConstraints = new GridBagConstraints();
         userPanelConstraints.gridx = 0;
@@ -209,7 +209,7 @@ public class ChatWindow extends Window {
         userPanelConstraints.weighty = 1.0;
         userPanelConstraints.fill = GridBagConstraints.BOTH;
         this.frame.getContentPane().add(this.userPanel, userPanelConstraints);
-        
+
         GridBagConstraints chatPanelConstraints = new GridBagConstraints();
         chatPanelConstraints.gridx = 1;
         chatPanelConstraints.gridy = 0;

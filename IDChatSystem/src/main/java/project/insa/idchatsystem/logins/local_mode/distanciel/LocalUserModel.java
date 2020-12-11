@@ -29,7 +29,7 @@ public class LocalUserModel extends UserModel {
         }).start();
     }
     @Override
-    public void setUsername(String username) {
+    public boolean setUsername(String username) {
         this.emitter.askUpdate();
         try {
             Thread.sleep(500);
@@ -38,9 +38,11 @@ public class LocalUserModel extends UserModel {
         }
         if(this.checkavailable(username)) {
             super.setUsername(username);
+            return true;
         }
         else {
             System.out.printf("Username %s already taken !\n",username);
+            return false;
         }
     }
     @Override

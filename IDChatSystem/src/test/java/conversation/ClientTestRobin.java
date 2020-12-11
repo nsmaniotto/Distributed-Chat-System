@@ -10,6 +10,8 @@ import project.insa.idchatsystem.Conversation.ConversationHandler;
 import project.insa.idchatsystem.Message;
 import project.insa.idchatsystem.User.distanciel.User;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author smani
@@ -17,50 +19,34 @@ import project.insa.idchatsystem.User.distanciel.User;
 public class ClientTestRobin {
     public ClientTestRobin() {
         int id = 20;
-        ClientController controller = new ClientController(id);
-        
-        //ConversationHandler conversationHandler = ConversationHandler.getInstance();
-        ConversationHandler conversationHandler = controller.getConversationHandler();
-        //new Thread(conversationHandler).start();
+        ArrayList<Integer> arrayBroadCast = new ArrayList<Integer>();
+        arrayBroadCast.add(2000);
+        ClientController controller = new ClientController(id,2001,2011,arrayBroadCast);
         
         /* TESTING TCP COMMUNICATIONS */
         try {
-            Thread.sleep(1000);
+            Thread.sleep(5000);//waiting for input login
         } catch (Exception e) {
             
         }
-        
-        // Initialize our current user
-        User.init_current_user(id);
-        try {
-            User.set_current_username("Robin");
-        } catch (Exception e) {
-            
-        }
-        
-        
-        User user1 = new User("Nathan", 10, "127.0.0.1");
-        
-        controller.onlineUser(user1);
-        //conversationHandler.addKnownUser(user1);
-        
-        conversationHandler.open(user1); // Sending a message to Nathan
-        conversationHandler.getCurrentConversation().send(new Message("Hi Nathan !"));
+        User user = controller.getConversationHandler().getUsers().get(0);
+        controller.getConversationHandler().open(user); // Sending a message to Nathan
+        controller.getConversationHandler().getCurrentConversation().send(new Message("Hi Nathan !"));
         
         try {
             Thread.sleep(1000);
         } catch (Exception e) {
             
         }
-        
-        conversationHandler.getCurrentConversation().send(new Message("Hello again !"));
+
+        controller.getConversationHandler().getCurrentConversation().send(new Message("Hello again !"));
         
         try {
             Thread.sleep(1000);
         } catch (Exception e) {
             
         }
-        
-        conversationHandler.getCurrentConversation().send(new Message(":-)"));
+
+        controller.getConversationHandler().getCurrentConversation().send(new Message(":-)"));
     }
 }

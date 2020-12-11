@@ -16,13 +16,15 @@ public abstract class UserModel implements ObservableUserModel {
         User.init_current_user(id);
         this.users = new HashMap<Integer,User>();
     }
-    public void setUsername(String newUserName) {
+    public boolean setUsername(String newUserName) {
+        System.out.printf("Changing username\n");
         try {
             User.set_current_username(newUserName);
         } catch (Uninitialized uninitialized) {
             uninitialized.printStackTrace();
         }
         this.diffuseNewUsername();
+        return true;
     }
     public void addOnlineUser(User user) {
         boolean new_user = this.users.containsKey(user.get_id());

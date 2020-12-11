@@ -1,18 +1,31 @@
 package project.insa.idchatsystem.gui;
 
 import project.insa.idchatsystem.Message;
+import project.insa.idchatsystem.Observers.ViewObserver;
 import project.insa.idchatsystem.User.distanciel.User;
+
+import java.util.ArrayList;
 
 public class View implements Runnable {
     private LoginWindow login_window;
     private ChatWindow chat_window;
+    private ViewObserver viewObservers;
     @Override
     public void run() {
         this.login_window = new LoginWindow();
+        this.login_window.setLoginOKObserver(this);
+        this.login_window.display();
     }
     public void loginOk() {
+        System.out.printf("Opening chat window\n");
         this.chat_window = new ChatWindow();
         this.chat_window.display();
+    }
+    public void addObserver(ViewObserver observer){
+        this.viewObservers = observer;
+    }
+    public boolean setUsername(String login) {
+        return this.viewObservers.newLogin(login);
     }
     public void offlineUser(User user){
         assert this.chat_window != null : "Vous n'êtes pas login";
@@ -44,5 +57,8 @@ public class View implements Runnable {
         assert this.chat_window != null : "You are not logged in";
         
         this.chat_window.displayNotification(message);
+    }
+    public void checkUsernameAvailable(String username){
+
     }
 }

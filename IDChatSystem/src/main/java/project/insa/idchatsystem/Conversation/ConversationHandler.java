@@ -191,7 +191,11 @@ public class ConversationHandler implements ConversationHandlerObserver, Runnabl
             this.currentConversation.open();
         }
     }
-    
+
+    public ArrayList<User> getUsers() {
+        return users;
+    }
+
     public void addObserver(ConversationHandlerObserver observer) {
         this.observers.add(observer);
     }

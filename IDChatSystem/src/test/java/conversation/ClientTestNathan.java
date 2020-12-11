@@ -7,7 +7,10 @@ package conversation;
 
 import project.insa.idchatsystem.ClientController;
 import project.insa.idchatsystem.Conversation.ConversationHandler;
+import project.insa.idchatsystem.Exceptions.Uninitialized;
 import project.insa.idchatsystem.User.distanciel.User;
+
+import java.util.ArrayList;
 
 /**
  *
@@ -16,28 +19,23 @@ import project.insa.idchatsystem.User.distanciel.User;
 public class ClientTestNathan {    
     public ClientTestNathan() {
         int id = 10;
-        ClientController controller = new ClientController(id);
-        
-        //ConversationHandler conversationHandler = ConversationHandler.getInstance();
-        ConversationHandler conversationHandler = controller.getConversationHandler();
-        new Thread(conversationHandler).start();
-        
-        
-        /* TESTING TCP COMMUNICATIONS */
-          
-        
-        // Initialize our current user
-        User.init_current_user(id);
+        ArrayList<Integer> arrayBroadCast = new ArrayList<Integer>();
+        arrayBroadCast.add(2001);
+        ClientController controller = new ClientController(id,2000,2010,arrayBroadCast);
         try {
-            User.set_current_username("Nathan");
-        } catch (Exception e) {
-            
+            Thread.sleep(5000);//On laisse le temps d'entrer le login
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-        
-        
-        User user1 = new User("Robin", 20, "/127.0.0.1");
-        
-        controller.onlineUser(user1);
-        //conversationHandler.addKnownUser(user1);
+        try {
+            if(User.get_current_username().equals(String.format("--user%d",id))) {
+                System.out.print("Error, the login has not be taken into account\n");
+            }
+            else {
+                System.out.printf("All Green, login correct ? %s\n",User.get_current_username());
+            }
+        } catch (Uninitialized uninitialized) {
+            uninitialized.printStackTrace();
+        }
     }
 }
