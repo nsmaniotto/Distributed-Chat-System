@@ -123,6 +123,7 @@ public class ChatWindow extends Window implements ActionListener {
         this.chatTextInputField = new JTextField();
         
         this.chatSendButton = new JButton("SEND");
+        this.chatSendButton.addActionListener(this);
             
         /* END: variables initialization */
     }
