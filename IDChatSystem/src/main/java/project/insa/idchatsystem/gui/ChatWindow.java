@@ -313,7 +313,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
                 Message newMessage = new Message(messageInputText);
                 
                 // Notify the view that there is a new message to be sent
-                this.notifyObserverSentMessage(newMessage);
+                this.notifyObserverSendingMessage(newMessage);
             }
         }
     }
@@ -331,9 +331,9 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
     }
 
     @Override
-    public void notifyObserverSentMessage(Message sentMessage) {
+    public void notifyObserverSendingMessage(Message sentMessage) {
         if(this.chatWindowObserver != null) {
-            this.chatWindowObserver.newMessageSent(sentMessage);
+            this.chatWindowObserver.newMessageSending(sentMessage);
         }
     }
 }
