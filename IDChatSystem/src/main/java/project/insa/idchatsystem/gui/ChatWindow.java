@@ -299,10 +299,16 @@ public class ChatWindow extends Window implements ActionListener {
         
         if(button == this.chatSendButton) {
             // Retrieve text from input
+            String messageInputText = this.chatTextInputField.getText();
             
-            // Create a message based on the retrieved text
+            boolean isMessageEmpty = messageInputText.isBlank(); // To be later modified to support file sending
             
-            // Notify the view that there is a new message to be sent
+            if(!isMessageEmpty) {
+                // Create a message based on the retrieved text
+                Message newMessage = new Message(messageInputText);
+                
+                // Notify the view that there is a new message to be sent
+            }
         }
     }
 }
