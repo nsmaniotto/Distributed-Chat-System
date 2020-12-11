@@ -1,9 +1,10 @@
 package project.insa.idchatsystem.gui;
 
 import project.insa.idchatsystem.Message;
+import project.insa.idchatsystem.Observers.ChatWindowObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 
-public class View implements Runnable {
+public class View implements Runnable, ChatWindowObserver {
     private LoginWindow login_window;
     private ChatWindow chat_window;
     @Override
@@ -12,6 +13,7 @@ public class View implements Runnable {
     }
     public void loginOk() {
         this.chat_window = new ChatWindow();
+        this.chat_window.addViewObserver(this);
         this.chat_window.display();
     }
     public void offlineUser(User user){
@@ -44,5 +46,12 @@ public class View implements Runnable {
         assert this.chat_window != null : "You are not logged in";
         
         this.chat_window.displayNotification(message);
+    }
+    
+    /* CHAT WINDOW OBSERVER METHODS */
+
+    @Override
+    public void newMessageSent(Message sentMessage) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
