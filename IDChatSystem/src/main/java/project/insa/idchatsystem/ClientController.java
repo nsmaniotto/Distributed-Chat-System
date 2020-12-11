@@ -89,6 +89,7 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
     public void initialized() {
         ArrayList<User> users = new ArrayList<>();
         HashMap <Integer,User> hashmapUsers = this.localUserModel.getOnlineUsers();
+        System.out.printf("Initializing hashmap for conversattion\n");
         hashmapUsers.forEach((k,v) -> {
             users.add(v);
             this.conversationHandler.addKnownUser(v);//En passant par une hashmap si il y a un duplicat, on écrasera l'ancienne valeur

@@ -11,6 +11,7 @@ import project.insa.idchatsystem.Message;
 import project.insa.idchatsystem.User.distanciel.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -29,7 +30,8 @@ public class ClientTestRobin {
         } catch (Exception ignored) {
             
         }
-        User user = controller.getConversationHandler().getUsers().get(0);
+        HashMap<Integer,User> userHashMap = controller.getConversationHandler().getUsers();
+        User user = userHashMap.get(userHashMap.keySet().toArray()[0]);
         controller.getConversationHandler().open(user); // Sending a message to Nathan
         controller.getConversationHandler().getCurrentConversation().send(new Message("Hi Nathan !"));
         

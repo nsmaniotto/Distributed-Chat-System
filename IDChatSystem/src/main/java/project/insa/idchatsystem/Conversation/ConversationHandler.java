@@ -219,6 +219,7 @@ public class ConversationHandler implements ConversationHandlerObserver, Runnabl
      */
     public void addKnownUser(User newUser) {
         this.users.put(newUser.get_id(),newUser);
+        System.out.printf("Adding user %s\n",newUser);
     }
     
     /* CONVERSATION HANDLER OBSERVER METHODS */
