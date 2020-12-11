@@ -10,12 +10,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import project.insa.idchatsystem.Message;
+import project.insa.idchatsystem.Observers.ChatWindowObservable;
+import project.insa.idchatsystem.Observers.ChatWindowObserver;
 
 /**
  *
  * @author nsmaniotto
  */
-public class ChatWindow extends Window implements ActionListener {
+public class ChatWindow extends Window implements ActionListener, ChatWindowObservable {
     /* BEGIN: variables declaration */
     private JPanel userPanel;
         private JPanel userInfoPanel;
@@ -310,5 +312,22 @@ public class ChatWindow extends Window implements ActionListener {
                 // Notify the view that there is a new message to be sent
             }
         }
+    }
+    
+    /* CHAT WINDOW OBSERVABLE METHODS */
+
+    @Override
+    public void addViewObserver(ChatWindowObserver observer) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void deleteViewObserver(ChatWindowObserver observer) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void notifyObserverSentMessage(Message sentMessage) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
