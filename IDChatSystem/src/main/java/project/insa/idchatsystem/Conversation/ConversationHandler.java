@@ -10,8 +10,10 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Based on Singleton pattern, a conversation handler is here to collect
@@ -25,7 +27,7 @@ public class ConversationHandler implements ConversationHandlerObserver, Runnabl
     private ArrayList<Conversation> conversations;
     private Conversation currentConversation;
     
-    private ArrayList<User> users; // Copy of UserModel's hashmap to identify every user
+    private HashMap<Integer,User> users; // Copy of UserModel's hashmap to identify every user
 
     private final ExecutorService conversationThreadPool;
     private ServerSocket handlerSocket; // Acts as a server listening for incoming connection requests
@@ -38,8 +40,8 @@ public class ConversationHandler implements ConversationHandlerObserver, Runnabl
         this.destinationPort = portDest;
         
         this.conversations = new ArrayList<>();
-        this.users = new ArrayList<>(); // Empty for now
-        
+        this.users = new HashMap<>(); // Empty for now
+
         // Create an open ended thread-pool for our conversations which are threads
         this.conversationThreadPool = Executors.newCachedThreadPool();
         
@@ -114,13 +116,14 @@ public class ConversationHandler implements ConversationHandlerObserver, Runnabl
      * @return User - null if not found
      */
     private User findUserByAddress(String correspondentAddress) {
-        for(User user : this.users) {
+        AtomicReference<User> userToFind = new AtomicReference<>();//Suggested by the IDE with the forEach...
+        this.users.forEach((k,user) -> {
             if (user.get_ipAddress().equals(correspondentAddress)) {
-                return user;
+                userToFind.set(user);
             }
-        }
+        });
         
-        return null;
+        return userToFind.get();
     }
     
     /**
@@ -197,7 +200,7 @@ public class ConversationHandler implements ConversationHandlerObserver, Runnabl
         }
     }
 
-    public ArrayList<User> getUsers() {
+    public HashMap<Integer,User> getUsers() {
         return users;
     }
 
@@ -215,7 +218,7 @@ public class ConversationHandler implements ConversationHandlerObserver, Runnabl
      * @param newUser 
      */
     public void addKnownUser(User newUser) {
-        this.users.add(newUser);
+        this.users.put(newUser.get_id(),newUser);
     }
     
     /* CONVERSATION HANDLER OBSERVER METHODS */
