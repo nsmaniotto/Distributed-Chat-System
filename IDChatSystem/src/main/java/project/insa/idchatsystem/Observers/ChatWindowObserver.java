@@ -4,5 +4,5 @@ package project.insa.idchatsystem.Observers;
 import project.insa.idchatsystem.Message;
 
 public interface ChatWindowObserver {
-    public void newMessageSent(Message sentMessage);
+    public void newMessageSending(Message sendingMessage);
 }
