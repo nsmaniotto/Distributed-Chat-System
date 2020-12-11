@@ -21,7 +21,6 @@ import java.util.concurrent.Executors;
  * @author nsmaniotto
  */
 public class ConversationHandler implements ConversationHandlerObserver, Runnable {
-    private static boolean initialized = false;
     private static ConversationHandler INSTANCE;
     private ArrayList<Conversation> conversations;
     private Conversation currentConversation;
@@ -54,9 +53,8 @@ public class ConversationHandler implements ConversationHandlerObserver, Runnabl
      * @return INSTANCE : ConversationHandler - single instance of this class
      */
     public static ConversationHandler getInstance(int portEcoute,int portDest) {
-        if(!ConversationHandler.initialized){
+        if(ConversationHandler.INSTANCE == null){
             ConversationHandler.INSTANCE = new ConversationHandler(portEcoute,portDest);
-            ConversationHandler.initialized = true;
         }
         return ConversationHandler.INSTANCE;
     }
