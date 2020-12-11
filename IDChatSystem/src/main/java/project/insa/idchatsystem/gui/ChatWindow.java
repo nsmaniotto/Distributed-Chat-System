@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
 import project.insa.idchatsystem.Message;
 
@@ -13,7 +15,7 @@ import project.insa.idchatsystem.Message;
  *
  * @author nsmaniotto
  */
-public class ChatWindow extends Window {
+public class ChatWindow extends Window implements ActionListener {
     /* BEGIN: variables declaration */
     private JPanel userPanel;
         private JPanel userInfoPanel;
@@ -286,5 +288,20 @@ public class ChatWindow extends Window {
         messagePanel.add(messageTimestampLabel, messageTimestampLabelConstraints);
         
         return messagePanel;
+    }
+    
+    /* ACTION LISTENER METHODS */
+    
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        JButton button = (JButton) event.getSource();
+        
+        if(button == this.chatSendButton) {
+            // Retrieve text from input
+            
+            // Create a message based on the retrieved text
+            
+            // Notify the view that there is a new message to be sent
+        }
     }
 }
