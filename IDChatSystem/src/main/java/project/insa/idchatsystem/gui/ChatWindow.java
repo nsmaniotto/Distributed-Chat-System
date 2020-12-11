@@ -313,6 +313,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
                 Message newMessage = new Message(messageInputText);
                 
                 // Notify the view that there is a new message to be sent
+                this.notifyObserverSentMessage(newMessage);
             }
         }
     }
