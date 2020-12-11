@@ -128,13 +128,13 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         this.chatTextInputField = new JTextField();
 
         this.chatSendButton = new JButton("SEND");
-        this.chatSendButton.addActionListener(this);
         /* END: variables initialization */
     }
     
     @Override
     protected void initListeners() {
-        
+        // Chat send button on click
+        this.chatSendButton.addActionListener(this);
     }
     
     @Override
