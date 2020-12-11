@@ -38,6 +38,9 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
             private JButton chatSendButton;
     /* END: variables declarations */
     
+    /* OBSERVERS */
+    ChatWindowObserver chatWindowObserver;
+            
     public ChatWindow() {
         super("IDChat");
     }
@@ -318,16 +321,18 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
 
     @Override
     public void addViewObserver(ChatWindowObserver observer) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.chatWindowObserver = observer;
     }
 
     @Override
     public void deleteViewObserver(ChatWindowObserver observer) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.chatWindowObserver = null;
     }
 
     @Override
     public void notifyObserverSentMessage(Message sentMessage) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(this.chatWindowObserver != null) {
+            this.chatWindowObserver.newMessageSent(sentMessage);
+        }
     }
 }
