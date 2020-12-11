@@ -24,8 +24,10 @@ public abstract class Window extends JFrame {
     
     public Window(String title) {
         this.frame = new JFrame(title);
-        this.init();
-        this.build();
+        
+        this.initComponents();
+        this.initListeners();
+        this.buildFrame();
     }
     
     protected void initLookAndFeel() {
@@ -44,6 +46,7 @@ public abstract class Window extends JFrame {
         this.frame.setVisible(true);
     }
     
-    protected abstract void init();
-    protected abstract void build();
+    protected abstract void initComponents();
+    protected abstract void initListeners();
+    protected abstract void buildFrame();
 }
