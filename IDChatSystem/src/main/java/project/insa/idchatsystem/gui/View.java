@@ -1,5 +1,6 @@
 package project.insa.idchatsystem.gui;
 
+import project.insa.idchatsystem.Exceptions.Uninitialized;
 import project.insa.idchatsystem.Message;
 import project.insa.idchatsystem.Observers.ViewObserver;
 import project.insa.idchatsystem.User.distanciel.User;
@@ -18,10 +19,15 @@ public class View implements Runnable, ChatWindowObserver {
         this.login_window.setLoginOKObserver(this);
         this.login_window.display();
     }
-    public void loginOk() {
+    public void loginOk(String login) {
         System.out.printf("Opening chat window\n");
         this.chat_window = new ChatWindow();
         this.chat_window.addChatWindowObserver(this);
+        try {
+            this.chat_window.displayUsername(login,User.get_current_id());
+        } catch (Uninitialized uninitialized) {
+            uninitialized.printStackTrace();
+        }
         this.chat_window.display();
         this.viewObserver.initialized();
     }

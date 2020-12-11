@@ -73,7 +73,7 @@ public class LoginWindow extends Window {
                                 loginTextField.setText("");
                             }
                             else {
-                                loginOk();
+                                loginOk(loginTextField.getText());
                                 frame.setVisible(false);
                             }
                         }
@@ -85,7 +85,7 @@ public class LoginWindow extends Window {
     public void setLoginOKObserver(View v) {
         this.observer = v;
     }
-    public void loginOk(){
-        this.observer.loginOk();
+    public void loginOk(String login){
+        this.observer.loginOk(login);
     }
 }
