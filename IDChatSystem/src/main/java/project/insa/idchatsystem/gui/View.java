@@ -57,7 +57,7 @@ public class View implements Runnable, ChatWindowObserver {
     /* CHAT WINDOW OBSERVER METHODS */
 
     @Override
-    public void newMessageSent(Message sentMessage) {
-        this.chatWindowObserver.newMessageSent(sentMessage);
+    public void newMessageSending(Message sendingMessage) {
+        this.chatWindowObserver.newMessageSending(sendingMessage);
     }
 }
