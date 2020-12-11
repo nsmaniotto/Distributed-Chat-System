@@ -23,7 +23,7 @@ public class View implements Runnable, ChatWindowObserver {
         this.chat_window = new ChatWindow();
         this.chat_window.addChatWindowObserver(this);
         this.chat_window.display();
-        viewObservers.initialized();
+        this.viewObserver.initialized();
     }
     public void availableUsers(ArrayList<User> users) {
         // Ajouter les utilisateurs
