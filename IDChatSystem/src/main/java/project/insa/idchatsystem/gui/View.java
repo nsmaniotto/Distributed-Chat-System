@@ -7,6 +7,8 @@ import project.insa.idchatsystem.User.distanciel.User;
 public class View implements Runnable, ChatWindowObserver {
     private LoginWindow login_window;
     private ChatWindow chat_window;
+    private ChatWindowObserver chatWindowObserver;
+    
     @Override
     public void run() {
         this.login_window = new LoginWindow();
@@ -48,10 +50,14 @@ public class View implements Runnable, ChatWindowObserver {
         this.chat_window.displayNotification(message);
     }
     
+    public void addChatWindowObserver(ChatWindowObserver observer) {
+        this.chatWindowObserver = observer;
+    }
+    
     /* CHAT WINDOW OBSERVER METHODS */
 
     @Override
     public void newMessageSent(Message sentMessage) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.chatWindowObserver.newMessageSent(sentMessage);
     }
 }
