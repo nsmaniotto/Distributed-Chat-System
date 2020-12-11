@@ -91,7 +91,7 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
         HashMap <Integer,User> hashmapUsers = this.localUserModel.getOnlineUsers();
         hashmapUsers.forEach((k,v) -> {
             users.add(v);
-            this.conversationHandler.addKnownUser(v);//inbtroduit potentiellement de la redondance
+            this.conversationHandler.addKnownUser(v);//En passant par une hashmap si il y a un duplicat, on écrasera l'ancienne valeur
         });
         this.view.availableUsers(users);
     }
