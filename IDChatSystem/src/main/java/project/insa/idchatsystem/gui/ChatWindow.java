@@ -6,14 +6,18 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
 import project.insa.idchatsystem.Message;
+import project.insa.idchatsystem.Observers.ChatWindowObservable;
+import project.insa.idchatsystem.Observers.ChatWindowObserver;
 
 /**
  *
  * @author nsmaniotto
  */
-public class ChatWindow extends Window {
+public class ChatWindow extends Window implements ActionListener, ChatWindowObservable {
     /* BEGIN: variables declaration */
     private JPanel userPanel;
         private JPanel userInfoPanel;
@@ -34,6 +38,9 @@ public class ChatWindow extends Window {
             private JButton chatSendButton;
     /* END: variables declarations */
     
+    /* OBSERVERS */
+    private ChatWindowObserver chatWindowObserver;
+            
     public ChatWindow() {
         super("IDChat");
     }
@@ -121,7 +128,7 @@ public class ChatWindow extends Window {
         this.chatTextInputField = new JTextField();
 
         this.chatSendButton = new JButton("SEND");
-
+        this.chatSendButton.addActionListener(this);
         /* END: variables initialization */
     }
     
@@ -286,5 +293,49 @@ public class ChatWindow extends Window {
         messagePanel.add(messageTimestampLabel, messageTimestampLabelConstraints);
         
         return messagePanel;
+    }
+    
+    /* ACTION LISTENER METHODS */
+    
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        JButton button = (JButton) event.getSource();
+        
+        if(button == this.chatSendButton) {
+            // Retrieve text from input
+            String messageInputText = this.chatTextInputField.getText();
+            
+            boolean isMessageEmpty = messageInputText.isBlank(); // To be later modified to support file sending
+            
+            if(!isMessageEmpty) {
+                // Create a message based on the retrieved text
+                Message newMessage = new Message(messageInputText);
+                
+                // Clear text input
+                this.chatTextInputField.setText("");
+                
+                // Notify the view that there is a new message to be sent
+                this.notifyObserverSendingMessage(newMessage);
+            }
+        }
+    }
+    
+    /* CHAT WINDOW OBSERVABLE METHODS */
+
+    @Override
+    public void addViewObserver(ChatWindowObserver observer) {
+        this.chatWindowObserver = observer;
+    }
+
+    @Override
+    public void deleteViewObserver(ChatWindowObserver observer) {
+        this.chatWindowObserver = null;
+    }
+
+    @Override
+    public void notifyObserverSendingMessage(Message sentMessage) {
+        if(this.chatWindowObserver != null) {
+            this.chatWindowObserver.newMessageSending(sentMessage);
+        }
     }
 }

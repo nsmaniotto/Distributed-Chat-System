@@ -5,11 +5,14 @@ import project.insa.idchatsystem.Observers.ViewObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 
 import java.util.ArrayList;
+import project.insa.idchatsystem.Observers.ChatWindowObserver;
 
-public class View implements Runnable {
+public class View implements Runnable, ChatWindowObserver {
     private LoginWindow login_window;
     private ChatWindow chat_window;
     private ViewObserver viewObservers;
+    private ChatWindowObserver chatWindowObserver;
+    
     @Override
     public void run() {
         this.login_window = new LoginWindow();
@@ -19,6 +22,7 @@ public class View implements Runnable {
     public void loginOk() {
         System.out.printf("Opening chat window\n");
         this.chat_window = new ChatWindow();
+        this.chat_window.addViewObserver(this);
         this.chat_window.display();
     }
     public void addObserver(ViewObserver observer){
@@ -58,7 +62,19 @@ public class View implements Runnable {
         
         this.chat_window.displayNotification(message);
     }
-    public void checkUsernameAvailable(String username){
 
+    public void checkUsernameAvailable(String username){
+        
+    }
+
+    public void addChatWindowObserver(ChatWindowObserver observer) {
+        this.chatWindowObserver = observer;
+    }
+    
+    /* CHAT WINDOW OBSERVER METHODS */
+
+    @Override
+    public void newMessageSending(Message sendingMessage) {
+        this.chatWindowObserver.newMessageSending(sendingMessage);
     }
 }
