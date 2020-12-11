@@ -8,5 +8,5 @@ public interface ChatWindowObservable {
 
     public void deleteViewObserver(ChatWindowObserver observer);
 
-    public void notifyObserverSentMessage(Message sentMessage);
+    public void notifyObserverSendingMessage(Message sendingMessage);
 }
