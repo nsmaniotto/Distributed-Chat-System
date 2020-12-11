@@ -11,6 +11,7 @@ import project.insa.idchatsystem.gui.View;
 import project.insa.idchatsystem.logins.local_mode.distanciel.LocalUserModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ClientController implements ConversationHandlerObserver, UsersStatusObserver, ViewObserver {
     private View view;
@@ -23,11 +24,6 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
                             int loginReceiverPort, int loginEmiterPort, ArrayList<Integer> loginBroadcast,
                             int conversationSocketPortEcoute, int conversationSocketPortDest)
     {
-        // View init
-        this.view = new View();
-        this.view.addObserver(this);
-        new Thread(view).start();
-        
         // Conversation handler init
         this.conversationHandler = ConversationHandler.getInstance(conversationSocketPortEcoute,conversationSocketPortDest);
         this.conversationHandler.addObserver(this);
@@ -36,6 +32,12 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
         // At this stage, the login controller is running in the same thread as the ClientController but the reception and emission operates in two others
         this.localUserModel = new LocalUserModel(id,loginReceiverPort,loginEmiterPort,loginBroadcast);
         this.localUserModel.addUserModelObserver(this);
+
+        // View init
+        this.view = new View();
+        this.view.addObserver(this);
+        new Thread(view).start();
+
     }
 
     public LocalUserModel getLocalUserModel() {
@@ -50,6 +52,7 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
 
     @Override
     public void onlineUser(User user) {
+        System.out.printf("Online user : %s\n",user);
         this.conversationHandler.addKnownUser(user);
     }
     
@@ -81,7 +84,18 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
     public boolean newLogin(String login) {
         return this.localUserModel.setUsername(login);
     }
-    
+
+    @Override
+    public void initialized() {
+        ArrayList<User> users = new ArrayList<>();
+        HashMap <Integer,User> hashmapUsers = this.localUserModel.getOnlineUsers();
+        hashmapUsers.forEach((k,v) -> {
+            users.add(v);
+            this.conversationHandler.addKnownUser(v);//inbtroduit potentiellement de la redondance
+        });
+        this.view.availableUsers(users);
+    }
+
     @Override
     public void newMessageSending(Message sendingMessage) {
         if(this.conversationHandler.getCurrentConversation() != null) {
