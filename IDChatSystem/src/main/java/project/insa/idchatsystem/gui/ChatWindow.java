@@ -129,6 +129,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         this.chatFormPanel.setBackground(Window.COLOR_SOFTWHITE);
 
         this.chatTextInputField = new JTextField();
+        this.chatTextInputField.setToolTipText("Share your thoughts!");
 
         this.chatSendButton = new JButton("SEND");
         /* END: variables initialization */
