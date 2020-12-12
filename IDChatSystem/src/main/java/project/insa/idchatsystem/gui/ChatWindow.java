@@ -107,6 +107,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         this.correspondentInfoLabel = new JLabel("BBBBB#yy", JLabel.LEFT);
 
         this.chatScrollPane = new JScrollPane(this.chatHistoryPanel);
+        this.chatScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         this.chatScrollPane.setBackground(Color.GRAY/*Window.COLOR_SOFTWHITE*/);
 
         this.chatHistoryPanel = new JPanel();
