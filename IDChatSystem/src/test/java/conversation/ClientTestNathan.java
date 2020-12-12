@@ -11,6 +11,7 @@ import project.insa.idchatsystem.Exceptions.Uninitialized;
 import project.insa.idchatsystem.User.distanciel.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -37,5 +38,14 @@ public class ClientTestNathan {
         } catch (Uninitialized uninitialized) {
             uninitialized.printStackTrace();
         }
+        
+        try {
+            Thread.sleep(15000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        HashMap<Integer,User> userHashMap = controller.getConversationHandler().getUsers();
+        User user = userHashMap.get(userHashMap.keySet().toArray()[0]);
+        controller.getConversationHandler().open(user); // Opening the first conversation
     }
 }
