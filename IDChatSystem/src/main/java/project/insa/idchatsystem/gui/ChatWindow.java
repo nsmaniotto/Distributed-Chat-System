@@ -296,22 +296,26 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
                 );
         
         // text area
-        JLabel messageTextLabel = new JLabel(message.getText());
-        GridBagConstraints messageTextLabelConstraints = new GridBagConstraints();
-        messageTextLabelConstraints.gridx = 0;
-        messageTextLabelConstraints.weightx = 1.0;
-        messageTextLabelConstraints.weighty = 1.0;
-        messageTextLabelConstraints.fill = GridBagConstraints.HORIZONTAL;
+        JTextArea messageTextArea = new JTextArea(message.getText());
+        messageTextArea.setEnabled(false);
+        messageTextArea.setLineWrap(true);
+        messageTextArea.setWrapStyleWord(true);
         
-        messagePanel.add(messageTextLabel, messageTextLabelConstraints);
+        GridBagConstraints messageTextAreaConstraints = new GridBagConstraints();
+        messageTextAreaConstraints.gridx = 0;
+        messageTextAreaConstraints.weightx = 0.7;
+        messageTextAreaConstraints.anchor = GridBagConstraints.WEST;
+        messageTextAreaConstraints.fill = GridBagConstraints.HORIZONTAL;
+        
+        messagePanel.add(messageTextArea, messageTextAreaConstraints);
         
         // timestamp area
         JLabel messageTimestampLabel = new JLabel(message.getTimestamp());
         GridBagConstraints messageTimestampLabelConstraints = new GridBagConstraints();
         messageTimestampLabelConstraints.gridx = 1;
-        messageTimestampLabelConstraints.weightx = 0;
-        messageTimestampLabelConstraints.weighty = 1.0;
-        messageTimestampLabelConstraints.fill = GridBagConstraints.NONE;
+        messageTimestampLabelConstraints.weightx = 0.3;
+        messageTimestampLabelConstraints.anchor = GridBagConstraints.SOUTHEAST;
+        messageTimestampLabelConstraints.fill = GridBagConstraints.HORIZONTAL;
         
         messagePanel.add(messageTimestampLabel, messageTimestampLabelConstraints);
         
