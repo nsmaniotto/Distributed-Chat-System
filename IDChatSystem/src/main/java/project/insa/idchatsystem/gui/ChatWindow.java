@@ -2,10 +2,12 @@ package project.insa.idchatsystem.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -110,7 +112,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         this.chatScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         this.chatScrollPane.setBackground(Color.GRAY/*Window.COLOR_SOFTWHITE*/);
 
-        this.chatHistoryPanel = new JPanel();
+        this.chatHistoryPanel = new ScrollableChat();
         this.chatHistoryPanel.setLayout(new BoxLayout(this.chatHistoryPanel, BoxLayout.Y_AXIS));
         this.chatHistoryPanel.setBorder(BorderFactory.createEmptyBorder(
                 10, //top
@@ -375,6 +377,39 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
     public void notifyObserverSendingMessage(Message sentMessage) {
         if(this.chatWindowObserver != null) {
             this.chatWindowObserver.newMessageSending(sentMessage);
+        }
+    }
+    
+    class ScrollableChat extends JPanel implements Scrollable {
+        public void ScrollableChat() {
+            
+        }
+
+        @Override
+        public Dimension getPreferredScrollableViewportSize() {
+            return super.getPreferredSize();
+        }
+
+        @Override
+        public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
+            return 64;
+            //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
+            return 64;
+            //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public boolean getScrollableTracksViewportWidth() {
+            return true;
+        }
+
+        @Override
+        public boolean getScrollableTracksViewportHeight() {
+            return false;
         }
     }
 }
