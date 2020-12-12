@@ -18,4 +18,12 @@ public class Data {
     public User getDestination() {
         return this.destination;
     }
+    
+    public void setSource(User source) {
+        this.source = source;
+    }
+    
+    public void setDestination(User destination) {
+        this.destination = destination;
+    }
 }
