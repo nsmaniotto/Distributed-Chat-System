@@ -3,6 +3,7 @@ package project.insa.idchatsystem.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -13,9 +14,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.*;
+import project.insa.idchatsystem.Exceptions.Uninitialized;
 import project.insa.idchatsystem.Message;
 import project.insa.idchatsystem.Observers.ChatWindowObservable;
 import project.insa.idchatsystem.Observers.ChatWindowObserver;
+import project.insa.idchatsystem.User.distanciel.User;
 
 /**
  *
@@ -298,33 +301,62 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
                 );
         
         // text area
-        JTextArea messageTextArea = new JTextArea(message.getText());
+        JTextArea messageTextArea = new JTextArea();
         messageTextArea.setEnabled(false);
         messageTextArea.setLineWrap(true);
         messageTextArea.setWrapStyleWord(true);
         
         GridBagConstraints messageTextAreaConstraints = new GridBagConstraints();
-        messageTextAreaConstraints.gridx = 0;
         messageTextAreaConstraints.weightx = 0.7;
-        messageTextAreaConstraints.anchor = GridBagConstraints.WEST;
         messageTextAreaConstraints.fill = GridBagConstraints.HORIZONTAL;
-        
-        messagePanel.add(messageTextArea, messageTextAreaConstraints);
         
         // timestamp area
         JLabel messageTimestampLabel = new JLabel(message.getTimestamp());
-        messageTimestampLabel.setBorder(BorderFactory.createEmptyBorder(
+        GridBagConstraints messageTimestampLabelConstraints = new GridBagConstraints();
+        messageTimestampLabelConstraints.weightx = 0.3;
+        messageTimestampLabelConstraints.fill = GridBagConstraints.HORIZONTAL;
+        
+        // Check if this is an incoming or outgoing message
+        try {
+            if(message.getSource().equals(User.getCurrentUser())) {
+                // Outgoing message
+                messageTextArea.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+                
+                messageTextAreaConstraints.gridx = 0; // Text at left
+                messageTextAreaConstraints.anchor = GridBagConstraints.WEST;
+                
+                messageTimestampLabel.setBorder(BorderFactory.createEmptyBorder(
                 0, //top
                 20, //left
                 0, //bottom
                 0) //right
                 );
-        GridBagConstraints messageTimestampLabelConstraints = new GridBagConstraints();
-        messageTimestampLabelConstraints.gridx = 1;
-        messageTimestampLabelConstraints.weightx = 0.3;
-        messageTimestampLabelConstraints.anchor = GridBagConstraints.SOUTHEAST;
-        messageTimestampLabelConstraints.fill = GridBagConstraints.HORIZONTAL;
+                
+                messageTimestampLabelConstraints.gridx = 1; // Timestamp at right
+                messageTimestampLabelConstraints.anchor = GridBagConstraints.SOUTHEAST;
+            } else {
+                // Incoming message
+                messageTextAreaConstraints.gridx = 1; // Text at right
+                messageTextAreaConstraints.anchor = GridBagConstraints.EAST;
+                
+                messageTimestampLabel.setBorder(BorderFactory.createEmptyBorder(
+                0, //top
+                0, //left
+                0, //bottom
+                20) //right
+                );
+                
+                messageTimestampLabelConstraints.gridx = 0; // Timestamp at left
+                messageTimestampLabelConstraints.anchor = GridBagConstraints.SOUTHWEST;
+            }
+        } catch (Uninitialized e) {
+            // Current user (thereforce message source) is not initialized
+            System.out.println("ChatWindow: EXCEPTION WHILE COMPARING MESSAGE SOURCE " + e);
+        }
         
+        messageTextArea.setText(message.getText());
+        
+        messagePanel.add(messageTextArea, messageTextAreaConstraints);
         messagePanel.add(messageTimestampLabel, messageTimestampLabelConstraints);
         
         return messagePanel;
