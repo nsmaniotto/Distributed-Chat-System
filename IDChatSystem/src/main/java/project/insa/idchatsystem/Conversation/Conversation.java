@@ -148,7 +148,13 @@ public class Conversation implements ConversationObservable, Runnable {
      * @param message : Message - message we want to send and display
      */
     public void send(Message message) {
-        System.out.println("Sending to " + this.correspondent.get_username() + " : " + message.getText());
+        try {
+            message.setSource(User.getCurrentUser());
+            message.setDestination(this.correspondent);
+        } catch (Uninitialized e) {
+            // Current user (thereforce message source) is not initialized
+            System.out.println("Conversation: EXCEPTION WHILE SETTING MESSAGE SOURCE " + e);
+        }
         
         PrintWriter outputStreamLink = null;
         
