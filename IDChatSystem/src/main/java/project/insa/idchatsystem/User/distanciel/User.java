@@ -58,6 +58,9 @@ public class User {
         return String.format("%s,%d,%s",User.current_username,User.current_id,User.current_ipAddress);
     }
 
+    public static User getCurrentUser() throws Uninitialized {
+        return new User(User.get_current_username(), User.get_current_id(), User.get_current_ipAddress());
+    }
     /***********************Other users methods***************************/
     public User(String username, int id, String ipAddress) {
         this.username = username;
