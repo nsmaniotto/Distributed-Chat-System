@@ -81,7 +81,7 @@ public class ConversationHandler implements ConversationHandlerObserver, Runnabl
                 // Retrieve correspondent informations thanks to its address
                 //String correspondentAddress = conversationSocket.getRemoteSocketAddress().toString(); // Address like '/127.0.0.1:53818'
                 InetAddress correspondentAddress = conversationSocket.getInetAddress(); // Address like '/127.0.0.1'
-                User correspondent = this.findUserByAddress(correspondentAddress.toString());
+                User correspondent = this.findUserByAddress(correspondentAddress.toString().substring(1)); // Find with removed '/'
                 
                 if(correspondent != null) {
                     // Check if we arleady have a conversation instance with this correspondent

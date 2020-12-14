@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import project.insa.idchatsystem.Exceptions.Uninitialized;
 
 public class Conversation implements ConversationObservable, Runnable {
     private Socket socket;
@@ -96,6 +97,15 @@ public class Conversation implements ConversationObservable, Runnable {
         // Generate a Message instance from the given input
         Message newMessage = new Message(input);
         
+        // Setting message source and destination
+        try {
+            newMessage.setSource(this.correspondent);
+            newMessage.setDestination(User.getCurrentUser());
+        } catch (Uninitialized e) {
+            // Current user (thereforce message source) is not initialized
+            System.out.println("Conversation: EXCEPTION WHILE SETTING MESSAGE DESTINATION " + e);
+        }
+        
         // Store the new message
         this.storeMessage(newMessage);
         
@@ -138,7 +148,13 @@ public class Conversation implements ConversationObservable, Runnable {
      * @param message : Message - message we want to send and display
      */
     public void send(Message message) {
-        System.out.println("Sending to " + this.correspondent.get_username() + " : " + message.getText());
+        try {
+            message.setSource(User.getCurrentUser());
+            message.setDestination(this.correspondent);
+        } catch (Uninitialized e) {
+            // Current user (thereforce message source) is not initialized
+            System.out.println("Conversation: EXCEPTION WHILE SETTING MESSAGE SOURCE " + e);
+        }
         
         PrintWriter outputStreamLink = null;
         
