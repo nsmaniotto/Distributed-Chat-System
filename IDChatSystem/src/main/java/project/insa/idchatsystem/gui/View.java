@@ -47,7 +47,6 @@ public class View implements Runnable, ChatWindowObserver {
 
     public void onlineUser(User user){
         assert this.chat_window != null : "Vous n'êtes pas login";
-
     }
     
     /**

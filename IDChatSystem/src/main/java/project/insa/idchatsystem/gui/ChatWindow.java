@@ -10,10 +10,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.HashMap;
 import javax.swing.*;
 import project.insa.idchatsystem.Message;
 import project.insa.idchatsystem.Observers.ChatWindowObservable;
 import project.insa.idchatsystem.Observers.ChatWindowObserver;
+import project.insa.idchatsystem.User.distanciel.User;
 
 /**
  *
@@ -28,6 +30,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         private JTabbedPane conversationTabs;
             private JScrollPane recentConversationsTab;
             private JScrollPane onlineUsersTab;
+            private JPanel onlineUsersPanel;
             private JScrollPane offlineUsersTab;
             private JScrollPane allUsersTab;
     private JPanel chatPanel;
@@ -82,6 +85,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
 
         this.recentConversationsTab = new JScrollPane();
         this.onlineUsersTab = new JScrollPane();
+        this.onlineUsersPanel = new JPanel();
         this.offlineUsersTab = new JScrollPane();
         this.allUsersTab = new JScrollPane();
 
@@ -176,6 +180,9 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         conversationTabsConstraints.anchor = GridBagConstraints.SOUTH;
         this.userPanel.add(this.conversationTabs, conversationTabsConstraints);
 
+        this.onlineUsersPanel.setLayout(new BoxLayout(this.onlineUsersPanel,BoxLayout.Y_AXIS));
+        this.onlineUsersTab.setViewportView(this.onlineUsersPanel);
+
         this.conversationTabs.addTab("Recent", this.recentConversationsTab);
         this.conversationTabs.addTab("Online", this.onlineUsersTab);
         this.conversationTabs.addTab("Offline", this.offlineUsersTab);
@@ -247,7 +254,11 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         this.frame.getContentPane().add(this.chatPanel, chatPanelConstraints);
         /* END: frame build */
     }
-    
+    public void updateUsers(HashMap<Integer,User> users){
+        this.onlineUsersPanel.removeAll();
+        users.forEach((k,user) -> this.onlineUsersPanel.add(new UserView(user)));
+        this.repaint();
+    }
     public void displayUsername(String username, int id) {
         if(this.usernameLabel != null) {
             this.usernameLabel.setText(username + " #" + id);

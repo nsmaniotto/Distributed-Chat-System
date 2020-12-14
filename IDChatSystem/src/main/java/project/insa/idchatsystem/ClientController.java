@@ -54,6 +54,7 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
     public void onlineUser(User user) {
         System.out.printf("Online user : %s\n",user);
         this.conversationHandler.addKnownUser(user);
+        this.view.onlineUser(user);
     }
     
     /* CONVERSATION HANDLER OBSERVER METHODS */
