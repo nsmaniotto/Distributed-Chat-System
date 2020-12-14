@@ -320,8 +320,6 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         try {
             if(message.getSource().equals(User.getCurrentUser())) {
                 // Outgoing message
-                messageTextArea.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-                
                 messageTextAreaConstraints.gridx = 0; // Text at left
                 messageTextAreaConstraints.anchor = GridBagConstraints.WEST;
                 
