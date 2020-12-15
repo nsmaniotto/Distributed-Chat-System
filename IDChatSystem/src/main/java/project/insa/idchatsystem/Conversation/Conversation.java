@@ -65,15 +65,6 @@ public class Conversation implements ConversationObservable, Runnable {
      */
     public void close() {
         this.isOpen = false;
-        
-        // Close socket unilaterally
-        try {
-            this.socket.close();
-        }
-        catch(IOException e) {
-            System.out.println("EXCEPTION WHILE CLOSING THE SOCKET (" + e + ")");
-            System.exit(0);
-        }
     }
     
     private void storeMessage(Message message) {
@@ -109,7 +100,7 @@ public class Conversation implements ConversationObservable, Runnable {
         // Store the new message
         this.storeMessage(newMessage);
         
-        // Notify the handler that a message has been received and must be treated 
+        // Notify the handler that a message has been received and must be treated
         this.notifyObserversReceivedMessage(newMessage);
     }
     
@@ -127,7 +118,7 @@ public class Conversation implements ConversationObservable, Runnable {
         }
         catch(IOException e) {
             System.out.println("EXCEPTION WHILE RETRIEVING THE INPUT STREAM (" + e + ")");
-            System.exit(0);
+            System.out.println("Continuing..");
         }
         
         // Continuously listen the input stream
@@ -198,7 +189,7 @@ public class Conversation implements ConversationObservable, Runnable {
     @Override
     public void notifyObserversReceivedMessage(Message receivedMessage) {
         if(this.conversationHandlerObserver != null) {
-            this.conversationHandlerObserver.newMessageReceived(receivedMessage);
+            this.conversationHandlerObserver.newMessageReceived(receivedMessage, this.isOpen);
         }
     }
     
