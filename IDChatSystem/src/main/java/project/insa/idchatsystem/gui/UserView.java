@@ -53,13 +53,17 @@ public class UserView extends JPanel implements UserViewObservable {
         this.selectButton.addActionListener(e -> {
             System.out.printf("Utilisateur %s sélectionné\n",parent.user);
             this.mainPanel.setBackground(Color.RED);
+            this.setOpaque(true);
 
             System.out.printf("%s\n",this.getBackground());
-            this.mainPanel.repaint();
-            this.mainPanel.setOpaque(true);
-            this.mainPanel.validate();
             //Action to open the conversation ...
         });
+    }
+    public void notificationAvailable() {
+        this.mainPanel.setBackground(Color.GREEN);
+    }
+    public void notificationSeen() {
+        this.setOpaque(false);
     }
     public void userSelected() {
         this.observer.userSelected(this);
