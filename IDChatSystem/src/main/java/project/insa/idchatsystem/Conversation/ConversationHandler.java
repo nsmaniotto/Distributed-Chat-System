@@ -188,15 +188,25 @@ public class ConversationHandler implements ConversationHandlerObserver, Runnabl
         
         if(conversation != this.currentConversation) {
             // Close the previous conversation
-            if(this.currentConversation != null) {
-                this.currentConversation.close();
-            }
+            this.closeCurrentConversation();
 
             // Set the opening conversation as our current conversation
             this.currentConversation = conversation;
             
             // Open the new current conversation
             this.currentConversation.open();
+        }
+    }
+    
+    /**
+     * Closing the current conversation
+     * No need to notify the controller because the order comes from the view (then the controller)
+     */
+    public void closeCurrentConversation() {
+        if(this.currentConversation != null) {
+            this.currentConversation.close();
+            
+            this.currentConversation = null;
         }
     }
 
