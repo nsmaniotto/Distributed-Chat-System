@@ -3,12 +3,14 @@ package project.insa.idchatsystem.Observers;
 
 import project.insa.idchatsystem.User.distanciel.User;
 
+import java.util.HashMap;
+
 public interface ObservableUserModel {
     
-    public void addUserModelObserver(UsersStatusObserver obs);
+    void addUserModelObserver(UsersStatusObserver obs);
 
-    public void deleteUserModelObserver(UsersStatusObserver obs);
+    void deleteUserModelObserver(UsersStatusObserver obs);
 
-    public void notifyNewUserObservers(User user);
-    public void notifyDisconnectedObservers(User user);
+    void notifyNewUserObservers(User user);
+    void notifyDisconnectedObservers(User user);
 }

@@ -1,5 +1,7 @@
 package project.insa.idchatsystem.gui;
 
+import project.insa.idchatsystem.Observers.UserViewObservable;
+import project.insa.idchatsystem.Observers.UserViewObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 
 import javax.swing.*;
@@ -7,12 +9,16 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Timestamp;
 
-public class UserView extends JPanel {
-    private final User user ;
+public class UserView extends JPanel implements UserViewObservable {
+    private User user ;
     private JPanel mainPanel;
         private JLabel usernameLabel;
         private JButton selectButton;
+    private int priority;
+    private UserViewObserver observer;
+    private boolean online;
     /* BEGIN: constants definitions */
     protected static final Color COLOR_SOFTWHITE = new Color(236, 240, 241);
     /* END: constants definitions */
@@ -20,12 +26,13 @@ public class UserView extends JPanel {
     public UserView(User user) {
         super();
         this.user = user;
-
+        this.priority = 0;//the most recent new connected user has a priority of 0 and it will grow  with time
+        this.online = true;//as we detect them we consider that they are online
         this.initComponents();
-        this.initListeners();
         this.buildPanel();
     }
-
+    public void offline(){this.online=false;}
+    //TODO change colors to notify new message
     protected void initComponents() {
         this.mainPanel = new JPanel();
         this.usernameLabel = new JLabel(String.format("%s #%d",this.user.get_username(),this.user.get_id()));
@@ -41,14 +48,51 @@ public class UserView extends JPanel {
         this.add(mainPanel);
     }
 
-    protected void initListeners() {
+    public void initListeners(UserViewObserver observer) {
         UserView parent = this;
-        this.selectButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.printf("Utilisateur %s sélectionné\n",parent.user);
-                //Action to open the conversation ...
-            }
+        this.selectButton.addActionListener(e -> {
+            System.out.printf("Utilisateur %s sélectionné\n",parent.user);
+            //Action to open the conversation ...
         });
     }
+    public void userSelected() {
+        this.observer.userSelected(this);
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+
+    public void userObserved() {
+        this.priority ++;
+    }
+    public String getUsername() {
+        return this.user.get_username();
+    }
+    public Timestamp getLastSeen(){
+        return this.user.get_lastSeen();
+    }
+    public void setUsername(String username){
+        this.user.setUsername(username);
+    }
+    public void setLastSeen(Timestamp timestamp){
+        this.user.setLastSeen(timestamp);
+    }
+    public int getId(){
+        return this.user.get_id();
+    }
+    @Override
+    public boolean equals(Object o){
+        if(o instanceof UserView){
+            UserView v = (UserView) o;
+            return this.getId()==v.getId();
+        } else {
+            return false;
+        }
+    }
+
 }

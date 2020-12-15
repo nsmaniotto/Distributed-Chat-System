@@ -8,6 +8,7 @@ import project.insa.idchatsystem.User.distanciel.User;
 import project.insa.idchatsystem.logins.local_mode.distanciel.LocalUserModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ControllerEncapsulation implements ConversationHandlerObserver, UsersStatusObserver {
     private final ConversationHandler conversationHandler;
@@ -34,7 +35,7 @@ public class ControllerEncapsulation implements ConversationHandlerObserver, Use
     }
 
     @Override
-    public void onlineUser(User user) {
+    public void onlineUsers(HashMap<Integer,User> users) {
         System.out.printf("ONLINE USER : %s\n",user.toString());
     }
 

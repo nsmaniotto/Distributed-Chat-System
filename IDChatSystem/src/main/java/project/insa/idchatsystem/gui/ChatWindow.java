@@ -1,6 +1,5 @@
 package project.insa.idchatsystem.gui;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -10,18 +9,42 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.HashMap;
+import java.util.*;
 import javax.swing.*;
 import project.insa.idchatsystem.Message;
 import project.insa.idchatsystem.Observers.ChatWindowObservable;
 import project.insa.idchatsystem.Observers.ChatWindowObserver;
+import project.insa.idchatsystem.Observers.UserViewObserver;
 import project.insa.idchatsystem.User.distanciel.User;
-
 /**
  *
  * @author nsmaniotto
  */
-public class ChatWindow extends Window implements ActionListener, ChatWindowObservable {
+public class ChatWindow extends Window implements ActionListener, ChatWindowObservable, UserViewObserver {
+
+    class UserViewArrayList extends ArrayList<UserView> {
+        public ArrayList<UserView> getListOrderedByName() {
+            this.sort(Comparator.comparing(UserView::getUsername));
+            return this;
+        }
+        public ArrayList<UserView> getListOrderedByPriority() {
+            this.sort(Comparator.comparing(UserView::getPriority));
+            return this;
+        }
+        @Override
+        public boolean add(UserView userView) {
+            int indexElem = this.indexOf(userView);
+            if(indexElem == -1)//We add the element only if it is not already present
+                return super.add(userView);
+            else {//Else we only update the user
+                UserView pastUserViewUpdated = this.get(indexElem);
+                pastUserViewUpdated.setUsername(userView.getUsername());
+                pastUserViewUpdated.setLastSeen(userView.getLastSeen());
+                this.set(indexElem,pastUserViewUpdated);
+                return false;
+            }
+        }
+    }
     /* BEGIN: variables declaration */
     private JPanel userPanel;
         private JPanel userInfoPanel;
@@ -29,9 +52,11 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
             private JButton changeUsernameButton;
         private JTabbedPane conversationTabs;
             private JScrollPane recentConversationsTab;
+            private JPanel recentUsersPanel;
             private JScrollPane onlineUsersTab;
             private JPanel onlineUsersPanel;
             private JScrollPane offlineUsersTab;
+            private JPanel offlineUsersPanel;
             private JScrollPane allUsersTab;
     private JPanel chatPanel;
         private JPanel correspondentPanel;
@@ -41,6 +66,8 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         private JPanel chatFormPanel;
             private JTextField chatTextInputField;
             private JButton chatSendButton;
+    /*Users containers*/
+    private UserViewArrayList usersContainer;
     /* END: variables declarations */
     
     /* OBSERVERS */
@@ -48,6 +75,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
             
     public ChatWindow() {
         super("IDChat");
+        this.usersContainer = new UserViewArrayList();
     }
     
     @Override
@@ -84,9 +112,11 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         //this.recentConversationsTab.setViewportView(this.recentConversationsTab);
 
         this.recentConversationsTab = new JScrollPane();
+        this.recentUsersPanel = new JPanel();
         this.onlineUsersTab = new JScrollPane();
         this.onlineUsersPanel = new JPanel();
         this.offlineUsersTab = new JScrollPane();
+        this.offlineUsersPanel = new JPanel();
         this.allUsersTab = new JScrollPane();
 
         this.chatPanel = new JPanel(new GridBagLayout());
@@ -181,7 +211,12 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         this.userPanel.add(this.conversationTabs, conversationTabsConstraints);
 
         this.onlineUsersPanel.setLayout(new BoxLayout(this.onlineUsersPanel,BoxLayout.Y_AXIS));
+        this.recentUsersPanel.setLayout(new BoxLayout(this.recentUsersPanel,BoxLayout.Y_AXIS));
+        this.offlineUsersPanel.setLayout(new BoxLayout(this.offlineUsersPanel,BoxLayout.Y_AXIS));
+
         this.onlineUsersTab.setViewportView(this.onlineUsersPanel);
+        this.recentConversationsTab.setViewportView(this.recentUsersPanel);
+        this.offlineUsersTab.setViewportView(this.offlineUsersPanel);
 
         this.conversationTabs.addTab("Recent", this.recentConversationsTab);
         this.conversationTabs.addTab("Online", this.onlineUsersTab);
@@ -255,10 +290,61 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         /* END: frame build */
     }
     public void updateUsers(HashMap<Integer,User> users){
-        this.onlineUsersPanel.removeAll();
-        users.forEach((k,user) -> this.onlineUsersPanel.add(new UserView(user)));
+        //On récupère les utilisateurs
+        //On les classes par login par ordre alphabétique
+        //On less ajoute à la liste des utilisateurs connectés
+        users.forEach((k,user) -> {
+            this.onlineUser(user);
+        });
         this.repaint();
     }
+    public void onlineUser(User user){
+        UserView v = new UserView(user);
+        v.initListeners(this);
+        this.usersContainer.add(v);
+        this.onlineUsersPanel.removeAll();
+        this.usersContainer.getListOrderedByName().forEach(userComp->{
+            this.onlineUsersPanel.add(userComp);
+        });
+    }
+    public void offlineUser(User user) throws Exception {
+        UserView v = new UserView(user);
+        v.initListeners(this);
+        int index = this.usersContainer.indexOf(v);
+        v.offline();
+        if(index != -1) {
+            this.usersContainer.set(index,v);
+        }
+        else {
+            throw new Exception("The element was not in the list of online users !");
+        }
+    }
+    @Override
+    public void userSelected(UserView userview) {
+        int index = this.usersContainer.indexOf(userview);
+        if(index != -1){
+            //Recalculate priorities
+            int maxPriotity = 0;
+            for(UserView v : this.usersContainer) {
+                if(v.getPriority() > maxPriotity)
+                    maxPriotity = v.getPriority();
+            }
+            userview.setPriority(maxPriotity+1);
+            //Uniformize priorities
+            int prevPrio=-1;
+            for (UserView v : this.usersContainer.getListOrderedByPriority()) {
+                if((v.getPriority()-prevPrio)>1) {
+                    v.setPriority(prevPrio+1);
+                }
+                prevPrio = v.getPriority();
+            }
+            //Transmit to view
+        }
+        else {
+            System.out.print("The element was not in the list of online users !\n");
+        }
+    }
+
     public void displayUsername(String username, int id) {
         if(this.usernameLabel != null) {
             this.usernameLabel.setText(username + " #" + id);

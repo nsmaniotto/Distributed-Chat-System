@@ -8,13 +8,13 @@ import java.sql.Timestamp;
 
 public class User {
 
-    private final String username;
+    private String username;
 
     private int id = -1;
 
     private final String ipAddress;
 
-    private final Timestamp lastSeen;
+    private Timestamp lastSeen;
     private static String current_username = "";
     private static int current_id;
     private static String current_ipAddress;
@@ -84,6 +84,8 @@ public class User {
     public String transfer_string() {
         return String.format("%s,%d,%s",this.username,this.id,this.ipAddress);
     }
+    public void setUsername(String username) { this.username = username;}
+    public void setLastSeen(Timestamp lastSeen) {this.lastSeen = lastSeen;}
 
     /*********************Utilities methods*****************************/
     @Override
@@ -103,4 +105,5 @@ public class User {
         else
             return false;
     }
+
 }
