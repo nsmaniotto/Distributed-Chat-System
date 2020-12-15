@@ -35,7 +35,7 @@ public class ControllerEncapsulation implements ConversationHandlerObserver, Use
     }
 
     @Override
-    public void onlineUsers(HashMap<Integer,User> users) {
+    public void onlineUser(User user) {
         System.out.printf("ONLINE USER : %s\n",user.toString());
     }
 

@@ -221,6 +221,10 @@ public class ConversationHandler implements ConversationHandlerObserver, Runnabl
         this.users.put(newUser.get_id(),newUser);
         System.out.printf("Adding user %s\n",newUser);
     }
+    public void removeKnownUser(User user){
+        this.users.remove(user.get_id(),user);
+        System.out.printf("Removing user %s\n",user);
+    }
     
     /* CONVERSATION HANDLER OBSERVER METHODS */
     

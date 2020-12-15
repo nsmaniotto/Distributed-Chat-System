@@ -307,7 +307,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
             this.onlineUsersPanel.add(userComp);
         });
     }
-    public void offlineUser(User user) throws Exception {
+    public void offlineUser(User user){
         UserView v = new UserView(user);
         v.initListeners(this);
         int index = this.usersContainer.indexOf(v);
@@ -316,7 +316,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
             this.usersContainer.set(index,v);
         }
         else {
-            throw new Exception("The element was not in the list of online users !");
+            System.out.printf("User %s was not connected\n",user);
         }
     }
     @Override

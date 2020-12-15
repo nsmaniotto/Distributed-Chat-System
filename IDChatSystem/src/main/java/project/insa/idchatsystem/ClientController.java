@@ -47,7 +47,8 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
     
     @Override
     public void offlineUser(User user) {
-        this.localUserModel.removeOnlineUser(user.get_id());
+        this.view.offlineUser(user);
+        this.conversationHandler.removeKnownUser(user);
     }
 
     @Override
@@ -86,17 +87,6 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
         return this.localUserModel.setUsername(login);
     }
 
-    @Override
-    public void initialized() {
-        ArrayList<User> users = new ArrayList<>();
-        HashMap <Integer,User> hashmapUsers = this.localUserModel.getOnlineUsers();
-        System.out.printf("Initializing hashmap for conversattion\n");
-        hashmapUsers.forEach((k,v) -> {
-            users.add(v);
-            this.conversationHandler.addKnownUser(v);//En passant par une hashmap si il y a un duplicat, on écrasera l'ancienne valeur
-        });
-        this.view.availableUsers(users);
-    }
 
     @Override
     public void newMessageSending(Message sendingMessage) {
