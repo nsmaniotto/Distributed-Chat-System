@@ -235,8 +235,10 @@ public class ConversationHandler implements ConversationHandlerObserver, Runnabl
     /* CONVERSATION HANDLER OBSERVER METHODS */
     
     @Override
-    public void newMessageReceived(Message receivedMessage) {
-        this.observers.forEach( observer -> observer.newMessageReceived(receivedMessage) );
+    public void newMessageReceived(Message receivedMessage, boolean isCurrentConversation) {  
+        for(ConversationHandlerObserver observer : this.observers) {
+            observer.newMessageReceived(receivedMessage, isCurrentConversation);
+        }
     }
 
     @Override
