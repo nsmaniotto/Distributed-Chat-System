@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import project.insa.idchatsystem.Exceptions.Uninitialized;
 
 public class Conversation implements ConversationObservable, Runnable {
     private Socket socket;
@@ -64,15 +65,6 @@ public class Conversation implements ConversationObservable, Runnable {
      */
     public void close() {
         this.isOpen = false;
-        
-        // Close socket unilaterally
-        try {
-            this.socket.close();
-        }
-        catch(IOException e) {
-            System.out.println("EXCEPTION WHILE CLOSING THE SOCKET (" + e + ")");
-            System.exit(0);
-        }
     }
     
     private void storeMessage(Message message) {
@@ -96,10 +88,19 @@ public class Conversation implements ConversationObservable, Runnable {
         // Generate a Message instance from the given input
         Message newMessage = new Message(input);
         
+        // Setting message source and destination
+        try {
+            newMessage.setSource(this.correspondent);
+            newMessage.setDestination(User.getCurrentUser());
+        } catch (Uninitialized e) {
+            // Current user (thereforce message source) is not initialized
+            System.out.println("Conversation: EXCEPTION WHILE SETTING MESSAGE DESTINATION " + e);
+        }
+        
         // Store the new message
         this.storeMessage(newMessage);
         
-        // Notify the handler that a message has been received and must be treated 
+        // Notify the handler that a message has been received and must be treated
         this.notifyObserversReceivedMessage(newMessage);
     }
     
@@ -117,7 +118,7 @@ public class Conversation implements ConversationObservable, Runnable {
         }
         catch(IOException e) {
             System.out.println("EXCEPTION WHILE RETRIEVING THE INPUT STREAM (" + e + ")");
-            System.exit(0);
+            System.out.println("Continuing..");
         }
         
         // Continuously listen the input stream
@@ -138,7 +139,13 @@ public class Conversation implements ConversationObservable, Runnable {
      * @param message : Message - message we want to send and display
      */
     public void send(Message message) {
-        System.out.println("Sending to " + this.correspondent.get_username() + " : " + message.getText());
+        try {
+            message.setSource(User.getCurrentUser());
+            message.setDestination(this.correspondent);
+        } catch (Uninitialized e) {
+            // Current user (thereforce message source) is not initialized
+            System.out.println("Conversation: EXCEPTION WHILE SETTING MESSAGE SOURCE " + e);
+        }
         
         PrintWriter outputStreamLink = null;
         
@@ -182,7 +189,7 @@ public class Conversation implements ConversationObservable, Runnable {
     @Override
     public void notifyObserversReceivedMessage(Message receivedMessage) {
         if(this.conversationHandlerObserver != null) {
-            this.conversationHandlerObserver.newMessageReceived(receivedMessage);
+            this.conversationHandlerObserver.newMessageReceived(receivedMessage, this.isOpen);
         }
     }
     

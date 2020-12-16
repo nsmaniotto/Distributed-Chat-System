@@ -40,7 +40,7 @@ public class ControllerEncapsulation implements ConversationHandlerObserver, Use
     }
 
     @Override
-    public void newMessageReceived(Message receivedMessage) {
+    public void newMessageReceived(Message receivedMessage, boolean isCurrentConversation) {
         System.out.printf("RECEIVED MESSAGE : %s\n",receivedMessage.toString());
     }
 

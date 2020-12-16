@@ -1,16 +1,20 @@
 package project.insa.idchatsystem.gui;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.*;
 import javax.swing.*;
+import project.insa.idchatsystem.Exceptions.Uninitialized;
 import project.insa.idchatsystem.Message;
 import project.insa.idchatsystem.Observers.ChatWindowObservable;
 import project.insa.idchatsystem.Observers.ChatWindowObserver;
@@ -143,9 +147,10 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         this.correspondentInfoLabel = new JLabel("BBBBB#yy", JLabel.LEFT);
 
         this.chatScrollPane = new JScrollPane(this.chatHistoryPanel);
+        this.chatScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         this.chatScrollPane.setBackground(Color.GRAY/*Window.COLOR_SOFTWHITE*/);
 
-        this.chatHistoryPanel = new JPanel();
+        this.chatHistoryPanel = new ScrollableChat();
         this.chatHistoryPanel.setLayout(new BoxLayout(this.chatHistoryPanel, BoxLayout.Y_AXIS));
         this.chatHistoryPanel.setBorder(BorderFactory.createEmptyBorder(
                 10, //top
@@ -408,23 +413,60 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
                 );
         
         // text area
-        JLabel messageTextLabel = new JLabel(message.getText());
-        GridBagConstraints messageTextLabelConstraints = new GridBagConstraints();
-        messageTextLabelConstraints.gridx = 0;
-        messageTextLabelConstraints.weightx = 1.0;
-        messageTextLabelConstraints.weighty = 1.0;
-        messageTextLabelConstraints.fill = GridBagConstraints.HORIZONTAL;
+        JTextArea messageTextArea = new JTextArea();
+        messageTextArea.setEnabled(false);
+        messageTextArea.setLineWrap(true);
+        messageTextArea.setWrapStyleWord(true);
         
-        messagePanel.add(messageTextLabel, messageTextLabelConstraints);
+        GridBagConstraints messageTextAreaConstraints = new GridBagConstraints();
+        messageTextAreaConstraints.weightx = 0.7;
+        messageTextAreaConstraints.fill = GridBagConstraints.HORIZONTAL;
         
         // timestamp area
         JLabel messageTimestampLabel = new JLabel(message.getTimestamp());
         GridBagConstraints messageTimestampLabelConstraints = new GridBagConstraints();
-        messageTimestampLabelConstraints.gridx = 1;
-        messageTimestampLabelConstraints.weightx = 0;
-        messageTimestampLabelConstraints.weighty = 1.0;
-        messageTimestampLabelConstraints.fill = GridBagConstraints.NONE;
+        messageTimestampLabelConstraints.weightx = 0.3;
+        messageTimestampLabelConstraints.fill = GridBagConstraints.HORIZONTAL;
         
+        // Check if this is an incoming or outgoing message
+        try {
+            if(message.getSource().equals(User.getCurrentUser())) {
+                // Outgoing message
+                messageTextAreaConstraints.gridx = 0; // Text at left
+                messageTextAreaConstraints.anchor = GridBagConstraints.WEST;
+
+                messageTimestampLabel.setBorder(BorderFactory.createEmptyBorder(
+                0, //top
+                20, //left
+                0, //bottom
+                0) //right
+                );
+
+                messageTimestampLabelConstraints.gridx = 1; // Timestamp at right
+                messageTimestampLabelConstraints.anchor = GridBagConstraints.SOUTHEAST;
+            } else {
+                // Incoming message
+                messageTextAreaConstraints.gridx = 1; // Text at right
+                messageTextAreaConstraints.anchor = GridBagConstraints.EAST;
+
+                messageTimestampLabel.setBorder(BorderFactory.createEmptyBorder(
+                0, //top
+                0, //left
+                0, //bottom
+                20) //right
+                );
+
+                messageTimestampLabelConstraints.gridx = 0; // Timestamp at left
+                messageTimestampLabelConstraints.anchor = GridBagConstraints.SOUTHWEST;
+            }
+        } catch (Uninitialized e) {
+            // Current user (thereforce message source) is not initialized
+            System.out.println("ChatWindow: EXCEPTION WHILE COMPARING MESSAGE SOURCE " + e);
+        }
+
+        messageTextArea.setText(message.getText());
+
+        messagePanel.add(messageTextArea, messageTextAreaConstraints);
         messagePanel.add(messageTimestampLabel, messageTimestampLabelConstraints);
         
         return messagePanel;
@@ -477,6 +519,39 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
     public void notifyObserverSendingMessage(Message sentMessage) {
         if(this.chatWindowObserver != null) {
             this.chatWindowObserver.newMessageSending(sentMessage);
+        }
+    }
+
+    class ScrollableChat extends JPanel implements Scrollable {
+        public void ScrollableChat() {
+
+        }
+
+        @Override
+        public Dimension getPreferredScrollableViewportSize() {
+            return super.getPreferredSize();
+        }
+
+        @Override
+        public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
+            return 64;
+            //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
+            return 64;
+            //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public boolean getScrollableTracksViewportWidth() {
+            return true;
+        }
+
+        @Override
+        public boolean getScrollableTracksViewportHeight() {
+            return false;
         }
     }
 }

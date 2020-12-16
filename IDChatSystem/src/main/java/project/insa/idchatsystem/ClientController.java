@@ -60,10 +60,12 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
     /* CONVERSATION HANDLER OBSERVER METHODS */
 
     @Override
-    public void newMessageReceived(Message receivedMessage) {        
-        this.view.displayMessage(receivedMessage);
-        //TODO manage notifications when current conversation is not the same conversation as the message
-        //this.view.displayNotification(receivedMessage);
+    public void newMessageReceived(Message receivedMessage, boolean isCurrentConversation) {  
+        if(isCurrentConversation) {
+            this.view.displayMessage(receivedMessage);
+        } else {
+            this.view.displayNotification(receivedMessage);
+        }
     }
 
     @Override
