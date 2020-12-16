@@ -1,6 +1,7 @@
 package logins.distanciel.ClientControlleur;
 
 import project.insa.idchatsystem.Conversation.ConversationHandler;
+import project.insa.idchatsystem.Exceptions.NoPortAvailable;
 import project.insa.idchatsystem.Message;
 import project.insa.idchatsystem.Observers.ConversationHandlerObserver;
 import project.insa.idchatsystem.Observers.UsersStatusObserver;
@@ -17,9 +18,9 @@ public class ControllerEncapsulation implements ConversationHandlerObserver, Use
 
     public ControllerEncapsulation(int id,
                                    int usermodel_receiver_port, int usermodel_emitter_port, ArrayList<Integer> others,
-                                   int conversationSocketPortEcoute,int conversationSocketPortDest) {
+                                   int conversationSocketPortDest) throws NoPortAvailable {
         this.localUserModel = new LocalUserModel(id,usermodel_receiver_port,usermodel_emitter_port,others);
-        this.conversationHandler = ConversationHandler.getInstance(conversationSocketPortEcoute,conversationSocketPortDest);
+        this.conversationHandler = ConversationHandler.getInstance(conversationSocketPortDest);
         this.conversationHandler.addObserver(this);
         this.localUserModel.addUserModelObserver(this);
     }

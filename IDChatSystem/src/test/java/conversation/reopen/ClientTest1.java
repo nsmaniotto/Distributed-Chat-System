@@ -1,15 +1,16 @@
 package conversation.reopen;
 
 import project.insa.idchatsystem.Conversation.ConversationHandler;
+import project.insa.idchatsystem.Exceptions.NoPortAvailable;
 import project.insa.idchatsystem.Message;
 import project.insa.idchatsystem.User.distanciel.User;
 
 public class ClientTest1 {    
-    public static void main(String [] argv){
+    public static void main(String [] argv) throws NoPortAvailable {
         int id = 1;
         
         // Creating the conversation handler
-        ConversationHandler conversationHandler = new ConversationHandler(2500, 2501);
+        ConversationHandler conversationHandler = new ConversationHandler( 2501);
         new Thread(conversationHandler).start();
         
         // Create fake users

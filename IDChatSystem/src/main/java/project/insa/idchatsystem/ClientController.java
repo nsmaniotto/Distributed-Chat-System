@@ -2,6 +2,7 @@
 package project.insa.idchatsystem;
 
 import project.insa.idchatsystem.Conversation.ConversationHandler;
+import project.insa.idchatsystem.Exceptions.NoPortAvailable;
 import project.insa.idchatsystem.Observers.ChatWindowObserver;
 import project.insa.idchatsystem.Observers.ConversationHandlerObserver;
 import project.insa.idchatsystem.Observers.UsersStatusObserver;
@@ -22,10 +23,9 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
     
     public ClientController(int id,
                             int loginReceiverPort, int loginEmiterPort, ArrayList<Integer> loginBroadcast,
-                            int conversationSocketPortEcoute, int conversationSocketPortDest)
-    {
+                            int conversationSocketPortDest) throws NoPortAvailable {
         // Conversation handler init
-        this.conversationHandler = ConversationHandler.getInstance(conversationSocketPortEcoute,conversationSocketPortDest);
+        this.conversationHandler = ConversationHandler.getInstance(conversationSocketPortDest);
         this.conversationHandler.addObserver(this);
         new Thread(conversationHandler).start();
 

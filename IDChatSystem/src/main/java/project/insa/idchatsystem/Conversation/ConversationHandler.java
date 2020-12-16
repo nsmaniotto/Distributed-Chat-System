@@ -1,9 +1,11 @@
 
 package project.insa.idchatsystem.Conversation;
 
+import project.insa.idchatsystem.Exceptions.NoPortAvailable;
 import project.insa.idchatsystem.Message;
 import project.insa.idchatsystem.Observers.ConversationHandlerObserver;
 import project.insa.idchatsystem.User.distanciel.User;
+import project.insa.idchatsystem.tools.TestPort;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -31,12 +33,23 @@ public class ConversationHandler implements ConversationHandlerObserver, Runnabl
 
     private final ExecutorService conversationThreadPool;
     private ServerSocket handlerSocket; // Acts as a server listening for incoming connection requests
-    private int listenerPort;
-    private int destinationPort;
+    private final int listenerPort;
+    private final int destinationPort;
     private ArrayList<ConversationHandlerObserver> observers;
+    private int MINLISTENERPORT = 1500;
+    private int MAXCONVERSATIONSPORTS = 100;
     
-    public ConversationHandler(int listenerPort, int portDest) {
-        this.listenerPort = listenerPort;
+    public ConversationHandler(int portDest) throws NoPortAvailable {
+        //Choose a port to listen
+        int port = this.MINLISTENERPORT;
+        while (!TestPort.portIsavailable(port) && port < this.MINLISTENERPORT +this.MAXCONVERSATIONSPORTS) {
+            port++;
+        }
+        if(port == this.MINLISTENERPORT +this.MAXCONVERSATIONSPORTS) {
+            throw new NoPortAvailable("ConversationHandler");
+        }
+
+        this.listenerPort = port;
         this.destinationPort = portDest;
         
         this.conversations = new ArrayList<>();
@@ -54,9 +67,9 @@ public class ConversationHandler implements ConversationHandlerObserver, Runnabl
      * 
      * @return INSTANCE : ConversationHandler - single instance of this class
      */
-    public static ConversationHandler getInstance(int portEcoute,int portDest) {
+    public static ConversationHandler getInstance(int portDest) throws NoPortAvailable {
         if(ConversationHandler.INSTANCE == null){
-            ConversationHandler.INSTANCE = new ConversationHandler(portEcoute,portDest);
+            ConversationHandler.INSTANCE = new ConversationHandler(portDest);
         }
         return ConversationHandler.INSTANCE;
     }

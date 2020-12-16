@@ -7,6 +7,7 @@ package conversation;
 
 import project.insa.idchatsystem.ClientController;
 import project.insa.idchatsystem.Conversation.ConversationHandler;
+import project.insa.idchatsystem.Exceptions.NoPortAvailable;
 import project.insa.idchatsystem.Exceptions.Uninitialized;
 import project.insa.idchatsystem.User.distanciel.User;
 
@@ -18,11 +19,11 @@ import java.util.HashMap;
  * @author smani
  */
 public class ClientTestNathan {    
-    public ClientTestNathan() {
+    public ClientTestNathan() throws NoPortAvailable {
         int id = 10;
         ArrayList<Integer> arrayBroadCast = new ArrayList<Integer>();
         arrayBroadCast.add(2001);
-        ClientController controller = new ClientController(id,2000,2010,arrayBroadCast,2500,2501);
+        ClientController controller = new ClientController(id,2000,2010,arrayBroadCast,2501);
         try {
             Thread.sleep(5000);//On laisse le temps d'entrer le login
         } catch (InterruptedException e) {

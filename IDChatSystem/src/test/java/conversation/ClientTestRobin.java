@@ -7,6 +7,7 @@ package conversation;
 
 import project.insa.idchatsystem.ClientController;
 import project.insa.idchatsystem.Conversation.ConversationHandler;
+import project.insa.idchatsystem.Exceptions.NoPortAvailable;
 import project.insa.idchatsystem.Message;
 import project.insa.idchatsystem.User.distanciel.User;
 
@@ -18,11 +19,11 @@ import java.util.HashMap;
  * @author smani
  */
 public class ClientTestRobin {
-    public ClientTestRobin() {
+    public ClientTestRobin() throws NoPortAvailable {
         int id = 20;
         ArrayList<Integer> arrayBroadCast = new ArrayList<Integer>();
         arrayBroadCast.add(2000);
-        ClientController controller = new ClientController(id,2001,2011,arrayBroadCast,2501,2500);
+        ClientController controller = new ClientController(id,2001,2011,arrayBroadCast,2500);
         
         /* TESTING TCP COMMUNICATIONS */
         try {
