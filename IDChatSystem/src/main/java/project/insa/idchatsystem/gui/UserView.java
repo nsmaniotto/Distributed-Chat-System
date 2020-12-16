@@ -10,7 +10,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Timestamp;
-
+//TODO : s'inspirer de generateDisplayedMessage pour régler le problème de taille
 public class UserView extends JPanel implements UserViewObservable {
     private User user ;
     private JPanel mainPanel;
@@ -32,6 +32,9 @@ public class UserView extends JPanel implements UserViewObservable {
         this.buildPanel();
     }
     public void offline(){this.online=false;}
+    public boolean getOnline() {
+        return this.online;
+    }
     //TODO change colors to notify new message
     protected void initComponents() {
         this.mainPanel = new JPanel();
@@ -46,6 +49,7 @@ public class UserView extends JPanel implements UserViewObservable {
         this.mainPanel.add(selectButton);
         this.mainPanel.setBorder(new EmptyBorder(10,10,10,10));
         this.add(mainPanel);
+
     }
 
     public void initListeners(UserViewObserver observer) {
@@ -88,6 +92,7 @@ public class UserView extends JPanel implements UserViewObservable {
     }
     public void setUsername(String username){
         this.user.setUsername(username);
+        this.usernameLabel.setText(String.format("%s #%d",this.user.get_username(),this.user.get_id()));
     }
     public void setLastSeen(Timestamp timestamp){
         this.user.setLastSeen(timestamp);

@@ -29,15 +29,14 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
         this.conversationHandler.addObserver(this);
         new Thread(conversationHandler).start();
 
-        // At this stage, the login controller is running in the same thread as the ClientController but the reception and emission operates in two others
-        this.localUserModel = new LocalUserModel(id,loginReceiverPort,loginEmiterPort,loginBroadcast);
-        this.localUserModel.addUserModelObserver(this);
-
         // View init
         this.view = new View();
         this.view.addObserver(this);
         new Thread(view).start();
 
+        // At this stage, the login controller is running in the same thread as the ClientController but the reception and emission operates in two others
+        this.localUserModel = new LocalUserModel(id,loginReceiverPort,loginEmiterPort,loginBroadcast);
+        this.localUserModel.addUserModelObserver(this);
     }
 
     public LocalUserModel getLocalUserModel() {
@@ -53,7 +52,7 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
 
     @Override
     public void onlineUser(User user) {
-        System.out.printf("Online user : %s\n",user);
+        System.out.printf("CONTROLLER : Online user : %s\n",user);
         this.conversationHandler.addKnownUser(user);
         this.view.onlineUser(user);
     }

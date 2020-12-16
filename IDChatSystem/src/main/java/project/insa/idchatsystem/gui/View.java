@@ -17,16 +17,15 @@ public class View implements Runnable, ChatWindowObserver {
     
     @Override
     public void run() {
-        this.login_window = new LoginWindow();
         this.chat_window = new ChatWindow();
         this.chat_window.addChatWindowObserver(this);
+        this.login_window = new LoginWindow();
         this.chat_window.setVisible(false);
         this.login_window.setLoginOKObserver(this);
         this.login_window.display();
     }
     public void loginOk(String login) {
         System.out.printf("Opening chat window\n");
-        this.chat_window.setVisible(true);
         try {
             this.chat_window.displayUsername(login,User.get_current_id());
         } catch (Uninitialized uninitialized) {
@@ -44,10 +43,12 @@ public class View implements Runnable, ChatWindowObserver {
     public void onlineUser(User user){
         //Indicates that the user has been seen
         assert this.chat_window != null;
+        System.out.printf("VIEW onlineUser : Online user %s\n",user);
         this.chat_window.onlineUser(user);
     }
     public void offlineUser(User user) {
         assert this.chat_window != null : "Vous n'êtes pas login";
+        System.out.printf("VIEW : offlineUser %s\n",user);
         this.chat_window.offlineUser(user);
     }
     

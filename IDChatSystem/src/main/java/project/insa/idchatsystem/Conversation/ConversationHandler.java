@@ -223,7 +223,7 @@ public class ConversationHandler implements ConversationHandlerObserver, Runnabl
     }
     public void removeKnownUser(User user){
         this.users.remove(user.get_id(),user);
-        System.out.printf("Removing user %s\n",user);
+        System.out.printf("CONVERSATIONHANDLER : Removing user %s\n",user);
     }
     
     /* CONVERSATION HANDLER OBSERVER METHODS */

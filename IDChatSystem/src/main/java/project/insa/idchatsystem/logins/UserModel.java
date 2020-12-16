@@ -30,13 +30,7 @@ public abstract class UserModel implements ObservableUserModel {
         System.out.printf("Online user 2 %s\n",user);
         boolean new_user = this.users.containsKey(user.get_id());
         this.users.put(user.get_id(),user);//Replace automatically the previous version if already in the HashMap
-        if(!new_user) {
-            //notify observers
-            this.notifyNewUserObservers(user);
-        }
-        else {
-            System.out.printf("User already know !\n");
-        }
+        this.notifyNewUserObservers(user);
     }
     public void removeOnlineUser(int id) {
         User removed_user = this.users.remove(id);

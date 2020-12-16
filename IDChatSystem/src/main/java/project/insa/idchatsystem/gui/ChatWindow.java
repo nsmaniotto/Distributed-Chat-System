@@ -34,11 +34,13 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         @Override
         public boolean add(UserView userView) {
             int indexElem = this.indexOf(userView);
-            if(indexElem == -1)//We add the element only if it is not already present
+            System.out.printf("CHATWINDOW add : passe dans %d\n",indexElem);
+            if(indexElem == -1)//We add the element if it is not already present
                 return super.add(userView);
             else {//Else we only update the user
                 UserView pastUserViewUpdated = this.get(indexElem);
                 pastUserViewUpdated.setUsername(userView.getUsername());
+                System.out.printf("CHATWINDOW add : newUserName : %s\n",pastUserViewUpdated.getUsername());
                 pastUserViewUpdated.setLastSeen(userView.getLastSeen());
                 this.set(indexElem,pastUserViewUpdated);
                 return false;
@@ -296,24 +298,39 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         users.forEach((k,user) -> {
             this.onlineUser(user);
         });
-        this.repaint();
+        this.updateOnlineUsers();
     }
     public void onlineUser(User user){
         UserView v = new UserView(user);
         v.initListeners(this);
         this.usersContainer.add(v);
+        System.out.printf("CHATWINDOW onlineUser : %s\n",v.getUsername());
+        this.updateOnlineUsers();
+    }
+    private void updateOnlineUsers(){
         this.onlineUsersPanel.removeAll();
         this.usersContainer.getListOrderedByName().forEach(userComp->{
-            this.onlineUsersPanel.add(userComp);
+            if(userComp.getOnline())
+                this.onlineUsersPanel.add(userComp);
+        });
+    }
+    private void updateOfflineUsers(){
+        this.offlineUsersPanel.removeAll();
+        this.usersContainer.getListOrderedByName().forEach(userComp->{
+            if(!userComp.getOnline())
+                this.offlineUsersPanel.add(userComp);
         });
     }
     public void offlineUser(User user){
+        System.out.printf("CHATWINDOW offlineUser %s\n",user);
         UserView v = new UserView(user);
         v.initListeners(this);
         int index = this.usersContainer.indexOf(v);
         v.offline();
         if(index != -1) {
             this.usersContainer.set(index,v);
+            this.updateOfflineUsers();
+            this.updateOnlineUsers();
         }
         else {
             System.out.printf("User %s was not connected\n",user);
