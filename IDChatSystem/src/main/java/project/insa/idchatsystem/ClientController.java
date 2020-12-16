@@ -76,7 +76,12 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
         */
         this.view.displayMessage(sentMessage);
     }
-    
+
+    @Override
+    public void listenerPortChosen(int port) {
+        //TODO
+    }
+
     /* GETTERS/SETTERS */
     public ConversationHandler getConversationHandler() {
         return this.conversationHandler;

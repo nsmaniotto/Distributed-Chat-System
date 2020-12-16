@@ -3,7 +3,9 @@ package project.insa.idchatsystem.Conversation;
 
 import project.insa.idchatsystem.Exceptions.NoPortAvailable;
 import project.insa.idchatsystem.Message;
+import project.insa.idchatsystem.Observers.ConversationHandlerObservable;
 import project.insa.idchatsystem.Observers.ConversationHandlerObserver;
+import project.insa.idchatsystem.Observers.ConversationObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 import project.insa.idchatsystem.tools.TestPort;
 
@@ -24,7 +26,7 @@ import java.util.concurrent.atomic.AtomicReference;
  *
  * @author nsmaniotto
  */
-public class ConversationHandler implements ConversationHandlerObserver, Runnable {
+public class ConversationHandler implements ConversationObserver, ConversationHandlerObservable, Runnable {
     private static ConversationHandler INSTANCE;
     private ArrayList<Conversation> conversations;
     private Conversation currentConversation;
@@ -227,10 +229,16 @@ public class ConversationHandler implements ConversationHandlerObserver, Runnabl
         return users;
     }
 
+    @Override
     public void addObserver(ConversationHandlerObserver observer) {
         this.observers.add(observer);
     }
-    
+
+    @Override
+    public void deleteObserver(ConversationHandlerObserver obs) {
+        this.observers.remove(obs);
+    }
+
     public void offlineUser(User user) {
 
     }
@@ -266,5 +274,10 @@ public class ConversationHandler implements ConversationHandlerObserver, Runnabl
     /* GETTERS/SETTERS */
     public Conversation getCurrentConversation() {
         return this.currentConversation;
+    }
+
+    @Override
+    public void notifyListenerPortNegociated() {
+
     }
 }

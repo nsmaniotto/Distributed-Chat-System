@@ -3,7 +3,9 @@ package logins.distanciel.ClientControlleur;
 import project.insa.idchatsystem.Conversation.ConversationHandler;
 import project.insa.idchatsystem.Exceptions.NoPortAvailable;
 import project.insa.idchatsystem.Message;
+import project.insa.idchatsystem.Observers.ConversationHandlerObservable;
 import project.insa.idchatsystem.Observers.ConversationHandlerObserver;
+import project.insa.idchatsystem.Observers.ConversationObserver;
 import project.insa.idchatsystem.Observers.UsersStatusObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 import project.insa.idchatsystem.logins.local_mode.distanciel.LocalUserModel;
@@ -11,7 +13,7 @@ import project.insa.idchatsystem.logins.local_mode.distanciel.LocalUserModel;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ControllerEncapsulation implements ConversationHandlerObserver, UsersStatusObserver {
+public class ControllerEncapsulation implements ConversationHandlerObserver,UsersStatusObserver {
     private final ConversationHandler conversationHandler;
     private LocalUserModel localUserModel;
     //private DistantUserModel centralizedUserModel;
@@ -48,5 +50,10 @@ public class ControllerEncapsulation implements ConversationHandlerObserver, Use
     @Override
     public void newMessageSent(Message sentMessage) {
         System.out.printf("SENT MESSAGE : %s\n",sentMessage.toString());
+    }
+
+    @Override
+    public void listenerPortChosen(int port) {
+
     }
 }

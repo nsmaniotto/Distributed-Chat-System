@@ -1,10 +1,11 @@
 
 package project.insa.idchatsystem.Conversation;
 
-import project.insa.idchatsystem.Observers.ConversationHandlerObserver;
-import project.insa.idchatsystem.Observers.ConversationObservable;
 import project.insa.idchatsystem.Data;
+import project.insa.idchatsystem.Exceptions.Uninitialized;
 import project.insa.idchatsystem.Message;
+import project.insa.idchatsystem.Observers.ConversationObservable;
+import project.insa.idchatsystem.Observers.ConversationObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 
 import java.io.BufferedReader;
@@ -13,14 +14,13 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
-import project.insa.idchatsystem.Exceptions.Uninitialized;
 
 public class Conversation implements ConversationObservable, Runnable {
     private Socket socket;
     private boolean isOpen;
     private final User correspondent;
     private final ArrayList<Message> history;
-    private ConversationHandlerObserver conversationHandlerObserver;
+    private ConversationObserver conversationHandlerObserver;
 
     /**
      * Initialize a passive conversation with a given correspondent
@@ -170,12 +170,12 @@ public class Conversation implements ConversationObservable, Runnable {
     /* CONVERSATION OBSERVER METHODS */
 
     @Override
-    public void addConversationObserver(ConversationHandlerObserver observer) {
+    public void addConversationObserver(ConversationObserver observer) {
         this.conversationHandlerObserver = observer;
     }
 
     @Override
-    public void deleteConversationObserver(ConversationHandlerObserver observer) {
+    public void deleteConversationObserver(ConversationObserver observer) {
         this.conversationHandlerObserver = null;
     }
 

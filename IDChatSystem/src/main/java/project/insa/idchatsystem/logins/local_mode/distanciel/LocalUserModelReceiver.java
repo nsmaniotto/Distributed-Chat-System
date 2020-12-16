@@ -15,7 +15,9 @@ public class LocalUserModelReceiver implements Runnable {
     // - username : max 25 letters
     // - id : between 0 and 1 000 000 > 100 000 -> between 1 and 7 digits
     // - ipAdress : maximum 3*4 + 3 = 15 characters
-    // Result = 25 + 7 + 15 = 47 character -> we will take 256 characters
+    // - lastSeen : 23-24 characters
+    // - conversationHandlerListenerPort : 65535 = 5 characters
+    // Result = 25 + 7 + 15 + 24 + 5 = 76 character -> we will take 256 characters
     protected byte[] in_buf = new byte[256];
 
     public LocalUserModelReceiver(LocalUserModel model, int in_port_broadcast) {
@@ -32,7 +34,7 @@ public class LocalUserModelReceiver implements Runnable {
     public void run() {
         //Création des objets pour recevoir de l'UDP en broadcast (multicast ici pour éviter de trop utiliser de ressources) des communications
         try {
-            Pattern pattern_new_host = Pattern.compile("(?<username>[A-Za-z_.0-9]+),(?<id>[0-9]+),(?<ip>[0-9]+[.][0-9]+[.][0-9]+[.][0-9]+)");
+            Pattern pattern_new_host = Pattern.compile("(?<username>[A-Za-z_.0-9]+),(?<id>[0-9]+),(?<ip>[0-9]+[.][0-9]+[.][0-9]+[.][0-9]+),(?<convListPort>[0-9]+)");
             Pattern pattern_disconnected = Pattern.compile("(?<id>[0-9]+),disconnected");
             Pattern pattern_update = Pattern.compile("update");
             while (true) {
@@ -45,6 +47,7 @@ public class LocalUserModelReceiver implements Runnable {
                 while (m.find()){
                     //System.out.println("NEW USER");
                     User new_user = new User(m.group("username"),Integer.parseInt(m.group("id")),m.group("ip"));
+                    new_user.setConversationHandlerListenerPort(Integer.parseInt(m.group("convListPort")));
                     this.model.addOnlineUser(new_user);//Add or refresh informations of the user based on the id
                 }
                 m = pattern_disconnected.matcher(received);

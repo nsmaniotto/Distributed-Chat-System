@@ -15,9 +15,11 @@ public class User {
     private final String ipAddress;
 
     private Timestamp lastSeen;
+    private int conversationHandlerListenerPort;
     private static String current_username = "";
     private static int current_id;
     private static String current_ipAddress;
+    private static int current_conversationHandlerListenerPort;
 
     /************************Current user methods***************************************/
     public static void init_current_user(int id) {
@@ -55,11 +57,14 @@ public class User {
         return User.current_ipAddress;
     }
     public static String current_user_transfer_string() {
-        return String.format("%s,%d,%s",User.current_username,User.current_id,User.current_ipAddress);
+        return String.format("%s,%d,%s,%d",User.current_username,User.current_id,User.current_ipAddress,User.current_conversationHandlerListenerPort);
     }
 
     public static User getCurrentUser() throws Uninitialized {
         return new User(User.get_current_username(), User.get_current_id(), User.get_current_ipAddress());
+    }
+    public static void setCurrentConversationHandlerListenerPort(int conversationHandlerListenerPort) {
+        User.current_conversationHandlerListenerPort = conversationHandlerListenerPort;
     }
     /***********************Other users methods***************************/
     public User(String username, int id, String ipAddress) {
@@ -67,6 +72,11 @@ public class User {
         this.id = id;
         this.ipAddress = ipAddress;
         this.lastSeen = new Timestamp(System.currentTimeMillis());
+        this.conversationHandlerListenerPort = -1;
+    }
+
+    public void setConversationHandlerListenerPort(int conversationHandlerListenerPort) {
+        this.conversationHandlerListenerPort = conversationHandlerListenerPort;
     }
 
     public String get_username() {
@@ -93,7 +103,7 @@ public class User {
     /*********************Utilities methods*****************************/
     @Override
     public String toString() {
-        return String.format("User %s ; id %d ; ipAddress %s ; lastSeen %s", this.username, this.id, this.ipAddress, this.lastSeen.toString());
+        return String.format("User %s ; id %d ; ipAddress %s ; lastSeen %s ; convListPort %d", this.username, this.id, this.ipAddress, this.lastSeen.toString(),this.conversationHandlerListenerPort);
     }
 
     @Override
