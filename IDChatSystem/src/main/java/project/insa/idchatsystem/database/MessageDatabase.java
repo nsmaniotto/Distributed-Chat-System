@@ -3,6 +3,7 @@ package project.insa.idchatsystem.database;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,6 +26,7 @@ public class MessageDatabase {
     
     // Database utilities
     private Connection conn;
+    private Statement statement;
     
     public static void MessageDatabase() {
         
@@ -57,14 +59,35 @@ public class MessageDatabase {
             System.out.println("(MessageDatabase) : EXCEPTION AT CONNECT : " + ex);
             Logger.getLogger(MessageDatabase.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        this.createStatement();
     }
     
     private void connect() throws SQLException {
         System.out.println("(MessageDatabase) - Connecting to the database...");
-        conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);
+        this.conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);
         
-        if(conn != null) {
+        if(this.conn != null) {
             System.out.println("(MessageDatabase) - Successfully connected to the database");
+        }
+    }
+    
+    private void createStatement() {
+        this.statement = null; // Reset the statement each time the method is called
+        
+        if(this.conn != null) {
+            System.out.println("Creating statement...");
+            
+            try {
+                statement = conn.createStatement();
+            } catch (SQLException ex) {
+                System.out.println("(MessageDatabase) : EXCEPTION AT CREATING STATEMENT : " + ex);
+                Logger.getLogger(MessageDatabase.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            if(this.statement != null) {
+                System.out.println("(MessageDatabase) - Successfully created the statement");
+            }
         }
     }
 }
