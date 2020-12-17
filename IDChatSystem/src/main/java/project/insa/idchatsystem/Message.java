@@ -52,7 +52,11 @@ public class Message extends Data {
         return this.text;
     }
     
-    public String getTimestamp() {
+    public Timestamp getTimestamp() {
+        return this.timestamp;
+    }
+    
+    public String getTimestampString() {
         return this.timestamp.toString();
     }
 
