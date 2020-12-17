@@ -2,6 +2,7 @@ package project.insa.idchatsystem.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
@@ -18,6 +19,7 @@ public class MessageDatabase {
     // JDBC driver name and database URL
     private final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";  
     private final int DB_PORT = 3306;
+    private final String DB_NAME = "idchatsystem";
     private final String DB_URL = "jdbc:mysql://localhost:" + DB_PORT;
 
     // Database credentials
@@ -60,7 +62,7 @@ public class MessageDatabase {
             Logger.getLogger(MessageDatabase.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        this.createStatement();
+        this.initDatabase();
     }
     
     private void connect() throws SQLException {
@@ -69,25 +71,50 @@ public class MessageDatabase {
         
         if(this.conn != null) {
             System.out.println("(MessageDatabase) - Successfully connected to the database");
+        } else {
+            System.out.println("(MessageDatabase) - Could not connect to the database");
+        }
+    }
+    
+    private void initDatabase() {
+        // Create Database if it does not exists
+        this.executeUpdate("CREATE DATABASE IF NOT EXISTS " + this.DB_NAME);
+        
+        // Create Table
+        //TODO
+    }
+    
+    private void executeUpdate(String update) {
+        this.createStatement();
+        
+        if(this.statement != null) {
+            try {
+                this.statement.executeUpdate(update);
+            } catch (SQLException ex) {
+                System.out.println("(MessageDatabase) : EXCEPTION AT EXECUTING UPDATE : " + ex);
+                Logger.getLogger(MessageDatabase.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
     private void createStatement() {
+        System.out.println("(MessageDatabase) - Creating a statement...");
+        
         this.statement = null; // Reset the statement each time the method is called
         
-        if(this.conn != null) {
-            System.out.println("Creating statement...");
-            
+        if(this.conn != null) {            
             try {
                 statement = conn.createStatement();
             } catch (SQLException ex) {
                 System.out.println("(MessageDatabase) : EXCEPTION AT CREATING STATEMENT : " + ex);
                 Logger.getLogger(MessageDatabase.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-            if(this.statement != null) {
-                System.out.println("(MessageDatabase) - Successfully created the statement");
-            }
+        }
+        
+        if(this.statement != null) {
+            System.out.println("(MessageDatabase) - Successfully created the statement");
+        } else {
+            System.out.println("(MessageDatabase) - Could not create a statement");
         }
     }
 }
