@@ -9,6 +9,17 @@ public class Data {
     private User destination;
 
     private String type;
+    
+    /* CONSTRUCTORS */
+    
+    public Data() {
+        
+    }
+    
+    public Data(User source, User destination) {
+        this.source = source;
+        this.destination = destination;
+    }
 
     /* GETTERS/SETTERS */
     public User getSource() {

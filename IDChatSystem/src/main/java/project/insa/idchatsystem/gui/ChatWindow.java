@@ -423,7 +423,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         messageTextAreaConstraints.fill = GridBagConstraints.HORIZONTAL;
         
         // timestamp area
-        JLabel messageTimestampLabel = new JLabel(message.getTimestamp());
+        JLabel messageTimestampLabel = new JLabel(message.getTimestampString());
         GridBagConstraints messageTimestampLabelConstraints = new GridBagConstraints();
         messageTimestampLabelConstraints.weightx = 0.3;
         messageTimestampLabelConstraints.fill = GridBagConstraints.HORIZONTAL;
