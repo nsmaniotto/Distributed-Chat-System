@@ -1,5 +1,7 @@
 package project.insa.idchatsystem.database;
 
+import java.sql.PreparedStatement;
+import java.sql.Timestamp;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -7,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import project.insa.idchatsystem.Message;
 
 /**
  *
@@ -16,10 +19,20 @@ public class MessageDatabase {
     // Singleton instance of the databases
     public static MessageDatabase INSTANCE;
     
+    // Databases
+    private final String DB_NAME = "idchatsystem";
+    // Tables
+    private final String DB_MESSAGE_TABLE_NAME = "messages";
+    // Rows
+    private final String DB_MESSAGE_ROW_ID = "ID";
+    private final String DB_MESSAGE_ROW_SOURCE_ID = "SOURCE_ID";
+    private final String DB_MESSAGE_ROW_DESTINATION_ID = "DESTINATION_ID";
+    private final String DB_MESSAGE_ROW_TEXT = "TEXT";
+    private final String DB_MESSAGE_ROW_TIMESTAMP = "TIMESTAMP";
+    
     // JDBC driver name and database URL
     private final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";  
     private final int DB_PORT = 3306;
-    private final String DB_NAME = "idchatsystem";
     private final String DB_SERVER_URL = "jdbc:mysql://localhost:" + DB_PORT;
     private final String DB_DATABASE_URL = DB_SERVER_URL + "/" + DB_NAME;
 
@@ -93,30 +106,15 @@ public class MessageDatabase {
     }
     
     private void createMessageTable() {
-        System.out.println("(MessageDatabase) - Creating the messages table...");
+        System.out.println("(MessageDatabase) - Creating the " + DB_MESSAGE_TABLE_NAME + " table...");
         
-        this.executeUpdate("CREATE TABLE IF NOT EXISTS messages ("
-                    + "ID INT NOT NULL,"
-                    + "SOURCE_ID INT NOT NULL,"
-                    + "DESTINATION_ID INT NOT NULL,"
-                    + "TEXT TEXT NOT NULL," // TINYTEXT = 255 char, TEXT = 65535 char
-                    + "TIMESTAMP TIMESTAMP NOT NULL,"
+        this.executeUpdate("CREATE TABLE IF NOT EXISTS " + DB_MESSAGE_TABLE_NAME + " ("
+                    + DB_MESSAGE_ROW_ID + " INT NOT NULL AUTO_INCREMENT,"
+                    + DB_MESSAGE_ROW_SOURCE_ID + " INT NOT NULL,"
+                    + DB_MESSAGE_ROW_DESTINATION_ID + " INT NOT NULL,"
+                    + DB_MESSAGE_ROW_TEXT + " TEXT NOT NULL," // TINYTEXT = 255 char, TEXT = 65535 char
+                    + DB_MESSAGE_ROW_TIMESTAMP + " TIMESTAMP NOT NULL,"
                     + "PRIMARY KEY (ID))");
-    }
-    
-    private void executeUpdate(String update) {
-        System.out.println("(MessageDatabase) - Update : " + update);
-        
-        this.createStatement();
-        
-        if(this.statement != null) {
-            try {
-                this.statement.executeUpdate(update);
-            } catch (SQLException ex) {
-                System.out.println("(MessageDatabase) : EXCEPTION AT EXECUTING UPDATE : " + ex);
-                Logger.getLogger(MessageDatabase.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
     }
     
     private void createStatement() {
@@ -137,6 +135,67 @@ public class MessageDatabase {
             System.out.println("(MessageDatabase) - Successfully created the statement");
         } else {
             System.out.println("(MessageDatabase) - Could not create a statement");
+        }
+    }
+    
+    /* QUERIES */
+    
+    public void storeMessage(Message message) {
+        // MySQL insert statement
+        String prepareQuery = "INSERT INTO " + DB_MESSAGE_TABLE_NAME + "("
+                + DB_MESSAGE_ROW_SOURCE_ID
+                + "," + DB_MESSAGE_ROW_DESTINATION_ID
+                + "," + DB_MESSAGE_ROW_TEXT
+                + "," + DB_MESSAGE_ROW_TIMESTAMP
+                + ")"
+                + "VALUES (?, ?, ?, ?)";
+
+        // Create the MySQL insert prepared statement to prevent injection
+        PreparedStatement preparedStatement;
+        try {
+            preparedStatement = this.conn.prepareStatement(prepareQuery);
+            
+            preparedStatement.setInt(1, message.getSource().get_id());
+            preparedStatement.setInt(2, message.getDestination().get_id());
+            preparedStatement.setString(3, message.getText());
+            preparedStatement.setTimestamp(4, message.getTimestamp());
+            
+            preparedStatement.execute();
+        } catch (SQLException ex) {
+            System.out.println("(MessageDatabase) : EXCEPTION AT CREATING/EXECUTING PREPARED STATEMENT : " + ex);
+            Logger.getLogger(MessageDatabase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    /* UTILITIES */
+    
+    private void executeUpdate(String update) {
+        System.out.println("(MessageDatabase) - Update : " + update);
+        
+        this.createStatement();
+        
+        if(this.statement != null) {
+            try {
+                this.statement.executeUpdate(update);
+            } catch (SQLException ex) {
+                System.out.println("(MessageDatabase) : EXCEPTION AT EXECUTING UPDATE : " + ex);
+                Logger.getLogger(MessageDatabase.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    private void executeQuery(String query) {
+        System.out.println("(MessageDatabase) - Query : " + query);
+        
+        this.createStatement();
+        
+        if(this.statement != null) {
+            try {
+                this.statement.executeQuery(query);
+            } catch (SQLException ex) {
+                System.out.println("(MessageDatabase) : EXCEPTION AT EXECUTING QUERY : " + ex);
+                Logger.getLogger(MessageDatabase.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 }
