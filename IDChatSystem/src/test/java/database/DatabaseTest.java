@@ -22,6 +22,7 @@ public class DatabaseTest {
         
         ArrayList<Message> retrievedMessages = db.retrieveOrderedMessagesByConversationBetween(fakeCurrentUser, fakeCorrespondent);
         
+        System.out.print("\n\n\n\n(DatabaseTest) - Retrieved messages test result : (must contain 'hello' message(s))\n");
         retrievedMessages.forEach(message -> System.out.println(message));
     }
 }
