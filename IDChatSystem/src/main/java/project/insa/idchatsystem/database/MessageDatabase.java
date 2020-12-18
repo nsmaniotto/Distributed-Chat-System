@@ -7,9 +7,11 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import project.insa.idchatsystem.Message;
+import project.insa.idchatsystem.User.distanciel.User;
 
 /**
  *
@@ -167,6 +169,47 @@ public class MessageDatabase {
         }
     }
     
+    public ArrayList<Message> retrieveOrderedMessagesByConversationBetween(User user1, User user2) {
+        ArrayList<Message> resultMessages = new ArrayList<Message>();
+        
+        // Query to retrieve messages between user1.id and user2.id (both can be source OR destination)
+        String query = "SELECT " + DB_MESSAGE_ROW_SOURCE_ID + "," + DB_MESSAGE_ROW_DESTINATION_ID
+                            + "," + DB_MESSAGE_ROW_TEXT+ "," + DB_MESSAGE_ROW_TIMESTAMP 
+                + " FROM " + DB_MESSAGE_TABLE_NAME
+                + " WHERE " + DB_MESSAGE_ROW_SOURCE_ID + "=" + user1.get_id()
+                    + " AND " + DB_MESSAGE_ROW_DESTINATION_ID + "=" + user2.get_id()
+                + " OR " + DB_MESSAGE_ROW_SOURCE_ID + "=" + user2.get_id()
+                    + " AND " + DB_MESSAGE_ROW_DESTINATION_ID + "=" + user1.get_id();
+        
+        // Execute query
+        ResultSet queryResultSet = this.executeQuery(query);
+        
+        // Convert result set to messages array
+        
+        try {
+            while(queryResultSet.next()){
+                // Retrieve values by column name
+                int sourceID  = queryResultSet.getInt(DB_MESSAGE_ROW_SOURCE_ID);
+                User source = user1.get_id() == sourceID ? user1 : user2;
+                int destinationID = queryResultSet.getInt(DB_MESSAGE_ROW_DESTINATION_ID);
+                User destination = user1.get_id() == destinationID ? user1 : user2;
+                String text = queryResultSet.getString(DB_MESSAGE_ROW_TEXT);
+                Timestamp timestamp = queryResultSet.getTimestamp(DB_MESSAGE_ROW_TIMESTAMP);
+                
+                // Generate a message from retrieved values
+                Message generatedMessage = new Message(source, destination, text, timestamp);
+                
+                // Add previously generated message to the returned array
+                resultMessages.add(generatedMessage);
+            }
+        } catch (SQLException ex) {
+            System.out.println("(MessageDatabase) : EXCEPTION AT CONVERTING RESULTSET TO MESSAGES : " + ex);
+            Logger.getLogger(MessageDatabase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return resultMessages;
+    }
+    
     /* UTILITIES */
     
     private void executeUpdate(String update) {
@@ -184,18 +227,22 @@ public class MessageDatabase {
         }
     }
     
-    private void executeQuery(String query) {
+    private ResultSet executeQuery(String query) {
         System.out.println("(MessageDatabase) - Query : " + query);
+        
+        ResultSet queryResultSet = null;
         
         this.createStatement();
         
         if(this.statement != null) {
             try {
-                this.statement.executeQuery(query);
+                queryResultSet = this.statement.executeQuery(query);
             } catch (SQLException ex) {
                 System.out.println("(MessageDatabase) : EXCEPTION AT EXECUTING QUERY : " + ex);
                 Logger.getLogger(MessageDatabase.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        
+        return queryResultSet;
     }
 }
