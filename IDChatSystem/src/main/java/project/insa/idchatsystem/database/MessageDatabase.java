@@ -169,6 +169,14 @@ public class MessageDatabase {
         }
     }
     
+    /**
+     * Retrieve messages between a given pair of users
+     * Messages are returned in a list, ordered by default : oldest at list[0]
+     * 
+     * @param user1 - User : can be the source OR destination
+     * @param user2 - User : can be the source OR destination
+     * @return a list a messages, ordered by oldest first
+     */
     public ArrayList<Message> retrieveOrderedMessagesByConversationBetween(User user1, User user2) {
         ArrayList<Message> resultMessages = new ArrayList<Message>();
         
