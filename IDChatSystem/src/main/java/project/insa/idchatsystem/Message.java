@@ -6,11 +6,21 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import project.insa.idchatsystem.User.distanciel.User;
 
 public class Message extends Data {
     private String text;
     private ArrayList<File> files;
     private Timestamp timestamp;
+    
+    /* CONSTRUCTORS */
+    
+    public Message(User source, User destination, String text, Timestamp timestamp) {
+        super(source, destination);
+        
+        this.text = text;
+        this.timestamp = timestamp;
+    }
     
     /**
      * Constructor called when translating network data to a message
@@ -31,6 +41,8 @@ public class Message extends Data {
             //this.text = "ERROR: MESSAGE COULD NOT BE DETERMINED";
         }
     }
+    
+    /* UTILITIES */
 
     public Timestamp generateTimeStamp() {
         return ( new Timestamp(System.currentTimeMillis()) );
@@ -48,6 +60,7 @@ public class Message extends Data {
     }
     
     /* GETTERS/SETTERS */
+    
     public String getText() {
         return this.text;
     }
