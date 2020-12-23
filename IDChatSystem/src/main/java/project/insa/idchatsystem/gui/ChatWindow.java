@@ -310,7 +310,6 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
     public void onlineUser(User user){
         UserView v = new UserView(user);
         v.initListeners(this);
-
         this.usersContainer.add(v);
         //System.out.printf("CHATWINDOW onlineUser : %s\n",v.getUsername());
         this.updateOnlineUsers();
@@ -572,12 +571,13 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
     }
 
     @Override
-    public void askForMessages(User user) {
-        this.notifyAskForMessages(user);
+    public void askForMessages(UserView userview) {
+        this.notifyAskForMessages(userview);
+        this.userSelected(userview);
     }
     @Override
-    public void notifyAskForMessages(User user) {
-        this.chatWindowObserver.askForMessages(user);
+    public void notifyAskForMessages(UserView user) {
+        this.chatWindowObserver.askForMessages(user.getUser());
     }
     public void messagesToShow(ArrayList<Message> messages) {
         this.chatHistoryPanel.removeAll();
