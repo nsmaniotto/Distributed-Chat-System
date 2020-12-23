@@ -9,6 +9,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.Timestamp;
 //TODO : s'inspirer de generateDisplayedMessage pour régler le problème de taille
 public class UserView extends JPanel implements UserViewObservable {
@@ -52,6 +54,11 @@ public class UserView extends JPanel implements UserViewObservable {
 
     }
 
+    @Override
+    public void notifyAskForMessagesUserSelected() {
+        this.observer.askForMessages(this.getUser());
+    }
+
     public void initListeners(UserViewObserver observer) {
         UserView parent = this;
         this.selectButton.addActionListener(e -> {
@@ -60,8 +67,34 @@ public class UserView extends JPanel implements UserViewObservable {
             this.setOpaque(true);
 
             System.out.printf("%s\n",this.getBackground());
-            //Action to open the conversation ...
-            parent.observer.userSelected(this);
+            parent.userSelected();
+        });
+        this.observer = observer;
+        this.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                parent.observer.askForMessages(parent.getUser());
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
         });
     }
     public void notificationAvailable() {

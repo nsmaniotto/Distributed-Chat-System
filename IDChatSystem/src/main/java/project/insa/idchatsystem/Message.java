@@ -19,14 +19,15 @@ public class Message extends Data {
      */
     public Message(String stream) {
         // Apply pattern matching to extract timstamp and text message
-        Pattern regex = Pattern.compile("([\\d]+)[;](.+)");
+        Pattern regex = Pattern.compile("(?<timestamp>\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{3});(?<text>.*)");
         Matcher matcher = regex.matcher(stream);
         
         if(matcher.find()) {
-            this.timestamp = new Timestamp(Long.parseLong(matcher.group(1)));
-            this.text = matcher.group(2);
+            this.timestamp = Timestamp.valueOf(matcher.group("timestamp"));
+            this.text = matcher.group("text");
         } else {
-            this.timestamp = this.generateTimeStamp();
+            System.out.printf("TimeStamp cannot be determined\n");
+            this.timestamp = this.generateTimeStamp();//Good solution ?? If the timestamp is not retrieved the user will see the generated timestamp without kowing where is the pb
             this.text = stream;
             //this.text = "ERROR: MESSAGE COULD NOT BE DETERMINED";
         }

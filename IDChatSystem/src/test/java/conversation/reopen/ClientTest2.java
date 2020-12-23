@@ -10,7 +10,7 @@ public class ClientTest2 {
         int id = 2;
         
         // Creating the conversation handler
-        ConversationHandler conversationHandler = new ConversationHandler( 2500);
+        ConversationHandler conversationHandler = new ConversationHandler();
         new Thread(conversationHandler).start();
         
         // Create fake users

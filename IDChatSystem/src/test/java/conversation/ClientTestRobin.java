@@ -23,7 +23,7 @@ public class ClientTestRobin {
         int id = 20;
         ArrayList<Integer> arrayBroadCast = new ArrayList<Integer>();
         arrayBroadCast.add(2000);
-        ClientController controller = new ClientController(id,2001,2011,arrayBroadCast,2500);
+        ClientController controller = new ClientController(id,2001,2011,arrayBroadCast);
         
         /* TESTING TCP COMMUNICATIONS */
         try {

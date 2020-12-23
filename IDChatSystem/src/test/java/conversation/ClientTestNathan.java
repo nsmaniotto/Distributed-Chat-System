@@ -23,7 +23,7 @@ public class ClientTestNathan {
         int id = 10;
         ArrayList<Integer> arrayBroadCast = new ArrayList<Integer>();
         arrayBroadCast.add(2001);
-        ClientController controller = new ClientController(id,2000,2010,arrayBroadCast,2501);
+        ClientController controller = new ClientController(id,2000,2010,arrayBroadCast);
         try {
             Thread.sleep(5000);//On laisse le temps d'entrer le login
         } catch (InterruptedException e) {

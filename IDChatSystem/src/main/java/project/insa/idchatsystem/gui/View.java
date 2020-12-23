@@ -2,6 +2,7 @@ package project.insa.idchatsystem.gui;
 
 import project.insa.idchatsystem.Exceptions.Uninitialized;
 import project.insa.idchatsystem.Message;
+import project.insa.idchatsystem.Observers.ViewObservable;
 import project.insa.idchatsystem.Observers.ViewObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 
@@ -10,7 +11,7 @@ import java.util.HashMap;
 
 import project.insa.idchatsystem.Observers.ChatWindowObserver;
 
-public class View implements Runnable, ChatWindowObserver {
+public class View implements Runnable, ChatWindowObserver, ViewObservable {
     private LoginWindow login_window;
     private ChatWindow chat_window = null;
     private ViewObserver viewObserver;
@@ -89,5 +90,18 @@ public class View implements Runnable, ChatWindowObserver {
     @Override
     public void userSelected(UserView userview) {
         this.viewObserver.userSelected(userview);
+    }
+
+    @Override
+    public void askForMessages(User user) {
+        this.notifyAskForMessage(user);
+    }
+
+    @Override
+    public void notifyAskForMessage(User user) {
+        this.viewObserver.askForMessages(user);
+    }
+    public void messagesToShow(ArrayList<Message> messages ) {
+        this.chat_window.messagesToShow(messages);
     }
 }

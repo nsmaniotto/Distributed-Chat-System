@@ -68,7 +68,11 @@ public class Conversation implements ConversationObservable, Runnable {
     }
     
     private void storeMessage(Message message) {
+        this.history.add(message);
+    }
 
+    public ArrayList<Message> getHistory() {
+        return history;
     }
 
     private Message generateMessage(Data data) {
@@ -85,6 +89,7 @@ public class Conversation implements ConversationObservable, Runnable {
      * @param input : String - received stream
      */
     private void onReceive(String input) {
+        System.out.printf("RECEIVED : %s\n",input);
         // Generate a Message instance from the given input
         Message newMessage = new Message(input);
         

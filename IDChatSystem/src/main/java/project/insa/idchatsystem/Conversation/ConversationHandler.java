@@ -41,7 +41,7 @@ public class ConversationHandler implements ConversationObserver, ConversationHa
     private int MINLISTENERPORT = 1500;
     private int MAXCONVERSATIONSPORTS = 100;
     
-    public ConversationHandler(int portDest) throws NoPortAvailable {
+    public ConversationHandler() throws NoPortAvailable {
         // Empty for now
         this.observers = new ArrayList<>();
         //Choose a port to listen
@@ -55,7 +55,7 @@ public class ConversationHandler implements ConversationObserver, ConversationHa
 
         this.listenerPort = port;
         this.notifyListenerPortNegociated();
-        this.destinationPort = portDest;
+        this.destinationPort = -1;
         
         this.conversations = new ArrayList<>();
         this.users = new HashMap<>(); // Empty for now
@@ -70,9 +70,9 @@ public class ConversationHandler implements ConversationObserver, ConversationHa
      * 
      * @return INSTANCE : ConversationHandler - single instance of this class
      */
-    public static ConversationHandler getInstance(int portDest) throws NoPortAvailable {
+    public static ConversationHandler getInstance() throws NoPortAvailable {
         if(ConversationHandler.INSTANCE == null){
-            ConversationHandler.INSTANCE = new ConversationHandler(portDest);
+            ConversationHandler.INSTANCE = new ConversationHandler();
         }
         return ConversationHandler.INSTANCE;
     }
@@ -157,13 +157,20 @@ public class ConversationHandler implements ConversationObserver, ConversationHa
         
         return null;
     }
-    
+    public ArrayList<Message> getMessagesOfConvWith(User user) {
+        Conversation conv = this.findConversationByCorrespondent(user);
+        if(conv != null) {
+            return conv.getHistory();
+        }
+        return null;
+    }
     /**
      * Add a new conversation to our array and thread pool
      *
      * @param newConversation : Conversation - conversation to add
      */
     private void addConversation(Conversation newConversation) {
+        System.out.printf("ADD CONVERSATION\n");
         // Add this new conversation to our array list, used for conversation search 
         this.conversations.add(newConversation);
         
@@ -174,6 +181,7 @@ public class ConversationHandler implements ConversationObserver, ConversationHa
         this.conversationThreadPool.submit(newConversation);
         if(this.currentConversation==null)
             this.currentConversation = newConversation;
+        System.out.printf("CURRENT CONV : %s\n",this.currentConversation);
     }
     
     /**
@@ -191,10 +199,9 @@ public class ConversationHandler implements ConversationObserver, ConversationHa
             Socket conversationSocket = null;
 
             try {
-                conversationSocket = new Socket(InetAddress.getByName(correspondent.get_ipAddress()), this.destinationPort);
+                conversationSocket = new Socket(InetAddress.getByName(correspondent.get_ipAddress()), correspondent.getConversationHandlerListenerPort());
             } catch(IOException e) {
-                System.out.println("EXCEPTION: CANNOT CREATE CONVERSATION SOCKET TOWARDS " + correspondent.get_ipAddress() + ":" + this.destinationPort + " (" + e + ")");
-                System.out.println("Check that  all handlers listen on the same port");
+                System.out.println("EXCEPTION: CANNOT CREATE CONVERSATION SOCKET TOWARDS " + correspondent.get_ipAddress() + ":" + correspondent.getConversationHandlerListenerPort() + " (" + e + ")");
                 System.exit(0);
             }
 

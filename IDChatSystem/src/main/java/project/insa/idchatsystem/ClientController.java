@@ -23,10 +23,9 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
     private DistantUserModel centralizedUserModel;*/
     
     public ClientController(int id,
-                            int loginReceiverPort, int loginEmiterPort, ArrayList<Integer> loginBroadcast,
-                            int conversationSocketPortDest) throws NoPortAvailable {
+                            int loginReceiverPort, int loginEmiterPort, ArrayList<Integer> loginBroadcast) throws NoPortAvailable {
         // Conversation handler init
-        this.conversationHandler = ConversationHandler.getInstance(conversationSocketPortDest);
+        this.conversationHandler = ConversationHandler.getInstance();
         this.conversationHandler.addObserver(this);
         new Thread(conversationHandler).start();
 
@@ -105,6 +104,18 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
 
     @Override
     public void userSelected(UserView userview) {
+        System.out.printf("CONTROLLEUR : userSelected\n");
         this.conversationHandler.open(userview.getUser());
+    }
+
+    @Override
+    public void askForMessages(User user) {
+        ArrayList<Message> messages = this.conversationHandler.getMessagesOfConvWith(user);
+        if(messages != null) {
+            this.view.messagesToShow(messages);
+        }
+        else {
+            System.out.printf("Conversation not found\n");
+        }
     }
 }

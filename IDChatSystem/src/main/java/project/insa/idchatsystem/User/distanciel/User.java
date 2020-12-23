@@ -106,6 +106,10 @@ public class User {
         return String.format("User %s ; id %d ; ipAddress %s ; lastSeen %s ; convListPort %d", this.username, this.id, this.ipAddress, this.lastSeen.toString(),this.conversationHandlerListenerPort);
     }
 
+    public int getConversationHandlerListenerPort() {
+        return conversationHandlerListenerPort;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this)

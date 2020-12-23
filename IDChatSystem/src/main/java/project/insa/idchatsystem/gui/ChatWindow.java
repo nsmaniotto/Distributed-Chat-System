@@ -368,6 +368,8 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         }
     }
 
+
+
     public void displayUsername(String username, int id) {
         if(this.usernameLabel != null) {
             this.usernameLabel.setText(username + " #" + id);
@@ -524,6 +526,18 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         }
     }
 
+    @Override
+    public void askForMessages(User user) {
+        this.notifyAskForMessages(user);
+    }
+    @Override
+    public void notifyAskForMessages(User user) {
+        this.chatWindowObserver.askForMessages(user);
+    }
+    public void messagesToShow(ArrayList<Message> messages) {
+        this.chatHistoryPanel.removeAll();
+        messages.forEach(this::displayMessage);
+    }
     class ScrollableChat extends JPanel implements Scrollable {
         public void ScrollableChat() {
 
@@ -555,5 +569,6 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         public boolean getScrollableTracksViewportHeight() {
             return false;
         }
+
     }
 }
