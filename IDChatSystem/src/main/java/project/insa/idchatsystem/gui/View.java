@@ -43,7 +43,7 @@ public class View implements Runnable, ChatWindowObserver {
     public void onlineUser(User user){
         //Indicates that the user has been seen
         assert this.chat_window != null;
-        System.out.printf("VIEW onlineUser : Online user %s\n",user);
+        //System.out.printf("VIEW onlineUser : Online user %s\n",user);
         this.chat_window.onlineUser(user);
     }
     public void offlineUser(User user) {
@@ -82,6 +82,12 @@ public class View implements Runnable, ChatWindowObserver {
 
     @Override
     public void newMessageSending(Message sendingMessage) {
+
         this.viewObserver.newMessageSending(sendingMessage);
+    }
+
+    @Override
+    public void userSelected(UserView userview) {
+        this.viewObserver.userSelected(userview);
     }
 }

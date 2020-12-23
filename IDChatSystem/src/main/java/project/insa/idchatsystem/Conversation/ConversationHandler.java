@@ -29,7 +29,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class ConversationHandler implements ConversationObserver, ConversationHandlerObservable, Runnable {
     private static ConversationHandler INSTANCE;
     private ArrayList<Conversation> conversations;
-    private Conversation currentConversation;
+    private Conversation currentConversation = null;
     
     private HashMap<Integer,User> users; // Copy of UserModel's hashmap to identify every user
 
@@ -42,6 +42,8 @@ public class ConversationHandler implements ConversationObserver, ConversationHa
     private int MAXCONVERSATIONSPORTS = 100;
     
     public ConversationHandler(int portDest) throws NoPortAvailable {
+        // Empty for now
+        this.observers = new ArrayList<>();
         //Choose a port to listen
         int port = this.MINLISTENERPORT;
         while (!TestPort.portIsavailable(port) && port < this.MINLISTENERPORT +this.MAXCONVERSATIONSPORTS) {
@@ -52,6 +54,7 @@ public class ConversationHandler implements ConversationObserver, ConversationHa
         }
 
         this.listenerPort = port;
+        this.notifyListenerPortNegociated();
         this.destinationPort = portDest;
         
         this.conversations = new ArrayList<>();
@@ -59,9 +62,7 @@ public class ConversationHandler implements ConversationObserver, ConversationHa
 
         // Create an open ended thread-pool for our conversations which are threads
         this.conversationThreadPool = Executors.newCachedThreadPool();
-        
-        // Empty for now
-        this.observers = new ArrayList<>();
+
     }
      
     /**
@@ -171,6 +172,8 @@ public class ConversationHandler implements ConversationObserver, ConversationHa
 
         // Add this new conversation thread to our thread pool
         this.conversationThreadPool.submit(newConversation);
+        if(this.currentConversation==null)
+            this.currentConversation = newConversation;
     }
     
     /**
@@ -232,6 +235,7 @@ public class ConversationHandler implements ConversationObserver, ConversationHa
     @Override
     public void addObserver(ConversationHandlerObserver observer) {
         this.observers.add(observer);
+        this.notifyListenerPortNegociated();
     }
 
     @Override
@@ -250,7 +254,7 @@ public class ConversationHandler implements ConversationObserver, ConversationHa
      */
     public void addKnownUser(User newUser) {
         this.users.put(newUser.get_id(),newUser);
-        System.out.printf("Adding user %s\n",newUser);
+        //System.out.printf("Adding user %s\n",newUser);
     }
     public void removeKnownUser(User user){
         this.users.remove(user.get_id(),user);
@@ -273,11 +277,13 @@ public class ConversationHandler implements ConversationObserver, ConversationHa
     
     /* GETTERS/SETTERS */
     public Conversation getCurrentConversation() {
+        System.out.printf("-------------------getCurrentConversation %s\n",this.currentConversation);
+
         return this.currentConversation;
     }
 
     @Override
     public void notifyListenerPortNegociated() {
-
+        this.observers.forEach(obs -> obs.listenerPortChosen(this.listenerPort));
     }
 }

@@ -61,6 +61,7 @@ public class UserView extends JPanel implements UserViewObservable {
 
             System.out.printf("%s\n",this.getBackground());
             //Action to open the conversation ...
+            parent.observer.userSelected(this);
         });
     }
     public void notificationAvailable() {
@@ -110,4 +111,7 @@ public class UserView extends JPanel implements UserViewObservable {
         }
     }
 
+    public User getUser() {
+        return user;
+    }
 }

@@ -8,6 +8,7 @@ import project.insa.idchatsystem.Observers.ConversationHandlerObserver;
 import project.insa.idchatsystem.Observers.UsersStatusObserver;
 import project.insa.idchatsystem.Observers.ViewObserver;
 import project.insa.idchatsystem.User.distanciel.User;
+import project.insa.idchatsystem.gui.UserView;
 import project.insa.idchatsystem.gui.View;
 import project.insa.idchatsystem.logins.local_mode.distanciel.LocalUserModel;
 
@@ -52,7 +53,7 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
 
     @Override
     public void onlineUser(User user) {
-        System.out.printf("CONTROLLER : Online user : %s\n",user);
+        //System.out.printf("CONTROLLER : Online user : %s\n",user);
         this.conversationHandler.addKnownUser(user);
         this.view.onlineUser(user);
     }
@@ -79,7 +80,7 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
 
     @Override
     public void listenerPortChosen(int port) {
-        //TODO
+        User.setCurrentConversationHandlerListenerPort(port);
     }
 
     /* GETTERS/SETTERS */
@@ -96,8 +97,14 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
 
     @Override
     public void newMessageSending(Message sendingMessage) {
+        System.out.printf("CONTROLLEUR newMessageSending\n");
         if(this.conversationHandler.getCurrentConversation() != null) {
             this.conversationHandler.getCurrentConversation().send(sendingMessage);
         }
+    }
+
+    @Override
+    public void userSelected(UserView userview) {
+        this.conversationHandler.open(userview.getUser());
     }
 }

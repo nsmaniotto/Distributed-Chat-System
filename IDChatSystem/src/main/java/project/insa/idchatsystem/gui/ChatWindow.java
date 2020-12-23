@@ -38,13 +38,13 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         @Override
         public boolean add(UserView userView) {
             int indexElem = this.indexOf(userView);
-            System.out.printf("CHATWINDOW add : passe dans %d\n",indexElem);
+//            System.out.printf("CHATWINDOW add : passe dans %d\n",indexElem);
             if(indexElem == -1)//We add the element if it is not already present
                 return super.add(userView);
             else {//Else we only update the user
                 UserView pastUserViewUpdated = this.get(indexElem);
                 pastUserViewUpdated.setUsername(userView.getUsername());
-                System.out.printf("CHATWINDOW add : newUserName : %s\n",pastUserViewUpdated.getUsername());
+//                System.out.printf("CHATWINDOW add : newUserName : %s\n",pastUserViewUpdated.getUsername());
                 pastUserViewUpdated.setLastSeen(userView.getLastSeen());
                 this.set(indexElem,pastUserViewUpdated);
                 return false;
@@ -309,7 +309,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         UserView v = new UserView(user);
         v.initListeners(this);
         this.usersContainer.add(v);
-        System.out.printf("CHATWINDOW onlineUser : %s\n",v.getUsername());
+        //System.out.printf("CHATWINDOW onlineUser : %s\n",v.getUsername());
         this.updateOnlineUsers();
     }
     private void updateOnlineUsers(){
@@ -327,7 +327,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         });
     }
     public void offlineUser(User user){
-        System.out.printf("CHATWINDOW offlineUser %s\n",user);
+        //System.out.printf("CHATWINDOW offlineUser %s\n",user);
         UserView v = new UserView(user);
         v.initListeners(this);
         int index = this.usersContainer.indexOf(v);
@@ -361,6 +361,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
                 prevPrio = v.getPriority();
             }
             //Transmit to view
+            this.chatWindowObserver.userSelected(userview);
         }
         else {
             System.out.print("The element was not in the list of online users !\n");
@@ -489,6 +490,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
 
             // Notify the view that there is a new message to be sent
             this.notifyObserverSendingMessage(newMessage);
+            System.out.printf("CHATWINDOW NOTIFY SEND\n");
         }
     }
     

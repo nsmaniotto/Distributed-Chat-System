@@ -139,6 +139,7 @@ public class Conversation implements ConversationObservable, Runnable {
      * @param message : Message - message we want to send and display
      */
     public void send(Message message) {
+        System.out.printf("-------------------------------------------------------------SENDED : %s\n",message);
         try {
             message.setSource(User.getCurrentUser());
             message.setDestination(this.correspondent);

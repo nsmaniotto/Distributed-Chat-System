@@ -94,7 +94,7 @@ public class LocalUserModel extends UserModel {
 
     @Override
     public void notifyNewUserObservers(User user)  {
-        System.out.printf("LOCALUSERMODEL : Online : %s\n",user);
+        //System.out.printf("LOCALUSERMODEL : Online : %s\n",user);
         for (UsersStatusObserver obs :
                 this.observers) {
             obs.onlineUser(user);
