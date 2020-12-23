@@ -157,8 +157,14 @@ public class ConversationHandler implements ConversationObserver, ConversationHa
         
         return null;
     }
-    public ArrayList<Message> getMessagesOfConvWith(User user) {
+    public ArrayList<Message> setCurrentConversation(User user) {
         Conversation conv = this.findConversationByCorrespondent(user);
+        this.conversations.forEach(conversation -> {
+            if(!conversation.equals(conv))
+                conversation.close();
+            else
+                conversation.open();
+        });
         if(conv != null) {
             return conv.getHistory();
         }

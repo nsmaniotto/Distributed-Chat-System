@@ -3,7 +3,6 @@ package project.insa.idchatsystem;
 
 import project.insa.idchatsystem.Conversation.ConversationHandler;
 import project.insa.idchatsystem.Exceptions.NoPortAvailable;
-import project.insa.idchatsystem.Observers.ChatWindowObserver;
 import project.insa.idchatsystem.Observers.ConversationHandlerObserver;
 import project.insa.idchatsystem.Observers.UsersStatusObserver;
 import project.insa.idchatsystem.Observers.ViewObserver;
@@ -13,7 +12,6 @@ import project.insa.idchatsystem.gui.View;
 import project.insa.idchatsystem.logins.local_mode.distanciel.LocalUserModel;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ClientController implements ConversationHandlerObserver, UsersStatusObserver, ViewObserver {
     private View view;
@@ -110,7 +108,7 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
 
     @Override
     public void askForMessages(User user) {
-        ArrayList<Message> messages = this.conversationHandler.getMessagesOfConvWith(user);
+        ArrayList<Message> messages = this.conversationHandler.setCurrentConversation(user);
         if(messages != null) {
             this.view.messagesToShow(messages);
         }
