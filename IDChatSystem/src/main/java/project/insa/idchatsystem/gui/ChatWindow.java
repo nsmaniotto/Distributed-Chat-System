@@ -14,6 +14,9 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.*;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import project.insa.idchatsystem.Exceptions.Uninitialized;
 import project.insa.idchatsystem.Message;
 import project.insa.idchatsystem.Observers.ChatWindowObservable;
@@ -172,8 +175,8 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
 
         this.chatSendButton = new JButton("SEND");
         /* END: variables initialization */
+        this.updateTabs();
     }
-    
     @Override
     protected void initListeners() {
         ChatWindow chatWindowReference = this;
@@ -192,6 +195,12 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         
         // Chat send button on click
         this.chatSendButton.addActionListener(this);
+        this.conversationTabs.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                updateTabs();
+            }
+        });
     }
     
     @Override
@@ -312,18 +321,53 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         //System.out.printf("CHATWINDOW onlineUser : %s\n",v.getUsername());
         this.updateOnlineUsers();
     }
+    private void updateTabs() {
+        if (this.conversationTabs == null || this.usersContainer == null)
+            return;
+        switch (this.conversationTabs.getSelectedIndex()) {
+            case 0: {
+                System.out.printf("Recent update\n");
+                this.uniformizePriorities();
+                this.updateRecentUsers();
+                break;
+            }
+            case 1: {
+                System.out.printf("Online update\n");
+                this.updateOnlineUsers();
+                break;
+            }
+            case 2: {
+                System.out.printf("Offline update\n");
+                this.updateOfflineUsers();
+                break;
+            }
+        }
+    }
     private void updateOnlineUsers(){
         this.onlineUsersPanel.removeAll();
+        this.offlineUsersPanel.removeAll();
+        this.recentUsersPanel.removeAll();
         this.usersContainer.getListOrderedByName().forEach(userComp->{
             if(userComp.getOnline())
                 this.onlineUsersPanel.add(userComp);
         });
     }
     private void updateOfflineUsers(){
+        this.onlineUsersPanel.removeAll();
         this.offlineUsersPanel.removeAll();
+        this.recentUsersPanel.removeAll();
         this.usersContainer.getListOrderedByName().forEach(userComp->{
             if(!userComp.getOnline())
                 this.offlineUsersPanel.add(userComp);
+        });
+    }
+    public void updateRecentUsers() {
+        this.onlineUsersPanel.removeAll();
+        this.offlineUsersPanel.removeAll();
+        this.recentUsersPanel.removeAll();
+        this.usersContainer.getListOrderedByPriority().forEach(userComp->{
+            if(userComp.getPriority() > 0)
+                this.recentUsersPanel.add(userComp);
         });
     }
     public void offlineUser(User user){
@@ -341,8 +385,16 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
             System.out.printf("User %s was not connected\n",user);
         }
     }
-    @Override
-    public void userSelected(UserView userview) {
+    private void uniformizePriorities(){
+        int prevPrio=0;
+        for (UserView v : this.usersContainer.getListOrderedByPriority()) {
+            if((v.getPriority()-prevPrio)>1) {
+                v.setPriority(prevPrio+1);
+            }
+            prevPrio = v.getPriority();
+        }
+    }
+    public boolean userSelected(UserView userview) {
         int index = this.usersContainer.indexOf(userview);
         if(index != -1){
             //Recalculate priorities
@@ -353,19 +405,18 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
             }
             userview.setPriority(maxPriotity+1);
             //Uniformize priorities
-            int prevPrio=-1;
-            for (UserView v : this.usersContainer.getListOrderedByPriority()) {
-                if((v.getPriority()-prevPrio)>1) {
-                    v.setPriority(prevPrio+1);
-                }
-                prevPrio = v.getPriority();
-            }
-            //Transmit to view
-            this.chatWindowObserver.userSelected(userview);
+            this.uniformizePriorities();
+            return true;
         }
         else {
             System.out.print("The element was not in the list of online users !\n");
+            return false;
         }
+    }
+    @Override
+    public void startCommunicationWith(UserView userview) {
+        if(this.userSelected(userview))//Transmit to view if user found
+            this.chatWindowObserver.userSelected(userview);
     }
 
 

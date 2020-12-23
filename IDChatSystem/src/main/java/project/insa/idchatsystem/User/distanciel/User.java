@@ -117,8 +117,12 @@ public class User {
         if (!(o instanceof User))
             return false;
         User other = (User) o;
-        if (this.id == other.get_id())
+        if (this.id == other.get_id()) {
+            if(this.getConversationHandlerListenerPort()!= other.getConversationHandlerListenerPort() ||
+                this.get_ipAddress() != other.get_ipAddress())
+                System.out.printf("WARNING : the two objects have the same ids but have different conversationListenerPort or ipAdress\n");
             return true;
+        }
         else
             return false;
     }

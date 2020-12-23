@@ -7,8 +7,6 @@ import project.insa.idchatsystem.User.distanciel.User;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.Timestamp;
@@ -104,7 +102,7 @@ public class UserView extends JPanel implements UserViewObservable {
         this.setOpaque(false);
     }
     public void userSelected() {
-        this.observer.userSelected(this);
+        this.observer.startCommunicationWith(this);
     }
 
     public int getPriority() {
