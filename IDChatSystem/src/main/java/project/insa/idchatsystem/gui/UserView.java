@@ -54,7 +54,7 @@ public class UserView extends JPanel implements UserViewObservable {
 
     @Override
     public void notifyAskForMessagesUserSelected() {
-        this.observer.askForMessages(this.getUser());
+        this.observer.askForMessages(this);
     }
 
     public void initListeners(UserViewObserver observer) {
@@ -71,7 +71,7 @@ public class UserView extends JPanel implements UserViewObservable {
         this.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                parent.observer.askForMessages(parent.getUser());
+                parent.observer.askForMessages(parent);
             }
 
             @Override

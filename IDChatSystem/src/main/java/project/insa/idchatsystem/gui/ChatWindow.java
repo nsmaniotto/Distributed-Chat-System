@@ -1,8 +1,6 @@
 package project.insa.idchatsystem.gui;
 
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -578,12 +576,13 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
     }
 
     @Override
-    public void askForMessages(User user) {
-        this.notifyAskForMessages(user);
+    public void askForMessages(UserView userview) {
+        this.notifyAskForMessages(userview);
+        this.userSelected(userview);
     }
     @Override
-    public void notifyAskForMessages(User user) {
-        this.chatWindowObserver.askForMessages(user);
+    public void notifyAskForMessages(UserView user) {
+        this.chatWindowObserver.askForMessages(user.getUser());
     }
     public void messagesToShow(ArrayList<Message> messages) {
         this.chatHistoryPanel.removeAll();
