@@ -9,6 +9,7 @@ public class Main2 {
     public static void main(String[] args) throws NoPortAvailable {
         ArrayList<Integer> loginsReceivers = new ArrayList<>();
         loginsReceivers.add(1500);
-        ClientController controller = new ClientController(0,1501,2001, loginsReceivers);
+        loginsReceivers.add(1502);
+        ClientController controller = new ClientController(1,1501,2001, loginsReceivers);
     }
 }

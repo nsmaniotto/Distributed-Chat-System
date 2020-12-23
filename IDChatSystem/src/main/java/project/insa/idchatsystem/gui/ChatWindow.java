@@ -1,13 +1,6 @@
 package project.insa.idchatsystem.gui;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.ComponentOrientation;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -308,6 +301,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
     public void onlineUser(User user){
         UserView v = new UserView(user);
         v.initListeners(this);
+
         this.usersContainer.add(v);
         //System.out.printf("CHATWINDOW onlineUser : %s\n",v.getUsername());
         this.updateOnlineUsers();
