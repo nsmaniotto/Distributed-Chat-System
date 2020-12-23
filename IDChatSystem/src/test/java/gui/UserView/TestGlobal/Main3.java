@@ -5,11 +5,11 @@ import project.insa.idchatsystem.Exceptions.NoPortAvailable;
 
 import java.util.ArrayList;
 
-public class Main1 {
+public class Main3 {
     public static void main(String[] args) throws NoPortAvailable {
         ArrayList<Integer> loginsReceivers = new ArrayList<>();
         loginsReceivers.add(1501);
-        loginsReceivers.add(1502);
-        ClientController controller = new ClientController(0,1500,2000, loginsReceivers);
+        loginsReceivers.add(1500);
+        ClientController controller = new ClientController(2,1502,2002, loginsReceivers);
     }
 }
