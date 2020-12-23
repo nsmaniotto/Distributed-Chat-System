@@ -29,7 +29,7 @@ public class Message extends Data {
      */
     public Message(String stream) {
         // Apply pattern matching to extract timstamp and text message
-        Pattern regex = Pattern.compile("(?<timestamp>\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{3});(?<text>.*)");
+        Pattern regex = Pattern.compile("(?<timestamp>\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{1,3});(?<text>.*)");
         Matcher matcher = regex.matcher(stream);
         
         if(matcher.find()) {
