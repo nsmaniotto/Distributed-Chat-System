@@ -1,52 +1,30 @@
 package project.insa.idchatsystem.gui;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
 import project.insa.idchatsystem.Exceptions.Uninitialized;
 import project.insa.idchatsystem.Message;
 import project.insa.idchatsystem.Observers.ChatWindowObservable;
 import project.insa.idchatsystem.Observers.ChatWindowObserver;
 import project.insa.idchatsystem.Observers.UserViewObserver;
 import project.insa.idchatsystem.User.distanciel.User;
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 /**
  *
  * @author nsmaniotto
  */
 public class ChatWindow extends Window implements ActionListener, ChatWindowObservable, UserViewObserver {
 
-    class UserViewArrayList extends ArrayList<UserView> {
-        public ArrayList<UserView> getListOrderedByName() {
-            this.sort(Comparator.comparing(UserView::getUsername));
-            return this;
-        }
-        public ArrayList<UserView> getListOrderedByPriority() {
-            this.sort(Comparator.comparing(UserView::getPriority));
-            return this;
-        }
-        @Override
-        public boolean add(UserView userView) {
-            int indexElem = this.indexOf(userView);
-//            System.out.printf("CHATWINDOW add : passe dans %d\n",indexElem);
-            if(indexElem == -1)//We add the element if it is not already present
-                return super.add(userView);
-            else {//Else we only update the user
-                UserView pastUserViewUpdated = this.get(indexElem);
-                pastUserViewUpdated.setUsername(userView.getUsername());
-//                System.out.printf("CHATWINDOW add : newUserName : %s\n",pastUserViewUpdated.getUsername());
-                pastUserViewUpdated.setLastSeen(userView.getLastSeen());
-                this.set(indexElem,pastUserViewUpdated);
-                return false;
-            }
-        }
-    }
+
     /* BEGIN: variables declaration */
     private JPanel userPanel;
         private JPanel userInfoPanel;
@@ -582,38 +560,5 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
     public void messagesToShow(ArrayList<Message> messages) {
         this.chatHistoryPanel.removeAll();
         messages.forEach(this::displayMessage);
-    }
-    class ScrollableChat extends JPanel implements Scrollable {
-        public void ScrollableChat() {
-
-        }
-
-        @Override
-        public Dimension getPreferredScrollableViewportSize() {
-            return super.getPreferredSize();
-        }
-
-        @Override
-        public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
-            return 64;
-            //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-
-        @Override
-        public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
-            return 64;
-            //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-
-        @Override
-        public boolean getScrollableTracksViewportWidth() {
-            return true;
-        }
-
-        @Override
-        public boolean getScrollableTracksViewportHeight() {
-            return false;
-        }
-
     }
 }
