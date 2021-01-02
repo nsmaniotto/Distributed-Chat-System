@@ -14,7 +14,7 @@ import project.insa.idchatsystem.logins.local_mode.distanciel.UserModel;
 
 import java.util.ArrayList;
 
-public class ClientController implements ConversationHandlerObserver, UsersStatusObserver, ViewObserver, ServerControllerObserver {
+public class ClientController implements ConversationHandlerObserver, UsersStatusObserver, ViewObserver {
     private View view;
     private final ConversationHandler conversationHandler;
     private final UserModel userModel;
@@ -116,15 +116,5 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
         else {
             System.out.printf("Conversation not found\n");
         }
-    }
-
-    @Override
-    public void notifyNewLoginMessage(String message) {
-
-    }
-
-    @Override
-    public void notifyNewConversationMessage(String message) {
-
     }
 }

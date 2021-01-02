@@ -19,7 +19,7 @@ public class Main {
         others.add(2101);
         //Démarrage de l'émission (émission périodique)
         System.out.println("Démarrage émission");
-        UserModelEmitters emitter = new UserModelEmitters(2100,others);
+        UserModelEmitters emitter = new UserModelEmitters(null,2100,others);
         new Thread(emitter).start();
         emitter.diffuseNewUsername("monUserName");
         //Attente en réception

@@ -1,7 +1,5 @@
 package project.insa.idchatsystem.logins.local_mode.distanciel;
 
-import project.insa.idchatsystem.logins.UserModelEmitter;
-
 import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;

@@ -13,12 +13,13 @@ import java.util.ArrayList;
 public class UserModel extends AbstractUserModel implements ServerControllerObserver, UserModelEmittersObserver {
     private final UserModelEmitters emitters;
     private final ServerController serverController;
+    private final UserModelReceivers receivers;
     private ArrayList<UsersStatusObserver> observers;
     public UserModel(int id, int receiver_port, int emitter_port, ArrayList<Integer> others)  {
         super(id);
         observers = new ArrayList<>();
-        new Thread(new LocalUserModelReceiver(this,receiver_port)).start();
         this.emitters = new UserModelEmitters(this,emitter_port,others);
+        this.receivers = new UserModelReceivers(this,receiver_port);
         this.serverController = new ServerController();
         this.serverController.addListener(this);
         this.setUsername(String.format("--user%d",id));
@@ -80,7 +81,7 @@ public class UserModel extends AbstractUserModel implements ServerControllerObse
     public void diffuseNewUsername(){
         String response = User.current_user_transfer_string();
         this.emitters.diffuseNewUsername(response);
-        this.serverController.sendMessage(String.format("login,%d,%s",response);
+        this.serverController.sendMessage(String.format("login,%s",response));
     }
 
     @Override
@@ -128,7 +129,7 @@ public class UserModel extends AbstractUserModel implements ServerControllerObse
 
     @Override
     public void notifyNewMessage(String message) {
-
+        this.receivers.notifyNewMsg(message);
     }
 
     @Override

@@ -26,7 +26,7 @@ public abstract class AbstractUserModel implements ObservableUserModel {
         this.diffuseNewUsername();
         return true;
     }
-    public void addOnlineUser(User user,boolean local) {
+    public void addOnlineUser(User user) {
         System.out.printf("Online user 2 %s\n",user);
         boolean new_user = this.users.containsKey(user.get_id());
         this.users.put(user.get_id(),user);//Replace automatically the previous version if already in the HashMap

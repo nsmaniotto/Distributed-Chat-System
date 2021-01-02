@@ -38,13 +38,13 @@ public class ServerController implements ServerIncomingMessagesObserver, ServerC
         Pattern pattern = Pattern.compile("login.*");
         Matcher m = pattern.matcher(message);
         while (m.find()){
-            this.obs.notifyNewLoginMessage(message);
+            this.obs.notifyNewMessage(message);
         }
         //check if cnversation message
         pattern = Pattern.compile("conversation.*");
         m = pattern.matcher(message);
         while (m.find()){
-            this.obs.notifyNewConversationMessage(message);
+            this.obs.notifyNewMessage(message);
         }
     }
 
