@@ -4,19 +4,20 @@ package project.insa.idchatsystem;
 import project.insa.idchatsystem.Conversation.ConversationHandler;
 import project.insa.idchatsystem.Exceptions.NoPortAvailable;
 import project.insa.idchatsystem.Observers.ConversationHandlerObserver;
+import project.insa.idchatsystem.Observers.ServerControllerObserver;
 import project.insa.idchatsystem.Observers.UsersStatusObserver;
 import project.insa.idchatsystem.Observers.ViewObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 import project.insa.idchatsystem.gui.UserView;
 import project.insa.idchatsystem.gui.View;
-import project.insa.idchatsystem.logins.local_mode.distanciel.LocalUserModel;
+import project.insa.idchatsystem.logins.local_mode.distanciel.UserModel;
 
 import java.util.ArrayList;
 
-public class ClientController implements ConversationHandlerObserver, UsersStatusObserver, ViewObserver {
+public class ClientController implements ConversationHandlerObserver, UsersStatusObserver, ViewObserver, ServerControllerObserver {
     private View view;
     private final ConversationHandler conversationHandler;
-    private final LocalUserModel localUserModel;
+    private final UserModel userModel;
     /*
     private DistantUserModel centralizedUserModel;*/
     
@@ -33,12 +34,12 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
         new Thread(view).start();
 
         // At this stage, the login controller is running in the same thread as the ClientController but the reception and emission operates in two others
-        this.localUserModel = new LocalUserModel(id,loginReceiverPort,loginEmiterPort,loginBroadcast);
-        this.localUserModel.addUserModelObserver(this);
+        this.userModel = new UserModel(id,loginReceiverPort,loginEmiterPort,loginBroadcast);
+        this.userModel.addUserModelObserver(this);
     }
 
-    public LocalUserModel getLocalUserModel() {
-        return localUserModel;
+    public UserModel getLocalUserModel() {
+        return userModel;
     }
     /* USERS STATUS OBSERVER METHODS */
     
@@ -88,7 +89,7 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
     /* VIEW OBSERVER METHODS */
     @Override
     public boolean newLogin(String login) {
-        return this.localUserModel.setUsername(login);
+        return this.userModel.setUsername(login);
     }
 
 
@@ -115,5 +116,15 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
         else {
             System.out.printf("Conversation not found\n");
         }
+    }
+
+    @Override
+    public void notifyNewLoginMessage(String message) {
+
+    }
+
+    @Override
+    public void notifyNewConversationMessage(String message) {
+
     }
 }

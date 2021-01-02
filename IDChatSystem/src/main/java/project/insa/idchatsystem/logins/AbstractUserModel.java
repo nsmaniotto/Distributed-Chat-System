@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class UserModel implements ObservableUserModel {
+public abstract class AbstractUserModel implements ObservableUserModel {
     private HashMap<Integer, User> users;
     private long limite_tolerance_ss_nouvelles = 10000;
-    public UserModel(int id) {
+    public AbstractUserModel(int id) {
         User.init_current_user(id);
         this.users = new HashMap<Integer,User>();
     }
@@ -26,7 +26,7 @@ public abstract class UserModel implements ObservableUserModel {
         this.diffuseNewUsername();
         return true;
     }
-    public void addOnlineUser(User user) {
+    public void addOnlineUser(User user,boolean local) {
         System.out.printf("Online user 2 %s\n",user);
         boolean new_user = this.users.containsKey(user.get_id());
         this.users.put(user.get_id(),user);//Replace automatically the previous version if already in the HashMap

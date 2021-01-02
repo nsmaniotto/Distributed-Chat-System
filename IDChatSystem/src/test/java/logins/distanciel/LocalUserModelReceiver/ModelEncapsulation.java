@@ -1,6 +1,6 @@
 package logins.distanciel.LocalUserModelReceiver;
 
-import project.insa.idchatsystem.logins.local_mode.distanciel.LocalUserModel;
+import project.insa.idchatsystem.logins.local_mode.distanciel.UserModel;
 import project.insa.idchatsystem.User.distanciel.User;
 
 import java.io.IOException;
@@ -10,7 +10,7 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ModelEncapsulation extends LocalUserModel {
+public class ModelEncapsulation extends UserModel {
     public ModelEncapsulation(int id, int receiver_port, int emitter_port, ArrayList<Integer>others) {
         super(id,receiver_port,emitter_port,others);
         System.out.println("--------------------------------------DEBUT CHAMP TEST : tester LLocalUserModel si erreur avant------------------------------------------");

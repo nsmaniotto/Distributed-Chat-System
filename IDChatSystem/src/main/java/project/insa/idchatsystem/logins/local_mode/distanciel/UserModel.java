@@ -1,22 +1,28 @@
 package project.insa.idchatsystem.logins.local_mode.distanciel;
 
 import project.insa.idchatsystem.Exceptions.Uninitialized;
+import project.insa.idchatsystem.Observers.ServerControllerObserver;
+import project.insa.idchatsystem.Observers.UserModelEmittersObserver;
 import project.insa.idchatsystem.Observers.UsersStatusObserver;
 import project.insa.idchatsystem.User.distanciel.User;
-import project.insa.idchatsystem.logins.UserModel;
+import project.insa.idchatsystem.logins.AbstractUserModel;
+import project.insa.idchatsystem.servlet.ServerController;
 
 import java.util.ArrayList;
 
-public class LocalUserModel extends UserModel {
-    private final LocalUserModelEmitter emitter;
+public class UserModel extends AbstractUserModel implements ServerControllerObserver, UserModelEmittersObserver {
+    private final UserModelEmitters emitters;
+    private final ServerController serverController;
     private ArrayList<UsersStatusObserver> observers;
-    public LocalUserModel(int id, int receiver_port, int emitter_port, ArrayList<Integer> others)  {
+    public UserModel(int id, int receiver_port, int emitter_port, ArrayList<Integer> others)  {
         super(id);
         observers = new ArrayList<>();
         new Thread(new LocalUserModelReceiver(this,receiver_port)).start();
-        this.emitter = new LocalUserModelEmitter(emitter_port,others);
+        this.emitters = new UserModelEmitters(this,emitter_port,others);
+        this.serverController = new ServerController();
+        this.serverController.addListener(this);
         this.setUsername(String.format("--user%d",id));
-        new Thread(this.emitter).start();
+        new Thread(this.emitters).start();
         new Thread(() -> {
             while(true){
                 try {
@@ -30,7 +36,12 @@ public class LocalUserModel extends UserModel {
     }
     @Override
     public boolean setUsername(String username) {
-        this.emitter.askUpdate();
+        this.emitters.askUpdate();
+        try {
+            this.serverController.sendMessage(String.format("login,update,%d",User.get_current_id()));
+        } catch (Uninitialized uninitialized) {
+            uninitialized.printStackTrace();
+        }
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
@@ -47,13 +58,18 @@ public class LocalUserModel extends UserModel {
     }
     @Override
     public void stopperEmission(){
-        this.emitter.stopperEmission();
+        this.emitters.stopperEmission();
+        try {
+            this.serverController.publish(String.format("login,%d,disconnected",User.get_current_id()));
+        } catch (Uninitialized uninitialized) {
+            uninitialized.printStackTrace();
+        }
     }
     @Override
     public void disconnect() {
         try {
-            while(!this.emitter.getState().equals("disconnected")) {
-                this.emitter.disconnect(User.get_current_id());
+            while(!this.emitters.getState().equals("disconnected")) {
+                this.emitters.disconnect(User.get_current_id());
             }
             this.stopperEmission();
         } catch (Uninitialized uninitialized) {
@@ -63,12 +79,13 @@ public class LocalUserModel extends UserModel {
     @Override
     public void diffuseNewUsername(){
         String response = User.current_user_transfer_string();
-        this.emitter.diffuseNewUsername(response);
+        this.emitters.diffuseNewUsername(response);
+        this.serverController.sendMessage(String.format("login,%d,%s",response);
     }
 
     @Override
     public boolean checkavailable(String username) {
-        this.emitter.askUpdate();
+        this.emitters.askUpdate();
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -106,6 +123,20 @@ public class LocalUserModel extends UserModel {
         for (UsersStatusObserver obs :
                 this.observers) {
             obs.offlineUser(user);
+        }
+    }
+
+    @Override
+    public void notifyNewMessage(String message) {
+
+    }
+
+    @Override
+    public void newMsgToSend(String message) {
+        try {
+            this.serverController.sendMessage(String.format("login,%d,%s",User.get_current_id(),message));
+        } catch (Uninitialized uninitialized) {
+            uninitialized.printStackTrace();
         }
     }
 }

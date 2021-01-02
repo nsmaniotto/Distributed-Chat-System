@@ -1,7 +1,7 @@
 package logins.distanciel.LocalUserModel.testRemoveUser;
 
 import project.insa.idchatsystem.User.distanciel.User;
-import project.insa.idchatsystem.logins.local_mode.distanciel.LocalUserModel;
+import project.insa.idchatsystem.logins.local_mode.distanciel.UserModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,7 +11,7 @@ public class Main2 {
         int DUREE_DIFF_EMISSION = 5000;
         int mode = 1;
         Thread.sleep(DUREE_DIFF_EMISSION*2);//On veut être sûr que le premier utilisateur est celui de Main1
-        LocalUserModel model = new LocalUserModel(1,2701,2706,new ArrayList<>(){{
+        UserModel model = new UserModel(1,2701,2706,new ArrayList<>(){{
             add(2700);
         }});
         model.setUsername("user1");
