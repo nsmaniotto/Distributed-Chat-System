@@ -1,14 +1,12 @@
 package project.insa.idchatsystem.servlet;
 
-import project.insa.idchatsystem.Observers.ServerIncomingMessagesObservable;
-import project.insa.idchatsystem.Observers.ServerIncomingMessagesObserver;
+import project.insa.idchatsystem.Observers.Server.ServerIncomingMessagesObservable;
+import project.insa.idchatsystem.Observers.Server.ServerIncomingMessagesObserver;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 
 public class ServerIncomingMessages implements Runnable, ServerIncomingMessagesObservable {

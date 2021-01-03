@@ -1,16 +1,18 @@
 package project.insa.idchatsystem.logins.local_mode.distanciel;
 
 import project.insa.idchatsystem.Exceptions.Uninitialized;
-import project.insa.idchatsystem.Observers.ServerControllerObserver;
-import project.insa.idchatsystem.Observers.UserModelEmittersObserver;
-import project.insa.idchatsystem.Observers.UsersStatusObserver;
+import project.insa.idchatsystem.Observers.Server.ServerLoginControllerObserver;
+import project.insa.idchatsystem.Observers.logins.UserModelEmittersObserver;
+import project.insa.idchatsystem.Observers.logins.UsersStatusObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 import project.insa.idchatsystem.logins.AbstractUserModel;
+import project.insa.idchatsystem.logins.local_mode.distanciel.Facades.UserModelEmitters;
+import project.insa.idchatsystem.logins.local_mode.distanciel.Facades.UserModelReceivers;
 import project.insa.idchatsystem.servlet.ServerController;
 
 import java.util.ArrayList;
 
-public class UserModel extends AbstractUserModel implements ServerControllerObserver, UserModelEmittersObserver {
+public class UserModel extends AbstractUserModel implements ServerLoginControllerObserver, UserModelEmittersObserver {
     private final UserModelEmitters emitters;
     private final ServerController serverController;
     private final UserModelReceivers receivers;
@@ -21,7 +23,7 @@ public class UserModel extends AbstractUserModel implements ServerControllerObse
         this.emitters = new UserModelEmitters(this,emitter_port,others);
         this.receivers = new UserModelReceivers(this,receiver_port);
         this.serverController = new ServerController();
-        this.serverController.addListener(this);
+        this.serverController.addLoginListener(this);
         this.setUsername(String.format("--user%d",id));
         new Thread(this.emitters).start();
         new Thread(() -> {

@@ -65,7 +65,8 @@ public class User {
         return User.current_ipAddress;
     }
     public static String current_user_transfer_string() {
-        return String.format("%s,%d,%s,%d",User.current_username,User.current_id,User.current_ipAddress,User.current_conversationHandlerListenerPort);
+        return String.format("%s,%d,%s,%d,%s",User.current_username,User.current_id,User.current_ipAddress,User.current_conversationHandlerListenerPort,
+                User.current_local_user ? "t" : "f");
     }
 
     public static User getCurrentUser() throws Uninitialized {
@@ -111,6 +112,11 @@ public class User {
     public Timestamp get_lastSeen() {
         return this.lastSeen;
     }
+
+    public boolean isLocal_user() {
+        return local_user;
+    }
+
     public String transfer_string() {
         return String.format("%s,%d,%s",this.username,this.id,this.ipAddress);
     }

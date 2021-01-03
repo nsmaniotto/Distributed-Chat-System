@@ -2,14 +2,13 @@ package project.insa.idchatsystem.gui;
 
 import project.insa.idchatsystem.Exceptions.Uninitialized;
 import project.insa.idchatsystem.Message;
-import project.insa.idchatsystem.Observers.ViewObservable;
-import project.insa.idchatsystem.Observers.ViewObserver;
+import project.insa.idchatsystem.Observers.gui.ViewObservable;
+import project.insa.idchatsystem.Observers.gui.ViewObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import project.insa.idchatsystem.Observers.ChatWindowObserver;
+import project.insa.idchatsystem.Observers.gui.ChatWindowObserver;
 
 public class View implements Runnable, ChatWindowObserver, ViewObservable {
     private LoginWindow login_window;

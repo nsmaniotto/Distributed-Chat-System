@@ -1,6 +1,6 @@
 package conversation.reopen;
 
-import project.insa.idchatsystem.Conversation.ConversationHandler;
+import project.insa.idchatsystem.Conversations.ConversationHandler.LocalConversationHandler;
 import project.insa.idchatsystem.Exceptions.NoPortAvailable;
 import project.insa.idchatsystem.Message;
 import project.insa.idchatsystem.User.distanciel.User;
@@ -10,7 +10,7 @@ public class ClientTest1 {
         int id = 1;
         
         // Creating the conversation handler
-        ConversationHandler conversationHandler = new ConversationHandler( );
+        LocalConversationHandler conversationHandler = new LocalConversationHandler( );
         new Thread(conversationHandler).start();
         
         // Create fake users

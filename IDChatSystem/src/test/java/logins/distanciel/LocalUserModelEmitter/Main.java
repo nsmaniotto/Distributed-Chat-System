@@ -1,7 +1,7 @@
 package logins.distanciel.UserModelEmitters;
 
 
-import project.insa.idchatsystem.logins.local_mode.distanciel.UserModelEmitters;
+import project.insa.idchatsystem.logins.local_mode.distanciel.Facades.UserModelEmitters;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

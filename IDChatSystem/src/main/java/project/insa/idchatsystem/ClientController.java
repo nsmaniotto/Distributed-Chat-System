@@ -1,12 +1,11 @@
 
 package project.insa.idchatsystem;
 
-import project.insa.idchatsystem.Conversation.ConversationHandler;
+import project.insa.idchatsystem.Conversations.ConversationHandler.LocalConversationHandler;
 import project.insa.idchatsystem.Exceptions.NoPortAvailable;
-import project.insa.idchatsystem.Observers.ConversationHandlerObserver;
-import project.insa.idchatsystem.Observers.ServerControllerObserver;
-import project.insa.idchatsystem.Observers.UsersStatusObserver;
-import project.insa.idchatsystem.Observers.ViewObserver;
+import project.insa.idchatsystem.Observers.Conversations.ConversationHandlerObserver;
+import project.insa.idchatsystem.Observers.logins.UsersStatusObserver;
+import project.insa.idchatsystem.Observers.gui.ViewObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 import project.insa.idchatsystem.gui.UserView;
 import project.insa.idchatsystem.gui.View;
@@ -16,7 +15,7 @@ import java.util.ArrayList;
 
 public class ClientController implements ConversationHandlerObserver, UsersStatusObserver, ViewObserver {
     private View view;
-    private final ConversationHandler conversationHandler;
+    private final LocalConversationHandler conversationHandler;
     private final UserModel userModel;
     /*
     private DistantUserModel centralizedUserModel;*/
@@ -24,7 +23,7 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
     public ClientController(int id,
                             int loginReceiverPort, int loginEmiterPort, ArrayList<Integer> loginBroadcast) throws NoPortAvailable {
         // Conversation handler init
-        this.conversationHandler = ConversationHandler.getInstance();
+        this.conversationHandler = LocalConversationHandler.getInstance();
         this.conversationHandler.addObserver(this);
         new Thread(conversationHandler).start();
 
@@ -82,7 +81,7 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
     }
 
     /* GETTERS/SETTERS */
-    public ConversationHandler getConversationHandler() {
+    public LocalConversationHandler getConversationHandler() {
         return this.conversationHandler;
     }
 

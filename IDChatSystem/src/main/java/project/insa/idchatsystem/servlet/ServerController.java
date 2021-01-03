@@ -1,9 +1,10 @@
 package project.insa.idchatsystem.servlet;
 
 import project.insa.idchatsystem.Exceptions.Uninitialized;
-import project.insa.idchatsystem.Observers.ServerControllerObservable;
-import project.insa.idchatsystem.Observers.ServerControllerObserver;
-import project.insa.idchatsystem.Observers.ServerIncomingMessagesObserver;
+import project.insa.idchatsystem.Observers.Server.ServerControllerObservable;
+import project.insa.idchatsystem.Observers.Server.ServerConvControllerObserver;
+import project.insa.idchatsystem.Observers.Server.ServerLoginControllerObserver;
+import project.insa.idchatsystem.Observers.Server.ServerIncomingMessagesObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 
 import java.util.regex.Matcher;
@@ -12,7 +13,8 @@ import java.util.regex.Pattern;
 public class ServerController implements ServerIncomingMessagesObserver, ServerControllerObservable {
     private ServerIncomingMessages incomingMessages;
     private ServerSendMessage sendMessages;
-    private ServerControllerObserver obs;
+    private ServerLoginControllerObserver loginObs;
+    private ServerConvControllerObserver convObs;
     public ServerController() {
         incomingMessages = new ServerIncomingMessages();
         incomingMessages.addOserver(this);
@@ -38,18 +40,23 @@ public class ServerController implements ServerIncomingMessagesObserver, ServerC
         Pattern pattern = Pattern.compile("login.*");
         Matcher m = pattern.matcher(message);
         while (m.find()){
-            this.obs.notifyNewMessage(message);
+            this.loginObs.notifyNewMessage(message);
         }
-        //check if cnversation message
+        //check if coversation message
         pattern = Pattern.compile("conversation.*");
         m = pattern.matcher(message);
         while (m.find()){
-            this.obs.notifyNewMessage(message);
+            this.convObs.notifyNewMessage(message);
         }
     }
 
     @Override
-    public void addListener(ServerControllerObserver obs) {
-        this.obs = obs;
+    public void addLoginListener(ServerLoginControllerObserver obs) {
+        this.loginObs = obs;
+    }
+
+    @Override
+    public void addConvListener(ServerConvControllerObserver obs) {
+        this.convObs = obs;
     }
 }
