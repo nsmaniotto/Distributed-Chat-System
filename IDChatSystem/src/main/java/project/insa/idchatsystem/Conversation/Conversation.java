@@ -203,6 +203,13 @@ public class Conversation implements ConversationObservable, Runnable {
         }
     }
     
+    @Override
+    public void notifyObserversRetrievedMessages(ArrayList<Message> retrievedMessages) {
+        if(this.conversationHandlerObserver != null) {
+            this.conversationHandlerObserver.messagesRetrieved(retrievedMessages);
+        }
+    }
+    
     /* GETTERS/SETTERS */
     public User getCorrespondent() {
         return this.correspondent;
