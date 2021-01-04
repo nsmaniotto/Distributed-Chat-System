@@ -249,6 +249,11 @@ public class ConversationHandler implements ConversationHandlerObserver, Runnabl
     public void newMessageSent(Message sentMessage) {
         this.observers.forEach( observer -> observer.newMessageSent(sentMessage) );
     }
+
+    @Override
+    public void messagesRetrieved(ArrayList<Message> retrievedMessages) {
+        this.observers.forEach( observer -> observer.messagesRetrieved(retrievedMessages) );
+    }
     
     /* GETTERS/SETTERS */
     public Conversation getCurrentConversation() {
