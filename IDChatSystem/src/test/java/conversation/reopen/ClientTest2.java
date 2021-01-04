@@ -24,7 +24,7 @@ public class ClientTest2 {
         conversationHandler.open(user1);
         
         // Sending messages to user1
-        conversationHandler.getCurrentConversation().send(new Message("Waiting 10s for your messages"));
+        conversationHandler.getCurrentConversation().send(new Message("Waiting 10s for your messages"),conversationHandler.getCurrentConversation().getCorrespondent());
         
         // Receiving some messages from user1 (waiting)
         try {
@@ -34,7 +34,7 @@ public class ClientTest2 {
         }
         
         // Simulate closing of the ocnversation
-        conversationHandler.getCurrentConversation().send(new Message("Closing the conversation"));
+        conversationHandler.getCurrentConversation().send(new Message("Closing the conversation"),conversationHandler.getCurrentConversation().getCorrespondent());
         conversationHandler.closeCurrentConversation();
         
         // Waiting before going back on the conversation
@@ -48,6 +48,6 @@ public class ClientTest2 {
         conversationHandler.open(user1);
         
         // Sending messages to user1
-        conversationHandler.getCurrentConversation().send(new Message("I am back !"));
+        conversationHandler.getCurrentConversation().send(new Message("I am back !"),conversationHandler.getCurrentConversation().getCorrespondent());
     }
 }

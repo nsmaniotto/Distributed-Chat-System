@@ -1,5 +1,7 @@
 package project.insa.idchatsystem.servlet;
 
+import project.insa.idchatsystem.User.distanciel.User;
+
 import javax.servlet.http.HttpServlet;
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -16,7 +18,7 @@ public class ServerSendMessage {
     public ServerSendMessage(){
         URLServlet = "";
     }
-    public void sendGet(String message){
+    public void sendGet(String message,User corresp){
         new Thread(() -> {
             try {
                 URL obj = new URL(URLServlet);
@@ -25,7 +27,9 @@ public class ServerSendMessage {
                 if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
                     con.setDoOutput(true);
                     DataOutputStream out = new DataOutputStream(con.getOutputStream());
-                    out.writeBytes(URLEncoder.encode(String.format("message=%s&", message)));
+                    out.writeBytes(URLEncoder.encode(String.format("message=%d,%d,%s&",
+                            User.get_current_id(), corresp == null ? -1 : corresp.get_id(),
+                            message)));
                     out.flush();
                     out.close();
                 } else {

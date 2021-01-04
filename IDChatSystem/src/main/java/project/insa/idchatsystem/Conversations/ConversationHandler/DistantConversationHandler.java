@@ -9,7 +9,7 @@ public class DistantConversationHandler extends AbstractLocalConversationHandler
     private static DistantConversationHandler INSTANCE;
     private ServerController server;
     private DistantConversationHandler(){
-        this.server = new ServerController();
+        this.server = ServerController.getInstance();
     }
     public static DistantConversationHandler getInstance() {
         if(DistantConversationHandler.INSTANCE == null){

@@ -62,7 +62,7 @@ public abstract class Conversation implements ConversationObservable, Runnable {
         this.isOpen = false;
     }
     protected void storeMessage(Message message) {this.history.add(message);}
-    public abstract void send(Message message);
+    public abstract void send(Message message,User corresp);
 
     /* CONVERSATION OBSERVER METHODS */
     @Override

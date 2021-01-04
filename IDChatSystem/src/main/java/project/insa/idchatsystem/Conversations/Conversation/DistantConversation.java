@@ -15,10 +15,9 @@ public class DistantConversation extends Conversation {
     public void loadConversation() {
 
     }
-
     @Override
-    public void send(Message message) {
-        this.server.sendMessage(String.format("conversation,%s",message.toStream()));
+    public void send(Message message,User corresp) {
+        this.server.sendMessage(String.format("conversation,%s",message.toStream()),corresp);
     }
 
     @Override

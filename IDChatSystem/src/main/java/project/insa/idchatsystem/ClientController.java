@@ -97,7 +97,7 @@ public class ClientController implements FacadeConversationHandlerObserver, User
     public void newMessageSending(Message sendingMessage) {
         System.out.printf("CONTROLLEUR newMessageSending\n");
         if(this.conversationHandler.getCurrentConversation() != null) {
-            this.conversationHandler.getCurrentConversation().send(sendingMessage);
+            this.conversationHandler.getCurrentConversation().send(sendingMessage,this.conversationHandler.getCurrentConversation().getCorrespondent());
         }
     }
 

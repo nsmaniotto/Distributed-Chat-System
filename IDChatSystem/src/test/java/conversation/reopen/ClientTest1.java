@@ -29,7 +29,7 @@ public class ClientTest1 {
         conversationHandler.open(user2);
         
         // Sending messages
-        conversationHandler.getCurrentConversation().send(new Message("Now waiting for you to close the conversation"));
+        conversationHandler.getCurrentConversation().send(new Message("Now waiting for you to close the conversation"),conversationHandler.getCurrentConversation().getCorrespondent());
         
         // Giving some some time for user2 to close the conversation
         try {
@@ -39,6 +39,6 @@ public class ClientTest1 {
         }
         
         // Try sending another message
-        conversationHandler.getCurrentConversation().send(new Message("Are you still here ?"));
+        conversationHandler.getCurrentConversation().send(new Message("Are you still here ?"),conversationHandler.getCurrentConversation().getCorrespondent());
     }
 }
