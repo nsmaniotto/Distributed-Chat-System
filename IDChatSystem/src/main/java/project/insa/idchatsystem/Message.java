@@ -54,8 +54,8 @@ public class Message extends Data {
      * @return String - timestamp;message
      */
     public String toStream() {
-        String stream = this.timestamp.toString() + ";" + this.text; // For now, files are not considered
-                
+        String stream = this.timestamp.getTime() + ";" + this.text; // For now, files are not considered
+        
         return stream;
     }
     
