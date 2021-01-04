@@ -20,7 +20,6 @@ public class Conversation implements ConversationObservable, Runnable {
     private Socket socket;
     private boolean isOpen;
     private final User correspondent;
-    private final ArrayList<Message> history;
     private ConversationHandlerObserver conversationHandlerObserver;
 
     /**
@@ -34,9 +33,6 @@ public class Conversation implements ConversationObservable, Runnable {
         this.isOpen = false;
         
         this.correspondent = correspondent;
-        
-        // Empty for now, will be loaded later
-        this.history = new ArrayList<>();
         
         this.conversationHandlerObserver = null;
     }
@@ -77,7 +73,17 @@ public class Conversation implements ConversationObservable, Runnable {
     }
 
     private void loadConversation() {
-
+        ArrayList<Message> history = new ArrayList<>();
+        
+        // Retrieve past messages
+        try {
+            history = MessageDatabase.getInstance().retrieveOrderedMessagesByConversationBetween(User.getCurrentUser(), this.correspondent);
+        } catch (Uninitialized e) {
+            // Current user (thereforce message source) is not initialized
+            System.out.println("Conversation: EXCEPTION WHILE RETRIEVING PAst MESSAGES " + e);
+        }
+        
+        // Notify ConversationHandler to display the previously retrieved messages
     }
 
     /**
