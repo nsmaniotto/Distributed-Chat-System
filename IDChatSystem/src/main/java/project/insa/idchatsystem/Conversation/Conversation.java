@@ -14,6 +14,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import project.insa.idchatsystem.Exceptions.Uninitialized;
+import project.insa.idchatsystem.database.MessageDatabase;
 
 public class Conversation implements ConversationObservable, Runnable {
     private Socket socket;
@@ -68,7 +69,7 @@ public class Conversation implements ConversationObservable, Runnable {
     }
     
     private void storeMessage(Message message) {
-
+        MessageDatabase.getInstance().storeMessage(message);
     }
 
     private Message generateMessage(Data data) {
