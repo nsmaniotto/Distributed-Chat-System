@@ -8,7 +8,7 @@ import project.insa.idchatsystem.User.distanciel.User;
 
 import java.util.ArrayList;
 
-public abstract class Conversation implements ConversationObservable {
+public abstract class Conversation implements ConversationObservable, Runnable {
     protected final User correspondent;
     protected final ArrayList<Message> history;
     protected boolean isOpen;

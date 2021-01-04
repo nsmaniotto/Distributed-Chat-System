@@ -20,4 +20,9 @@ public class DistantConversation extends Conversation {
     public void send(Message message) {
         this.server.sendMessage(String.format("conversation,%s",message.toStream()));
     }
+
+    @Override
+    public void run() {
+
+    }
 }

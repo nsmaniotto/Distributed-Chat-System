@@ -1,17 +1,19 @@
 package logins.distanciel.ClientControlleur;
 
 import project.insa.idchatsystem.Conversations.ConversationHandler.LocalConversationHandler;
+import project.insa.idchatsystem.Conversations.FacadeConversationHandler;
 import project.insa.idchatsystem.Exceptions.NoPortAvailable;
 import project.insa.idchatsystem.Message;
 import project.insa.idchatsystem.Observers.Conversations.ConversationHandlerObserver;
+import project.insa.idchatsystem.Observers.Conversations.FacadeConversationHandlerObserver;
 import project.insa.idchatsystem.Observers.logins.UsersStatusObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 import project.insa.idchatsystem.logins.local_mode.distanciel.UserModel;
 
 import java.util.ArrayList;
 
-public class ControllerEncapsulation implements ConversationHandlerObserver,UsersStatusObserver {
-    private final LocalConversationHandler conversationHandler;
+public class ControllerEncapsulation implements FacadeConversationHandlerObserver,UsersStatusObserver {
+    private final FacadeConversationHandler conversationHandler;
     private UserModel userModel;
     //private DistantUserModel centralizedUserModel;
 
@@ -19,7 +21,7 @@ public class ControllerEncapsulation implements ConversationHandlerObserver,User
                                    int usermodel_receiver_port, int usermodel_emitter_port, ArrayList<Integer> others) throws NoPortAvailable {
         this.userModel = new UserModel(id,usermodel_receiver_port,usermodel_emitter_port,others);
         //TODO : Remplacer par la facade
-        this.conversationHandler = LocalConversationHandler.getInstance();
+        this.conversationHandler = FacadeConversationHandler.getInstance();
         this.conversationHandler.addObserver(this);
         this.userModel.addUserModelObserver(this);
     }
@@ -51,6 +53,6 @@ public class ControllerEncapsulation implements ConversationHandlerObserver,User
 
     @Override
     public void listenerPortChosen(int port) {
-
+        User.setCurrentConversationHandlerListenerPort(port);
     }
 }

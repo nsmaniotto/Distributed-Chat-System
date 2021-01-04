@@ -2,8 +2,10 @@
 package project.insa.idchatsystem;
 
 import project.insa.idchatsystem.Conversations.ConversationHandler.LocalConversationHandler;
+import project.insa.idchatsystem.Conversations.FacadeConversationHandler;
 import project.insa.idchatsystem.Exceptions.NoPortAvailable;
 import project.insa.idchatsystem.Observers.Conversations.ConversationHandlerObserver;
+import project.insa.idchatsystem.Observers.Conversations.FacadeConversationHandlerObserver;
 import project.insa.idchatsystem.Observers.logins.UsersStatusObserver;
 import project.insa.idchatsystem.Observers.gui.ViewObserver;
 import project.insa.idchatsystem.User.distanciel.User;
@@ -13,9 +15,9 @@ import project.insa.idchatsystem.logins.local_mode.distanciel.UserModel;
 
 import java.util.ArrayList;
 
-public class ClientController implements ConversationHandlerObserver, UsersStatusObserver, ViewObserver {
+public class ClientController implements FacadeConversationHandlerObserver, UsersStatusObserver, ViewObserver {
     private View view;
-    private final LocalConversationHandler conversationHandler;
+    private final FacadeConversationHandler conversationHandler;
     private final UserModel userModel;
     /*
     private DistantUserModel centralizedUserModel;*/
@@ -23,9 +25,8 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
     public ClientController(int id,
                             int loginReceiverPort, int loginEmiterPort, ArrayList<Integer> loginBroadcast) throws NoPortAvailable {
         // Conversation handler init
-        this.conversationHandler = LocalConversationHandler.getInstance();
+        this.conversationHandler = FacadeConversationHandler.getInstance();
         this.conversationHandler.addObserver(this);
-        new Thread(conversationHandler).start();
 
         // View init
         this.view = new View();
@@ -81,7 +82,7 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
     }
 
     /* GETTERS/SETTERS */
-    public LocalConversationHandler getConversationHandler() {
+    public FacadeConversationHandler getConversationHandler() {
         return this.conversationHandler;
     }
 

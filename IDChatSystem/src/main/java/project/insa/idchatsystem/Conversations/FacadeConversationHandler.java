@@ -5,22 +5,22 @@ import project.insa.idchatsystem.Conversations.ConversationHandler.DistantConver
 import project.insa.idchatsystem.Conversations.ConversationHandler.LocalConversationHandler;
 import project.insa.idchatsystem.Exceptions.NoPortAvailable;
 import project.insa.idchatsystem.Message;
-import project.insa.idchatsystem.Observers.Conversations.ConversationHandlerObserver;
-import project.insa.idchatsystem.Observers.Conversations.LocalConversationHandlerObservable;
-import project.insa.idchatsystem.Observers.Conversations.LocalConversationHandlerObserver;
+import project.insa.idchatsystem.Observers.Conversations.*;
 import project.insa.idchatsystem.User.distanciel.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class FacadeConversationHandler implements LocalConversationHandlerObserver, ConversationHandlerObserver {
+public class FacadeConversationHandler implements LocalConversationHandlerObserver, ConversationHandlerObserver, FacadeConversationHandlerObservable {
     private static FacadeConversationHandler INSTANCE;
     private final LocalConversationHandler localHandler;
     private final DistantConversationHandler distantHandler;
+    private int portHandlerLocal;
+    private ArrayList<FacadeConversationHandlerObserver> observers;
     private FacadeConversationHandler() throws NoPortAvailable {
         this.localHandler = LocalConversationHandler.getInstance();
         this.distantHandler = DistantConversationHandler.getInstance();
         new Thread(this.localHandler).start();
-        new Thread(this.distantHandler).start();
     }
     /**
      * Access point of the (unique) instance
@@ -71,16 +71,40 @@ public class FacadeConversationHandler implements LocalConversationHandlerObserv
 
     @Override
     public void newMessageReceived(Message receivedMessage, boolean isCurrentConversation) {
-
+        for (FacadeConversationHandlerObserver obs : this.observers) {
+            obs.newMessageReceived(receivedMessage,isCurrentConversation);
+        }
     }
 
     @Override
     public void newMessageSent(Message sentMessage) {
-
+        this.observers.forEach( observer -> observer.newMessageSent(sentMessage) );
+    }
+    @Override
+    public void listenerPortChosen(int port) {
+        this.portHandlerLocal = port;
+        this.notifyListenerPortNegociated();
     }
 
     @Override
-    public void listenerPortChosen(int port) {
+    public void notifyListenerPortNegociated() {
+        this.observers.forEach(obs -> obs.listenerPortChosen(this.portHandlerLocal));
+    }
 
+    @Override
+    public void addObserver(FacadeConversationHandlerObserver observer) {
+        this.observers.add(observer);
+        this.notifyListenerPortNegociated();
+    }
+
+    @Override
+    public void deleteObserver(FacadeConversationHandlerObserver observer) {
+        this.observers.remove(observer);
+    }
+    public HashMap<Integer,User> getUsers() {
+        HashMap<Integer,User> merged_hashmap_users = new HashMap<>();
+        merged_hashmap_users.putAll(this.localHandler.getUsers());
+        merged_hashmap_users.putAll(this.distantHandler.getUsers());// Not useful as all users are stored in both of the handlers
+        return merged_hashmap_users;
     }
 }
