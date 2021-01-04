@@ -19,7 +19,7 @@ import project.insa.idchatsystem.User.distanciel.User;
  */
 public class MessageDatabase {
     // Singleton instance of the databases
-    public static MessageDatabase INSTANCE;
+    private static MessageDatabase INSTANCE;
     
     // Databases
     private final String DB_NAME = "idchatsystem";
