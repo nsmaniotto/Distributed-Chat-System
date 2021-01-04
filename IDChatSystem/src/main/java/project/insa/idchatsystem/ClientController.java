@@ -82,6 +82,11 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
         */
         this.view.displayMessage(sentMessage);
     }
+
+    @Override
+    public void messagesRetrieved(ArrayList<Message> retrievedMessages) {
+        retrievedMessages.forEach( message -> this.view.displayMessage(message) );
+    }
     
     /* GETTERS/SETTERS */
     public ConversationHandler getConversationHandler() {
