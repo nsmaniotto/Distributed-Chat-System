@@ -80,10 +80,13 @@ public class Conversation implements ConversationObservable, Runnable {
             history = MessageDatabase.getInstance().retrieveOrderedMessagesByConversationBetween(User.getCurrentUser(), this.correspondent);
         } catch (Uninitialized e) {
             // Current user (thereforce message source) is not initialized
-            System.out.println("Conversation: EXCEPTION WHILE RETRIEVING PAst MESSAGES " + e);
+            System.out.println("Conversation: EXCEPTION WHILE RETRIEVING PAST MESSAGES " + e);
         }
         
         // Notify ConversationHandler to display the previously retrieved messages
+        if(!history.isEmpty()) {
+            this.notifyObserversRetrievedMessages(history);
+        }
     }
 
     /**
