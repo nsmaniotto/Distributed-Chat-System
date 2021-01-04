@@ -12,11 +12,13 @@ import project.insa.idchatsystem.logins.local_mode.distanciel.LocalUserModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import project.insa.idchatsystem.database.MessageDatabase;
 
 public class ClientController implements ConversationHandlerObserver, UsersStatusObserver, ViewObserver {
     private View view;
     private final ConversationHandler conversationHandler;
     private final LocalUserModel localUserModel;
+    private final MessageDatabase database;
     /*
     private DistantUserModel centralizedUserModel;*/
     
@@ -37,6 +39,10 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
         // At this stage, the login controller is running in the same thread as the ClientController but the reception and emission operates in two others
         this.localUserModel = new LocalUserModel(id,loginReceiverPort,loginEmiterPort,loginBroadcast);
         this.localUserModel.addUserModelObserver(this);
+        
+        // Initialize local database
+        this.database = MessageDatabase.getInstance();
+        this.database.init();
     }
 
     public LocalUserModel getLocalUserModel() {
