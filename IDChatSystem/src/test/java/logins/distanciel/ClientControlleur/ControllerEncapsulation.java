@@ -48,4 +48,9 @@ public class ControllerEncapsulation implements ConversationHandlerObserver, Use
     public void newMessageSent(Message sentMessage) {
         System.out.printf("SENT MESSAGE : %s\n",sentMessage.toString());
     }
+
+    @Override
+    public void messagesRetrieved(ArrayList<Message> retrievedMessages) {
+        System.out.printf("RETRIEVED STORED MESSAGES\n");
+    }
 }
