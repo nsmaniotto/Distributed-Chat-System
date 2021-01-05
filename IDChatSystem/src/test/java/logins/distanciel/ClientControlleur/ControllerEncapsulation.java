@@ -53,6 +53,11 @@ public class ControllerEncapsulation implements ConversationHandlerObserver,User
 
     @Override
     public void listenerPortChosen(int port) {
-
+        
+    }
+    
+    @Override
+    public void messagesRetrieved(ArrayList<Message> retrievedMessages) {
+        System.out.printf("RETRIEVED STORED MESSAGES\n");
     }
 }

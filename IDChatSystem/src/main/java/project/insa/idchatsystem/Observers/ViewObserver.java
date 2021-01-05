@@ -8,5 +8,4 @@ public interface ViewObserver {
     abstract boolean newLogin(String login);
     abstract void newMessageSending(Message sendingMessage);
     abstract void userSelected(UserView userview);
-    abstract void askForMessages(User user);
 }

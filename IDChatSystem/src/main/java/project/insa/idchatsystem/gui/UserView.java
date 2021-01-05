@@ -53,11 +53,6 @@ public class UserView extends JPanel implements UserViewObservable {
 
     }
 
-    @Override
-    public void notifyAskForMessagesUserSelected() {
-        this.observer.askForMessages(this);
-    }
-
     public void initListeners(UserViewObserver observer) {
         UserView parent = this;
         this.selectButton.addActionListener(e -> {
@@ -72,7 +67,7 @@ public class UserView extends JPanel implements UserViewObservable {
         this.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                parent.observer.askForMessages(parent);
+                parent.userSelected();
             }
 
             @Override
@@ -102,6 +97,7 @@ public class UserView extends JPanel implements UserViewObservable {
     public void notificationSeen() {
         this.setOpaque(false);
     }
+    
     public void userSelected() {
         this.observer.startCommunicationWith(this);
     }

@@ -91,17 +91,4 @@ public class View implements Runnable, ChatWindowObserver, ViewObservable {
     public void userSelected(UserView userview) {
         this.viewObserver.userSelected(userview);
     }
-
-    @Override
-    public void askForMessages(User user) {
-        this.notifyAskForMessage(user);
-    }
-
-    @Override
-    public void notifyAskForMessage(User user) {
-        this.viewObserver.askForMessages(user);
-    }
-    public void messagesToShow(ArrayList<Message> messages ) {
-        this.chat_window.messagesToShow(messages);
-    }
 }

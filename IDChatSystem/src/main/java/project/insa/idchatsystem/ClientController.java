@@ -12,11 +12,13 @@ import project.insa.idchatsystem.gui.View;
 import project.insa.idchatsystem.logins.local_mode.distanciel.LocalUserModel;
 
 import java.util.ArrayList;
+import project.insa.idchatsystem.database.MessageDatabase;
 
 public class ClientController implements ConversationHandlerObserver, UsersStatusObserver, ViewObserver {
     private View view;
     private final ConversationHandler conversationHandler;
     private final LocalUserModel localUserModel;
+    private final MessageDatabase database;
     /*
     private DistantUserModel centralizedUserModel;*/
     
@@ -35,6 +37,10 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
         // At this stage, the login controller is running in the same thread as the ClientController but the reception and emission operates in two others
         this.localUserModel = new LocalUserModel(id,loginReceiverPort,loginEmiterPort,loginBroadcast);
         this.localUserModel.addUserModelObserver(this);
+        
+        // Initialize local database
+        this.database = MessageDatabase.getInstance();
+        this.database.init();
     }
 
     public LocalUserModel getLocalUserModel() {
@@ -58,7 +64,7 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
     /* CONVERSATION HANDLER OBSERVER METHODS */
 
     @Override
-    public void newMessageReceived(Message receivedMessage, boolean isCurrentConversation) {  
+    public void newMessageReceived(Message receivedMessage, boolean isCurrentConversation) {
         if(isCurrentConversation) {
             this.view.displayMessage(receivedMessage);
         } else {
@@ -80,6 +86,10 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
         User.setCurrentConversationHandlerListenerPort(port);
     }
 
+    @Override
+    public void messagesRetrieved(ArrayList<Message> retrievedMessages) {
+        retrievedMessages.forEach( message -> this.view.displayMessage(message) );
+    }
     /* GETTERS/SETTERS */
     public ConversationHandler getConversationHandler() {
         return this.conversationHandler;
@@ -104,16 +114,5 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
     public void userSelected(UserView userview) {
         System.out.printf("CONTROLLEUR : userSelected\n");
         this.conversationHandler.open(userview.getUser());
-    }
-
-    @Override
-    public void askForMessages(User user) {
-        ArrayList<Message> messages = this.conversationHandler.setCurrentConversation(user);
-        if(messages != null) {
-            this.view.messagesToShow(messages);
-        }
-        else {
-            System.out.printf("Conversation not found\n");
-        }
     }
 }

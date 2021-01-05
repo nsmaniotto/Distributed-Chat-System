@@ -157,19 +157,7 @@ public class ConversationHandler implements ConversationObserver, ConversationHa
         
         return null;
     }
-    public ArrayList<Message> setCurrentConversation(User user) {
-        Conversation conv = this.findConversationByCorrespondent(user);
-        this.conversations.forEach(conversation -> {
-            if(!conversation.equals(conv))
-                conversation.close();
-            else
-                conversation.open();
-        });
-        if(conv != null) {
-            return conv.getHistory();
-        }
-        return null;
-    }
+    
     /**
      * Add a new conversation to our array and thread pool
      *
@@ -185,9 +173,6 @@ public class ConversationHandler implements ConversationObserver, ConversationHa
 
         // Add this new conversation thread to our thread pool
         this.conversationThreadPool.submit(newConversation);
-        if(this.currentConversation==null)
-            this.currentConversation = newConversation;
-        System.out.printf("CURRENT CONV : %s\n",this.currentConversation);
     }
     
     /**
@@ -277,7 +262,7 @@ public class ConversationHandler implements ConversationObserver, ConversationHa
     /* CONVERSATION HANDLER OBSERVER METHODS */
     
     @Override
-    public void newMessageReceived(Message receivedMessage, boolean isCurrentConversation) {  
+    public void newMessageReceived(Message receivedMessage, boolean isCurrentConversation) {
         for(ConversationHandlerObserver observer : this.observers) {
             observer.newMessageReceived(receivedMessage, isCurrentConversation);
         }
@@ -286,6 +271,11 @@ public class ConversationHandler implements ConversationObserver, ConversationHa
     @Override
     public void newMessageSent(Message sentMessage) {
         this.observers.forEach( observer -> observer.newMessageSent(sentMessage) );
+    }
+
+    @Override
+    public void messagesRetrieved(ArrayList<Message> retrievedMessages) {
+        this.observers.forEach( observer -> observer.messagesRetrieved(retrievedMessages) );
     }
     
     /* GETTERS/SETTERS */

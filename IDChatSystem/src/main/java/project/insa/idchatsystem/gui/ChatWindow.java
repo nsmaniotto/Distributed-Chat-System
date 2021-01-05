@@ -547,18 +547,4 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
             this.chatWindowObserver.newMessageSending(sentMessage);
         }
     }
-
-    @Override
-    public void askForMessages(UserView userview) {
-        this.notifyAskForMessages(userview);
-        this.userSelected(userview);
-    }
-    @Override
-    public void notifyAskForMessages(UserView user) {
-        this.chatWindowObserver.askForMessages(user.getUser());
-    }
-    public void messagesToShow(ArrayList<Message> messages) {
-        this.chatHistoryPanel.removeAll();
-        messages.forEach(this::displayMessage);
-    }
 }
