@@ -13,11 +13,17 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Template extends HttpServlet {
+public class OnlineServlet extends HttpServlet {
     class StructUser {
         public PrintWriter writer = null;
         public ArrayList<String> cache = null;
-        StructUser(PrintWriter writer,ArrayList<String> cache) {
+        public String state = "disconnected";
+        public StructUser(PrintWriter writer,ArrayList<String> cache,String state) {
+            this.writer = writer;
+            this.cache = cache;
+            this.state = state;
+        }
+        public StructUser(PrintWriter writer,ArrayList<String> cache) {
             this.writer = writer;
             this.cache = cache;
         }
@@ -38,6 +44,11 @@ public class Template extends HttpServlet {
                         value.cache = previous.cache;
                     }
                 }
+                if(value.state.equals("previousState"))
+                    value.state = previous.state;
+            }
+            else {
+                value.state = "disconnected";
             }
             return super.put(key, value);
         }
@@ -58,16 +69,31 @@ public class Template extends HttpServlet {
             other = m.group("other");
         }
         PrintWriter writer = resp.getWriter();
-        if(idSrc != -1) {
-            users.put(idSrc,new StructUser(writer,null));
+        Pattern pattern_subscribe = Pattern.compile("state,(?<subscribe>subscribeLocal)");
+        m = pattern_subscribe.matcher(other);
+        String subscribe = "";
+        while (m.find()){
+            subscribe = m.group("subscribe");
         }
-        if(!users.containsKey(idDest) || writer == null) {
+        Pattern pattern_state = Pattern.compile("state,(?<state>ready|disconnected)");
+        m = pattern_state.matcher(other);
+        String state = "";
+        while (m.find()){
+            state = m.group("state");
+        }
+        if(idSrc != -1 && !subscribe.equals("")) {
+            users.put(idSrc,new StructUser(writer,null,"previousState"));
+        }
+        if(idSrc != -1 && !state.equals("")) {
+            users.put(idSrc,new StructUser(writer,null,state));
+        }
+        if(!users.containsKey(idDest) || writer == null || !users.get(idDest).state.equals("ready")) {
             ArrayList<String> cache = new ArrayList<>();
             cache.add(other);
-            users.put(idDest,new StructUser(null,cache));
+            users.put(idDest,new StructUser(null,cache,"previousState"));
         }
         else {
-            users.put(idDest,new StructUser(writer,null));
+            users.put(idDest,new StructUser(writer,null,"previousState"));
             users.get(idDest).writer.println(other);
         }
     }

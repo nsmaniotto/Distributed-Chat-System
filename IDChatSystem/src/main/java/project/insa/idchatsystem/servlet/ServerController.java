@@ -20,6 +20,8 @@ public class ServerController implements ServerIncomingMessagesObserver, ServerC
         incomingMessages = new ServerIncomingMessages();
         incomingMessages.addOserver(this);
         sendMessages = new ServerSendMessage();
+        this.subscribe();
+        this.publish("ready");
     }
     public static ServerController getInstance() {
         if(INSTANCE == null) {
@@ -28,14 +30,10 @@ public class ServerController implements ServerIncomingMessagesObserver, ServerC
         return ServerController.INSTANCE;
     }
     public void subscribe() {
-        sendMessages.sendGet(String.format("subscribeLocal,%s", User.current_user_transfer_string()),null);
+        sendMessages.sendGet(String.format("subscribe"),null);
     }
     public void publish(String state) {
-        try {
-            sendMessages.sendGet(String.format("state,%d,%s",User.get_current_id(),state),null);
-        } catch (Uninitialized uninitialized) {
-            uninitialized.printStackTrace();
-        }
+        sendMessages.sendGet(String.format("state,%s",state),null);
     }
     public void sendMessage(String message,User corresp) {
         this.sendMessages.sendGet(message,corresp);
