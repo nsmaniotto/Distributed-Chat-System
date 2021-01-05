@@ -27,7 +27,7 @@ public class ClientController implements FacadeConversationHandlerObserver, User
     public ClientController(int id,
                             int loginReceiverPort, int loginEmiterPort, ArrayList<Integer> loginBroadcast) throws NoPortAvailable {
         // Conversation handler init
-        this.conversationHandler = FacadeConversationHandler.getInstance();
+        this.conversationHandler = FacadeConversationHandler.getInstance(loginBroadcast != null);
         this.conversationHandler.addObserver(this);
 
         // View init
@@ -36,17 +36,15 @@ public class ClientController implements FacadeConversationHandlerObserver, User
         new Thread(view).start();
 
         // At this stage, the login controller is running in the same thread as the ClientController but the reception and emission operates in two others
-        this.localUserModel = new LocalUserModel(id,loginReceiverPort,loginEmiterPort,loginBroadcast);
-        this.localUserModel.addUserModelObserver(this);
+        this.userModel = new UserModel(id,loginReceiverPort,loginEmiterPort,loginBroadcast);
+        this.userModel.addUserModelObserver(this);
 
         // Initialize local database
         this.database = MessageDatabase.getInstance();
         this.database.init();
-        this.userModel = new UserModel(id,loginReceiverPort,loginEmiterPort,loginBroadcast);
-        this.userModel.addUserModelObserver(this);
     }
 
-    public UserModel getLocalUserModel() {
+    public UserModel getUserModel() {
         return userModel;
     }
     /* USERS STATUS OBSERVER METHODS */

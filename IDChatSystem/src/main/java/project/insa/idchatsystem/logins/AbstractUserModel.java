@@ -12,8 +12,8 @@ import java.util.Map;
 public abstract class AbstractUserModel implements ObservableUserModel {
     private HashMap<Integer, User> users;
     private long limite_tolerance_ss_nouvelles = 10000;
-    public AbstractUserModel(int id) {
-        User.init_current_user(id);
+    public AbstractUserModel(int id,boolean local) {
+        User.init_current_user(id,local);
         this.users = new HashMap<Integer,User>();
     }
     public boolean setUsername(String newUserName) {

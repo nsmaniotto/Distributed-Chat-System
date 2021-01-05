@@ -1,4 +1,3 @@
-package project.insa.idchatsystem.server;
 
 import project.insa.idchatsystem.User.distanciel.User;
 

@@ -11,14 +11,18 @@ public class UserModelEmitters implements Runnable {
     protected  boolean emission = true;
     protected String state = "connected";
     private UserModelEmittersObserver obs;
-    public UserModelEmitters(UserModelEmittersObserver obs,int emitter_port, ArrayList<Integer> others) {
+    private boolean local;
+    public UserModelEmitters(UserModelEmittersObserver obs,int emitter_port, ArrayList<Integer> others,boolean local) {
+        this.local = local;
         this.obs = obs;
-        localEmitter = new LocalUserModelEmitter(emitter_port,others);
+        if(this.local)
+            localEmitter = new LocalUserModelEmitter(emitter_port,others);
         this.last_user_updated_string = "";
     }
     public void sendMessage(String message) {
-        this.localEmitter.sendBroadcast(message);
-        //this.askSendMessage(message); //TODO : implémenter l'iterface
+        if(this.local)
+            this.localEmitter.sendBroadcast(message);
+        this.obs.newMsgToSend(message);
 
     }
     public void askUpdate() {

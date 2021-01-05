@@ -13,47 +13,51 @@ import java.util.HashMap;
 
 public class FacadeConversationHandler implements LocalConversationHandlerObserver, ConversationHandlerObserver, FacadeConversationHandlerObservable {
     private static FacadeConversationHandler INSTANCE;
-    private final LocalConversationHandler localHandler;
+    private LocalConversationHandler localHandler = null;
     private final DistantConversationHandler distantHandler;
     private int portHandlerLocal;
     private ArrayList<FacadeConversationHandlerObserver> observers;
-    private FacadeConversationHandler() throws NoPortAvailable {
-        this.localHandler = LocalConversationHandler.getInstance();
+    private boolean local;
+    private FacadeConversationHandler(boolean local) throws NoPortAvailable {
+        this.local = local;
         this.distantHandler = DistantConversationHandler.getInstance();
-        new Thread(this.localHandler).start();
+        if(local) {
+            this.localHandler = LocalConversationHandler.getInstance();
+            new Thread(this.localHandler).start();
+        }
     }
     /**
      * Access point of the (unique) instance
      *
      * @return INSTANCE : FacadeConversationHandler - single instance of this class
      */
-    public static FacadeConversationHandler getInstance() throws NoPortAvailable {
+    public static FacadeConversationHandler getInstance(boolean local) throws NoPortAvailable {
         if(FacadeConversationHandler.INSTANCE == null){
-            FacadeConversationHandler.INSTANCE = new FacadeConversationHandler();
+            FacadeConversationHandler.INSTANCE = new FacadeConversationHandler(local);
         }
         return FacadeConversationHandler.INSTANCE;
     }
     /* GETTERS/SETTERS */
     public Conversation getCurrentConversation() {
-        if(this.localHandler.getCurrentConversation() != null)
+        if(this.localHandler != null && this.localHandler.getCurrentConversation() != null)
             return this.localHandler.getCurrentConversation();
         else
             return this.distantHandler.getCurrentConversation();
     }
     public void open(User correspondent) {
-        if(correspondent.isLocal_user())
+        if(this.local && correspondent.isLocal_user())
             this.localHandler.open(correspondent);
         else
             this.distantHandler.open(correspondent);
     }
     public void addKnownUser(User newUser) {
-        if(newUser.isLocal_user())
+        if(this.local && newUser.isLocal_user())
             this.localHandler.addKnownUser(newUser);
         else
             this.distantHandler.addKnownUser(newUser);
     }
     public void removeKnownUser(User user) {
-        if(user.isLocal_user())
+        if(this.local && user.isLocal_user())
             this.localHandler.removeKnownUser(user);
         else
             this.distantHandler.removeKnownUser(user);
@@ -98,7 +102,8 @@ public class FacadeConversationHandler implements LocalConversationHandlerObserv
     }
     public HashMap<Integer,User> getUsers() {
         HashMap<Integer,User> merged_hashmap_users = new HashMap<>();
-        merged_hashmap_users.putAll(this.localHandler.getUsers());
+        if(this.local)
+            merged_hashmap_users.putAll(this.localHandler.getUsers());
         merged_hashmap_users.putAll(this.distantHandler.getUsers());// Not useful as all users are stored in both of the handlers
         return merged_hashmap_users;
     }
