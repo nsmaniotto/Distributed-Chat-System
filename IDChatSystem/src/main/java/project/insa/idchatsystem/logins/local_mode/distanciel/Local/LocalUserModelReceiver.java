@@ -37,8 +37,10 @@ public class LocalUserModelReceiver implements Runnable {
                 DatagramPacket packet = new DatagramPacket(in_buf, in_buf.length);
                 socket.receive(packet);
                 String received = new String(packet.getData(), 0, packet.getLength());
-                this.model.notifyNewMsg(received);
-                //System.out.printf("Received %s\n",received);
+                if(!received.equals("")) {
+                    System.out.printf(".(LocalUserModelReceiver.java:40) : RECEIVED : %s\n",received);
+                    this.model.notifyNewMsg(received);
+                }
 
             }
         } catch (IOException e) {

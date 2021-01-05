@@ -16,11 +16,12 @@ public class LocalUserModelEmitter {
         }
     }
     public void sendBroadcast(String msg) {
+        String full_msg = String.format("login,%s",msg);
         for(int port:this.liste_ports_others) {
             DatagramPacket outPacket = null;
             try {
-                outPacket = new DatagramPacket(msg.getBytes(),
-                        msg.length(),
+                outPacket = new DatagramPacket(full_msg.getBytes(),
+                        full_msg.length(),
                         InetAddress.getByName("127.0.0.1"),port);
             } catch (UnknownHostException e) {
                 e.printStackTrace();
