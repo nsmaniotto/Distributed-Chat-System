@@ -1,7 +1,7 @@
-package logins.distanciel.LocalUserModelEmitter;
+package logins.distanciel.UserModelEmitters;
 
 
-import project.insa.idchatsystem.logins.local_mode.distanciel.LocalUserModelEmitter;
+import project.insa.idchatsystem.logins.local_mode.distanciel.Facades.UserModelEmitters;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -19,7 +19,7 @@ public class Main {
         others.add(2101);
         //Démarrage de l'émission (émission périodique)
         System.out.println("Démarrage émission");
-        LocalUserModelEmitter emitter = new LocalUserModelEmitter(2100,others);
+        UserModelEmitters emitter = new UserModelEmitters(null,2100,others);
         new Thread(emitter).start();
         emitter.diffuseNewUsername("monUserName");
         //Attente en réception

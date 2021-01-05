@@ -1,7 +1,7 @@
 package logins.distanciel.LocalUserModel.testRemoveUser;
 
 import project.insa.idchatsystem.User.distanciel.User;
-import project.insa.idchatsystem.logins.local_mode.distanciel.LocalUserModel;
+import project.insa.idchatsystem.logins.local_mode.distanciel.UserModel;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.HashMap;
 public class Main1 {
     public static void main(String [] argv) {
         int DUREE_DIFF_EMISSION = 5000;
-        LocalUserModel model = new LocalUserModel(0,2700,2705, new ArrayList<>() {{
+        UserModel model = new UserModel(0,2700,2705, new ArrayList<>() {{
             add(2701);
         }});
         model.setUsername("user0");

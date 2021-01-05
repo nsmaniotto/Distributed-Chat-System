@@ -6,7 +6,6 @@
 package conversation;
 
 import project.insa.idchatsystem.ClientController;
-import project.insa.idchatsystem.Conversation.ConversationHandler;
 import project.insa.idchatsystem.Exceptions.NoPortAvailable;
 import project.insa.idchatsystem.Message;
 import project.insa.idchatsystem.User.distanciel.User;
@@ -34,7 +33,7 @@ public class ClientTestRobin {
         HashMap<Integer,User> userHashMap = controller.getConversationHandler().getUsers();
         User user = userHashMap.get(userHashMap.keySet().toArray()[0]);
         controller.getConversationHandler().open(user); // Sending a message to Nathan
-        controller.getConversationHandler().getCurrentConversation().send(new Message("Hi Nathan !"));
+        controller.getConversationHandler().getCurrentConversation().send(new Message("Hi Nathan !"),controller.getConversationHandler().getCurrentConversation().getCorrespondent());
         
         try {
             Thread.sleep(1000);
@@ -42,7 +41,7 @@ public class ClientTestRobin {
             
         }
 
-        controller.getConversationHandler().getCurrentConversation().send(new Message("Hello again !"));
+        controller.getConversationHandler().getCurrentConversation().send(new Message("Hello again !"),controller.getConversationHandler().getCurrentConversation().getCorrespondent());
         
         try {
             Thread.sleep(1000);
@@ -50,6 +49,6 @@ public class ClientTestRobin {
             
         }
 
-        controller.getConversationHandler().getCurrentConversation().send(new Message(":-)"));
+        controller.getConversationHandler().getCurrentConversation().send(new Message(":-)"),controller.getConversationHandler().getCurrentConversation().getCorrespondent());
     }
 }

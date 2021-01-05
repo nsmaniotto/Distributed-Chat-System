@@ -1,7 +1,7 @@
 package project.insa.idchatsystem.gui;
 
-import project.insa.idchatsystem.Observers.UserViewObservable;
-import project.insa.idchatsystem.Observers.UserViewObserver;
+import project.insa.idchatsystem.Observers.gui.UserViewObservable;
+import project.insa.idchatsystem.Observers.gui.UserViewObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 
 import javax.swing.*;

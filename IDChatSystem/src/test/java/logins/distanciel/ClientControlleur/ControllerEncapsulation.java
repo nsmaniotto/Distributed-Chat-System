@@ -1,35 +1,35 @@
 package logins.distanciel.ClientControlleur;
 
-import project.insa.idchatsystem.Conversation.ConversationHandler;
+import project.insa.idchatsystem.Conversations.ConversationHandler.LocalConversationHandler;
+import project.insa.idchatsystem.Conversations.FacadeConversationHandler;
 import project.insa.idchatsystem.Exceptions.NoPortAvailable;
 import project.insa.idchatsystem.Message;
-import project.insa.idchatsystem.Observers.ConversationHandlerObservable;
-import project.insa.idchatsystem.Observers.ConversationHandlerObserver;
-import project.insa.idchatsystem.Observers.ConversationObserver;
-import project.insa.idchatsystem.Observers.UsersStatusObserver;
+import project.insa.idchatsystem.Observers.Conversations.ConversationHandlerObserver;
+import project.insa.idchatsystem.Observers.Conversations.FacadeConversationHandlerObserver;
+import project.insa.idchatsystem.Observers.logins.UsersStatusObserver;
 import project.insa.idchatsystem.User.distanciel.User;
-import project.insa.idchatsystem.logins.local_mode.distanciel.LocalUserModel;
+import project.insa.idchatsystem.logins.local_mode.distanciel.UserModel;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
-public class ControllerEncapsulation implements ConversationHandlerObserver,UsersStatusObserver {
-    private final ConversationHandler conversationHandler;
-    private LocalUserModel localUserModel;
+public class ControllerEncapsulation implements FacadeConversationHandlerObserver,UsersStatusObserver {
+    private final FacadeConversationHandler conversationHandler;
+    private UserModel userModel;
     //private DistantUserModel centralizedUserModel;
 
     public ControllerEncapsulation(int id,
                                    int usermodel_receiver_port, int usermodel_emitter_port, ArrayList<Integer> others) throws NoPortAvailable {
-        this.localUserModel = new LocalUserModel(id,usermodel_receiver_port,usermodel_emitter_port,others);
-        this.conversationHandler = ConversationHandler.getInstance();
+        this.userModel = new UserModel(id,usermodel_receiver_port,usermodel_emitter_port,others);
+        //TODO : Remplacer par la facade
+        this.conversationHandler = FacadeConversationHandler.getInstance();
         this.conversationHandler.addObserver(this);
-        this.localUserModel.addUserModelObserver(this);
+        this.userModel.addUserModelObserver(this);
     }
     public void startConversation(int id){
-        User user = this.localUserModel.getOnlineUsers().get(id);
+        User user = this.userModel.getOnlineUsers().get(id);
         System.out.println(user);
         this.conversationHandler.open(user);
-        this.conversationHandler.getCurrentConversation().send(new Message("raclette et tartiflette seront au menu"));
+        this.conversationHandler.getCurrentConversation().send(new Message("raclette et tartiflette seront au menu"),this.conversationHandler.getCurrentConversation().getCorrespondent());
     }
     @Override
     public void offlineUser(User user) {
@@ -53,9 +53,10 @@ public class ControllerEncapsulation implements ConversationHandlerObserver,User
 
     @Override
     public void listenerPortChosen(int port) {
-        
+        User.setCurrentConversationHandlerListenerPort(port);
+
     }
-    
+
     @Override
     public void messagesRetrieved(ArrayList<Message> retrievedMessages) {
         System.out.printf("RETRIEVED STORED MESSAGES\n");

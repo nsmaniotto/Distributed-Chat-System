@@ -2,19 +2,16 @@ package project.insa.idchatsystem.gui;
 
 import project.insa.idchatsystem.Exceptions.Uninitialized;
 import project.insa.idchatsystem.Message;
-import project.insa.idchatsystem.Observers.ChatWindowObservable;
-import project.insa.idchatsystem.Observers.ChatWindowObserver;
-import project.insa.idchatsystem.Observers.UserViewObserver;
+import project.insa.idchatsystem.Observers.gui.ChatWindowObservable;
+import project.insa.idchatsystem.Observers.gui.ChatWindowObserver;
+import project.insa.idchatsystem.Observers.gui.UserViewObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -170,6 +167,13 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
             @Override
             public void stateChanged(ChangeEvent e) {
                 updateTabs();
+            }
+        });
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                //Closing events
             }
         });
     }

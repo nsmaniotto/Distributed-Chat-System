@@ -6,7 +6,6 @@
 package conversation;
 
 import project.insa.idchatsystem.ClientController;
-import project.insa.idchatsystem.Conversation.ConversationHandler;
 import project.insa.idchatsystem.Exceptions.NoPortAvailable;
 import project.insa.idchatsystem.Exceptions.Uninitialized;
 import project.insa.idchatsystem.User.distanciel.User;

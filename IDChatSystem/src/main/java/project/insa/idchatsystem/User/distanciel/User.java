@@ -3,7 +3,6 @@ package project.insa.idchatsystem.User.distanciel;
 
 import project.insa.idchatsystem.Exceptions.Uninitialized;
 
-import java.net.*;
 import java.sql.Timestamp;
 
 public class User {
@@ -13,6 +12,7 @@ public class User {
     private int id = -1;
 
     private final String ipAddress;
+    private boolean local_user;
 
     private Timestamp lastSeen;
     private int conversationHandlerListenerPort;
@@ -20,11 +20,19 @@ public class User {
     private static int current_id;
     private static String current_ipAddress;
     private static int current_conversationHandlerListenerPort;
+    private static boolean current_local_user;
 
     /************************Current user methods***************************************/
     public static void init_current_user(int id) {
         User.current_id = id;
         User.current_ipAddress = User.calculate_current_ip();
+        User.current_local_user = true;
+    }
+
+    public static void init_current_user(int id,boolean local) {
+        User.current_id = id;
+        User.current_ipAddress = User.calculate_current_ip();
+        User.current_local_user = local;
     }
     public static String calculate_current_ip()  {
         return "127.0.0.1";
@@ -57,7 +65,8 @@ public class User {
         return User.current_ipAddress;
     }
     public static String current_user_transfer_string() {
-        return String.format("%s,%d,%s,%d",User.current_username,User.current_id,User.current_ipAddress,User.current_conversationHandlerListenerPort);
+        return String.format("%s,%d,%s,%d,%s",User.current_username,User.current_id,User.current_ipAddress,User.current_conversationHandlerListenerPort,
+                User.current_local_user ? "t" : "f");
     }
 
     public static User getCurrentUser() throws Uninitialized {
@@ -73,8 +82,17 @@ public class User {
         this.ipAddress = ipAddress;
         this.lastSeen = new Timestamp(System.currentTimeMillis());
         this.conversationHandlerListenerPort = -1;
+        this.local_user = true;
     }
 
+    public User(String username, int id, String ipAddress,boolean local_user) {
+        this.username = username;
+        this.id = id;
+        this.ipAddress = ipAddress;
+        this.lastSeen = new Timestamp(System.currentTimeMillis());
+        this.conversationHandlerListenerPort = -1;
+        this.local_user = local_user;
+    }
     public void setConversationHandlerListenerPort(int conversationHandlerListenerPort) {
         this.conversationHandlerListenerPort = conversationHandlerListenerPort;
     }
@@ -94,6 +112,11 @@ public class User {
     public Timestamp get_lastSeen() {
         return this.lastSeen;
     }
+
+    public boolean isLocal_user() {
+        return local_user;
+    }
+
     public String transfer_string() {
         return String.format("%s,%d,%s",this.username,this.id,this.ipAddress);
     }

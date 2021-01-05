@@ -1,33 +1,34 @@
 
 package project.insa.idchatsystem;
 
-import project.insa.idchatsystem.Conversation.ConversationHandler;
+import project.insa.idchatsystem.Conversations.ConversationHandler.LocalConversationHandler;
+import project.insa.idchatsystem.Conversations.FacadeConversationHandler;
 import project.insa.idchatsystem.Exceptions.NoPortAvailable;
-import project.insa.idchatsystem.Observers.ConversationHandlerObserver;
-import project.insa.idchatsystem.Observers.UsersStatusObserver;
-import project.insa.idchatsystem.Observers.ViewObserver;
+import project.insa.idchatsystem.Observers.Conversations.ConversationHandlerObserver;
+import project.insa.idchatsystem.Observers.Conversations.FacadeConversationHandlerObserver;
+import project.insa.idchatsystem.Observers.logins.UsersStatusObserver;
+import project.insa.idchatsystem.Observers.gui.ViewObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 import project.insa.idchatsystem.gui.UserView;
 import project.insa.idchatsystem.gui.View;
-import project.insa.idchatsystem.logins.local_mode.distanciel.LocalUserModel;
+import project.insa.idchatsystem.logins.local_mode.distanciel.UserModel;
 
 import java.util.ArrayList;
 import project.insa.idchatsystem.database.MessageDatabase;
 
-public class ClientController implements ConversationHandlerObserver, UsersStatusObserver, ViewObserver {
+public class ClientController implements FacadeConversationHandlerObserver, UsersStatusObserver, ViewObserver {
     private View view;
-    private final ConversationHandler conversationHandler;
-    private final LocalUserModel localUserModel;
     private final MessageDatabase database;
+    private final FacadeConversationHandler conversationHandler;
+    private final UserModel userModel;
     /*
     private DistantUserModel centralizedUserModel;*/
     
     public ClientController(int id,
                             int loginReceiverPort, int loginEmiterPort, ArrayList<Integer> loginBroadcast) throws NoPortAvailable {
         // Conversation handler init
-        this.conversationHandler = ConversationHandler.getInstance();
+        this.conversationHandler = FacadeConversationHandler.getInstance();
         this.conversationHandler.addObserver(this);
-        new Thread(conversationHandler).start();
 
         // View init
         this.view = new View();
@@ -37,14 +38,16 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
         // At this stage, the login controller is running in the same thread as the ClientController but the reception and emission operates in two others
         this.localUserModel = new LocalUserModel(id,loginReceiverPort,loginEmiterPort,loginBroadcast);
         this.localUserModel.addUserModelObserver(this);
-        
+
         // Initialize local database
         this.database = MessageDatabase.getInstance();
         this.database.init();
+        this.userModel = new UserModel(id,loginReceiverPort,loginEmiterPort,loginBroadcast);
+        this.userModel.addUserModelObserver(this);
     }
 
-    public LocalUserModel getLocalUserModel() {
-        return localUserModel;
+    public UserModel getLocalUserModel() {
+        return userModel;
     }
     /* USERS STATUS OBSERVER METHODS */
     
@@ -91,14 +94,14 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
         retrievedMessages.forEach( message -> this.view.displayMessage(message) );
     }
     /* GETTERS/SETTERS */
-    public ConversationHandler getConversationHandler() {
+    public FacadeConversationHandler getConversationHandler() {
         return this.conversationHandler;
     }
 
     /* VIEW OBSERVER METHODS */
     @Override
     public boolean newLogin(String login) {
-        return this.localUserModel.setUsername(login);
+        return this.userModel.setUsername(login);
     }
 
 
@@ -106,7 +109,7 @@ public class ClientController implements ConversationHandlerObserver, UsersStatu
     public void newMessageSending(Message sendingMessage) {
         System.out.printf("CONTROLLEUR newMessageSending\n");
         if(this.conversationHandler.getCurrentConversation() != null) {
-            this.conversationHandler.getCurrentConversation().send(sendingMessage);
+            this.conversationHandler.getCurrentConversation().send(sendingMessage,this.conversationHandler.getCurrentConversation().getCorrespondent());
         }
     }
 
