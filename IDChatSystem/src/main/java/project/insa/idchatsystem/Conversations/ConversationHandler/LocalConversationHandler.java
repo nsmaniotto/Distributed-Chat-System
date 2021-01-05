@@ -167,4 +167,5 @@ public class LocalConversationHandler extends AbstractLocalConversationHandler i
     public void deleteObserver(LocalConversationHandlerObserver obs) {
         this.observers.remove(obs);
     }
+
 }

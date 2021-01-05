@@ -2,6 +2,7 @@ package project.insa.idchatsystem.Conversations.ConversationHandler;
 
 import project.insa.idchatsystem.Conversations.Conversation.Conversation;
 import project.insa.idchatsystem.Message;
+import project.insa.idchatsystem.Observers.Conversations.ConversationHandlerObservable;
 import project.insa.idchatsystem.Observers.Conversations.LocalConversationHandlerObservable;
 import project.insa.idchatsystem.Observers.Conversations.ConversationHandlerObserver;
 import project.insa.idchatsystem.Observers.Conversations.ConversationObserver;
@@ -13,7 +14,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
-public abstract class AbstractLocalConversationHandler implements ConversationHandlerObserver,ConversationObserver {
+public abstract class AbstractLocalConversationHandler implements ConversationObserver, ConversationHandlerObservable {
     protected ArrayList<Conversation> conversations;
     protected Conversation currentConversation = null;
     protected HashMap<Integer, User> users; // Copy of UserModel's hashmap to identify every user
@@ -70,9 +71,6 @@ public abstract class AbstractLocalConversationHandler implements ConversationHa
 
         // Add this new conversation thread to our thread pool
         this.conversationThreadPool.submit(newConversation);
-        if(this.currentConversation==null)
-            this.currentConversation = newConversation;
-        System.out.printf("CURRENT CONV : %s\n",this.currentConversation);
     }
     public ArrayList<Message> setCurrentConversation(User user) {
         Conversation conv = this.findConversationByCorrespondent(user);
@@ -139,6 +137,13 @@ public abstract class AbstractLocalConversationHandler implements ConversationHa
     public Conversation getCurrentConversation() {
         System.out.printf("-------------------getCurrentConversation %s\n",this.currentConversation);
         return this.currentConversation;
+    }
+    public void notifyObserversRetrievedMessages(ArrayList<Message> retrievedMessages) {
+        this.observers.forEach(observer -> observer.messagesRetrieved(retrievedMessages));
+    }
+
+    public void messagesRetrieved(ArrayList<Message> retrievedMessages) {
+        this.notifyObserversRetrievedMessages(retrievedMessages);
     }
 
 }

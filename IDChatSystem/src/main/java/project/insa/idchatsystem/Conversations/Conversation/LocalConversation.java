@@ -5,6 +5,7 @@ import project.insa.idchatsystem.Conversations.Conversation.Conversation;
 import project.insa.idchatsystem.Data;
 import project.insa.idchatsystem.Exceptions.Uninitialized;
 import project.insa.idchatsystem.Message;
+import project.insa.idchatsystem.Observers.Conversations.ConversationObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 
 import java.io.BufferedReader;
@@ -17,9 +18,6 @@ import project.insa.idchatsystem.database.MessageDatabase;
 
 public class LocalConversation extends Conversation implements Runnable {
     private Socket socket;
-    private boolean isOpen;
-    private final User correspondent;
-    private ConversationObserver conversationHandlerObserver;
 
     /**
      * Initialize a passive conversation with a given correspondent
@@ -45,7 +43,7 @@ public class LocalConversation extends Conversation implements Runnable {
         return null;
     }
 
-    private void loadConversation() {
+    public void loadConversation() {
         ArrayList<Message> history = new ArrayList<>();
 
         // Retrieve past messages
@@ -62,7 +60,7 @@ public class LocalConversation extends Conversation implements Runnable {
         }
     }
 
-    
+
     /**
      * Listening on the current socket for incoming messages
      * 
@@ -97,7 +95,8 @@ public class LocalConversation extends Conversation implements Runnable {
      *
      * @param message : Message - message we want to send and display
      */
-    public void send(Message message) {
+    @Override
+    public void send(Message message, User corresp) {
         System.out.printf("-------------------------------------------------------------SENDED : %s\n",message);
         try {
             message.setSource(User.getCurrentUser());
@@ -133,4 +132,5 @@ public class LocalConversation extends Conversation implements Runnable {
     public void setSocket(Socket newSocket) {
         this.socket = newSocket;
     }
+
 }

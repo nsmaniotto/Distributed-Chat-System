@@ -5,6 +5,7 @@ import project.insa.idchatsystem.Message;
 import project.insa.idchatsystem.Observers.Conversations.ConversationObservable;
 import project.insa.idchatsystem.Observers.Conversations.ConversationObserver;
 import project.insa.idchatsystem.User.distanciel.User;
+import project.insa.idchatsystem.database.MessageDatabase;
 
 import java.util.ArrayList;
 
@@ -53,7 +54,10 @@ public abstract class Conversation implements ConversationObservable, Runnable {
         // Notify the handler that a message has been received and must be treated
         this.notifyObserversReceivedMessage(newMessage);
     }
-    public abstract void loadConversation();
+    protected abstract void loadConversation();
+    protected void storeMessage(Message message) {
+        MessageDatabase.getInstance().storeMessage(message);
+    }
     /**
      * Method making the conversation to close itself
      *
@@ -61,7 +65,6 @@ public abstract class Conversation implements ConversationObservable, Runnable {
     public void close() {
         this.isOpen = false;
     }
-    protected void storeMessage(Message message) {this.history.add(message);}
     public abstract void send(Message message,User corresp);
 
     /* CONVERSATION OBSERVER METHODS */
@@ -85,6 +88,12 @@ public abstract class Conversation implements ConversationObservable, Runnable {
     public void notifyObserversReceivedMessage(Message receivedMessage) {
         if(this.conversationHandlerObserver != null) {
             this.conversationHandlerObserver.newMessageReceived(receivedMessage, this.isOpen);
+        }
+    }
+    @Override
+    public void notifyObserversRetrievedMessages(ArrayList<Message> retrievedMessages) {
+        if(this.conversationHandlerObserver != null) {
+            this.conversationHandlerObserver.messagesRetrieved(retrievedMessages);
         }
     }
     //GETTERS

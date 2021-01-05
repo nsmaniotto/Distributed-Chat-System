@@ -46,16 +46,6 @@ public class FacadeConversationHandler implements LocalConversationHandlerObserv
         else
             this.distantHandler.open(correspondent);
     }
-    public ArrayList<Message> setCurrentConversation(User user) {
-        if(user.isLocal_user()){
-            this.distantHandler.noCurrentConversation();
-            return this.localHandler.setCurrentConversation(user);
-        }
-        else {
-            this.localHandler.noCurrentConversation();
-            return this.distantHandler.setCurrentConversation(user);
-        }
-    }
     public void addKnownUser(User newUser) {
         if(newUser.isLocal_user())
             this.localHandler.addKnownUser(newUser);
@@ -84,6 +74,11 @@ public class FacadeConversationHandler implements LocalConversationHandlerObserv
     public void listenerPortChosen(int port) {
         this.portHandlerLocal = port;
         this.notifyListenerPortNegociated();
+    }
+
+    @Override
+    public void messagesRetrieved(ArrayList<Message> retrievedMessages) {
+        this.observers.forEach(obs -> obs.messagesRetrieved(retrievedMessages));
     }
 
     @Override
