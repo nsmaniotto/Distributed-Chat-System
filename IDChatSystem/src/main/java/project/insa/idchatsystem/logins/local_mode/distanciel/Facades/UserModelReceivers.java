@@ -1,6 +1,6 @@
 package project.insa.idchatsystem.logins.local_mode.distanciel.Facades;
 
-import project.insa.idchatsystem.Observers.logins.UserModelReceiverObserver;
+import project.insa.idchatsystem.Observers.logins.Observers.UserModelReceiverObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 import project.insa.idchatsystem.logins.local_mode.distanciel.Local.LocalUserModelReceiver;
 import project.insa.idchatsystem.logins.local_mode.distanciel.UserModel;

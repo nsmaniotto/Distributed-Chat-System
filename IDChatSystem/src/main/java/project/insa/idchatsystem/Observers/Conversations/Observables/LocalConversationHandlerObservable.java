@@ -1,4 +1,6 @@
-package project.insa.idchatsystem.Observers.Conversations;
+package project.insa.idchatsystem.Observers.Conversations.Observables;
+
+import project.insa.idchatsystem.Observers.Conversations.Observers.LocalConversationHandlerObserver;
 
 public interface LocalConversationHandlerObservable {
     public void notifyListenerPortNegociated();

@@ -1,8 +1,8 @@
 package project.insa.idchatsystem.logins;
 
 import project.insa.idchatsystem.Exceptions.Uninitialized;
-import project.insa.idchatsystem.Observers.logins.ObservableUserModel;
-import project.insa.idchatsystem.Observers.logins.UsersStatusObserver;
+import project.insa.idchatsystem.Observers.logins.Observables.ObservableUserModel;
+import project.insa.idchatsystem.Observers.logins.Observers.UsersStatusObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 
 import java.util.ArrayList;

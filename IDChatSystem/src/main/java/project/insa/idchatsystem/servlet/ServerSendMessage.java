@@ -32,6 +32,7 @@ public class ServerSendMessage {
                             message)));
                     out.flush();
                     out.close();
+                    System.out.printf("MESSAGE SENT TO SERVER\n");
                 } else {
                     System.out.println("GET request not worked");
                 }

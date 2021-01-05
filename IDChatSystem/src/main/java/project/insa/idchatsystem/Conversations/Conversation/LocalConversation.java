@@ -1,11 +1,9 @@
 
 package project.insa.idchatsystem.Conversations.Conversation;
 
-import project.insa.idchatsystem.Conversations.Conversation.Conversation;
 import project.insa.idchatsystem.Data;
 import project.insa.idchatsystem.Exceptions.Uninitialized;
 import project.insa.idchatsystem.Message;
-import project.insa.idchatsystem.Observers.Conversations.ConversationObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 
 import java.io.BufferedReader;

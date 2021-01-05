@@ -1,10 +1,9 @@
 package project.insa.idchatsystem.servlet;
 
-import project.insa.idchatsystem.Exceptions.Uninitialized;
-import project.insa.idchatsystem.Observers.Server.ServerControllerObservable;
-import project.insa.idchatsystem.Observers.Server.ServerConvControllerObserver;
-import project.insa.idchatsystem.Observers.Server.ServerLoginControllerObserver;
-import project.insa.idchatsystem.Observers.Server.ServerIncomingMessagesObserver;
+import project.insa.idchatsystem.Observers.Server.Observables.ServerControllerObservable;
+import project.insa.idchatsystem.Observers.Server.Observers.ServerConvControllerObserver;
+import project.insa.idchatsystem.Observers.Server.Observers.ServerLoginControllerObserver;
+import project.insa.idchatsystem.Observers.Server.Observers.ServerIncomingMessagesObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 
 import java.util.regex.Matcher;
@@ -30,6 +29,7 @@ public class ServerController implements ServerIncomingMessagesObserver, ServerC
         return ServerController.INSTANCE;
     }
     public void subscribe() {
+        System.out.printf("SUBSCRIBE MESSAGE sent\n");
         sendMessages.sendGet(String.format("subscribe"),null);
     }
     public void publish(String state) {
@@ -40,6 +40,7 @@ public class ServerController implements ServerIncomingMessagesObserver, ServerC
     }
     @Override
     public void notifyNewMessage(String message) {
+        System.out.printf("NEW SERVER MESSAGE\n");
         //Analyse message
         //check if login message
         Pattern pattern = Pattern.compile("login.*");

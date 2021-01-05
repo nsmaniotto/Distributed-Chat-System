@@ -1,6 +1,6 @@
 package project.insa.idchatsystem.logins.local_mode.distanciel.Local;
 
-import project.insa.idchatsystem.Observers.logins.UserModelReceiverObserver;
+import project.insa.idchatsystem.Observers.logins.Observers.UserModelReceiverObserver;
 
 import java.io.IOException;
 import java.net.*;

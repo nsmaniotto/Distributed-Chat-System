@@ -1,11 +1,14 @@
-package project.insa.idchatsystem.Observers.Conversations;
+
+package project.insa.idchatsystem.Observers.Conversations.Observers;
 
 import java.util.ArrayList;
 import project.insa.idchatsystem.Message;
 
-public interface ConversationObserver {
+public interface ConversationHandlerObserver {
     public void newMessageReceived(Message receivedMessage, boolean isCurrentConversation);
     public void newMessageSent(Message sentMessage);
-    
+
+    public void listenerPortChosen(int port);
+
     public void messagesRetrieved(ArrayList<Message> retrievedMessages);
 }

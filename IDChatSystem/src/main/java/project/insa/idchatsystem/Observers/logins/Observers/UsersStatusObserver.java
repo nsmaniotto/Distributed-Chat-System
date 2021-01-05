@@ -1,5 +1,5 @@
 
-package project.insa.idchatsystem.Observers.logins;
+package project.insa.idchatsystem.Observers.logins.Observers;
 
 import project.insa.idchatsystem.User.distanciel.User;
 

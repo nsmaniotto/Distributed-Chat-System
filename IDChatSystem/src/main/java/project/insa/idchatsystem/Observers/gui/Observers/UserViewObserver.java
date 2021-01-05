@@ -1,4 +1,4 @@
-package project.insa.idchatsystem.Observers.gui;
+package project.insa.idchatsystem.Observers.gui.Observers;
 
 import project.insa.idchatsystem.gui.UserView;
 

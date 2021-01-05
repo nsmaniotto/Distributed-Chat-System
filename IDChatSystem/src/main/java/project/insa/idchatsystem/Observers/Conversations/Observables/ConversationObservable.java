@@ -1,8 +1,9 @@
 
-package project.insa.idchatsystem.Observers.Conversations;
+package project.insa.idchatsystem.Observers.Conversations.Observables;
 
 import java.util.ArrayList;
 import project.insa.idchatsystem.Message;
+import project.insa.idchatsystem.Observers.Conversations.Observers.ConversationObserver;
 
 public interface ConversationObservable {
     public void addConversationObserver(ConversationObserver observer);

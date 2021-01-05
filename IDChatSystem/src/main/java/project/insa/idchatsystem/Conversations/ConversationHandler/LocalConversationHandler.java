@@ -3,9 +3,8 @@ package project.insa.idchatsystem.Conversations.ConversationHandler;
 
 import project.insa.idchatsystem.Conversations.Conversation.LocalConversation;
 import project.insa.idchatsystem.Exceptions.NoPortAvailable;
-import project.insa.idchatsystem.Observers.Conversations.LocalConversationHandlerObservable;
-import project.insa.idchatsystem.Observers.Conversations.ConversationHandlerObserver;
-import project.insa.idchatsystem.Observers.Conversations.LocalConversationHandlerObserver;
+import project.insa.idchatsystem.Observers.Conversations.Observables.LocalConversationHandlerObservable;
+import project.insa.idchatsystem.Observers.Conversations.Observers.LocalConversationHandlerObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 import project.insa.idchatsystem.tools.TestPort;
 
@@ -23,7 +22,7 @@ import java.util.HashMap;
  *
  * @author nsmaniotto
  */
-public class LocalConversationHandler extends AbstractLocalConversationHandler implements LocalConversationHandlerObservable,Runnable {
+public class LocalConversationHandler extends AbstractConversationHandler implements LocalConversationHandlerObservable,Runnable {
     private static LocalConversationHandler INSTANCE;
     private ArrayList<LocalConversation> conversations;
     private LocalConversation currentConversation = null;
@@ -33,7 +32,6 @@ public class LocalConversationHandler extends AbstractLocalConversationHandler i
     private ServerSocket handlerSocket; // Acts as a server listening for incoming connection requests
     private final int listenerPort;
     private final int destinationPort;
-    private ArrayList<LocalConversationHandlerObserver> observers;
     private int MINLISTENERPORT = 1500;
     private int MAXCONVERSATIONSPORTS = 100;
     
@@ -49,7 +47,9 @@ public class LocalConversationHandler extends AbstractLocalConversationHandler i
         }
 
         this.listenerPort = port;
-        this.notifyListenerPortNegociated();
+//        if(this.observers != null)
+//            this.notifyListenerPortNegociated();
+
         this.destinationPort = -1;
     }
      
@@ -155,7 +155,10 @@ public class LocalConversationHandler extends AbstractLocalConversationHandler i
     //OBSERVERS
     @Override
     public void notifyListenerPortNegociated() {
-        this.observers.forEach(obs -> obs.listenerPortChosen(this.listenerPort));
+        this.observers.forEach(obs -> {
+            if(obs instanceof LocalConversationHandlerObserver)
+                ((LocalConversationHandlerObserver)(obs)).listenerPortChosen(this.listenerPort);
+        });
     }
     @Override
     public void addObserver(LocalConversationHandlerObserver observer) {

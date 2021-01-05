@@ -1,13 +1,11 @@
 
 package project.insa.idchatsystem;
 
-import project.insa.idchatsystem.Conversations.ConversationHandler.LocalConversationHandler;
 import project.insa.idchatsystem.Conversations.FacadeConversationHandler;
 import project.insa.idchatsystem.Exceptions.NoPortAvailable;
-import project.insa.idchatsystem.Observers.Conversations.ConversationHandlerObserver;
-import project.insa.idchatsystem.Observers.Conversations.FacadeConversationHandlerObserver;
-import project.insa.idchatsystem.Observers.logins.UsersStatusObserver;
-import project.insa.idchatsystem.Observers.gui.ViewObserver;
+import project.insa.idchatsystem.Observers.Conversations.Observers.FacadeConversationHandlerObserver;
+import project.insa.idchatsystem.Observers.logins.Observers.UsersStatusObserver;
+import project.insa.idchatsystem.Observers.gui.Observers.ViewObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 import project.insa.idchatsystem.gui.UserView;
 import project.insa.idchatsystem.gui.View;
@@ -27,7 +25,7 @@ public class ClientController implements FacadeConversationHandlerObserver, User
     public ClientController(int id,
                             int loginReceiverPort, int loginEmiterPort, ArrayList<Integer> loginBroadcast) throws NoPortAvailable {
         // Conversation handler init
-        this.conversationHandler = FacadeConversationHandler.getInstance(loginBroadcast != null);
+        this.conversationHandler = FacadeConversationHandler.getInstance(loginBroadcast != null,this);
         this.conversationHandler.addObserver(this);
 
         // View init

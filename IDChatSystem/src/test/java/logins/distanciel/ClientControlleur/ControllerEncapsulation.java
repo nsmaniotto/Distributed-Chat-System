@@ -1,12 +1,10 @@
 package logins.distanciel.ClientControlleur;
 
-import project.insa.idchatsystem.Conversations.ConversationHandler.LocalConversationHandler;
 import project.insa.idchatsystem.Conversations.FacadeConversationHandler;
 import project.insa.idchatsystem.Exceptions.NoPortAvailable;
 import project.insa.idchatsystem.Message;
-import project.insa.idchatsystem.Observers.Conversations.ConversationHandlerObserver;
-import project.insa.idchatsystem.Observers.Conversations.FacadeConversationHandlerObserver;
-import project.insa.idchatsystem.Observers.logins.UsersStatusObserver;
+import project.insa.idchatsystem.Observers.Conversations.Observers.FacadeConversationHandlerObserver;
+import project.insa.idchatsystem.Observers.logins.Observers.UsersStatusObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 import project.insa.idchatsystem.logins.local_mode.distanciel.UserModel;
 
@@ -21,7 +19,8 @@ public class ControllerEncapsulation implements FacadeConversationHandlerObserve
                                    int usermodel_receiver_port, int usermodel_emitter_port, ArrayList<Integer> others) throws NoPortAvailable {
         this.userModel = new UserModel(id,usermodel_receiver_port,usermodel_emitter_port,others);
         //TODO : Remplacer par la facade
-        this.conversationHandler = FacadeConversationHandler.getInstance();
+        this.conversationHandler = FacadeConversationHandler.getInstance(true,this);
+        this.conversationHandler.addObserver(this);
         this.conversationHandler.addObserver(this);
         this.userModel.addUserModelObserver(this);
     }

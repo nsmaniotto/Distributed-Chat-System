@@ -1,4 +1,6 @@
-package project.insa.idchatsystem.Observers.Conversations;
+package project.insa.idchatsystem.Observers.Conversations.Observables;
+
+import project.insa.idchatsystem.Observers.Conversations.Observers.FacadeConversationHandlerObserver;
 
 public interface FacadeConversationHandlerObservable {
     public void notifyListenerPortNegociated();

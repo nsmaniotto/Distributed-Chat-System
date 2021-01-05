@@ -5,7 +5,10 @@ import project.insa.idchatsystem.Conversations.ConversationHandler.DistantConver
 import project.insa.idchatsystem.Conversations.ConversationHandler.LocalConversationHandler;
 import project.insa.idchatsystem.Exceptions.NoPortAvailable;
 import project.insa.idchatsystem.Message;
-import project.insa.idchatsystem.Observers.Conversations.*;
+import project.insa.idchatsystem.Observers.Conversations.Observables.FacadeConversationHandlerObservable;
+import project.insa.idchatsystem.Observers.Conversations.Observers.ConversationHandlerObserver;
+import project.insa.idchatsystem.Observers.Conversations.Observers.FacadeConversationHandlerObserver;
+import project.insa.idchatsystem.Observers.Conversations.Observers.LocalConversationHandlerObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 
 import java.util.ArrayList;
@@ -18,11 +21,14 @@ public class FacadeConversationHandler implements LocalConversationHandlerObserv
     private int portHandlerLocal;
     private ArrayList<FacadeConversationHandlerObserver> observers;
     private boolean local;
-    private FacadeConversationHandler(boolean local) throws NoPortAvailable {
+    private FacadeConversationHandler(boolean local,FacadeConversationHandlerObserver obs) throws NoPortAvailable {
         this.local = local;
+        this.observers = new ArrayList<>();
+        this.addObserver(obs);
         this.distantHandler = DistantConversationHandler.getInstance();
         if(local) {
             this.localHandler = LocalConversationHandler.getInstance();
+            this.localHandler.addObserver(this);
             new Thread(this.localHandler).start();
         }
     }
@@ -31,9 +37,9 @@ public class FacadeConversationHandler implements LocalConversationHandlerObserv
      *
      * @return INSTANCE : FacadeConversationHandler - single instance of this class
      */
-    public static FacadeConversationHandler getInstance(boolean local) throws NoPortAvailable {
+    public static FacadeConversationHandler getInstance(boolean local,FacadeConversationHandlerObserver obs) throws NoPortAvailable {
         if(FacadeConversationHandler.INSTANCE == null){
-            FacadeConversationHandler.INSTANCE = new FacadeConversationHandler(local);
+            FacadeConversationHandler.INSTANCE = new FacadeConversationHandler(local,obs);
         }
         return FacadeConversationHandler.INSTANCE;
     }
@@ -92,6 +98,7 @@ public class FacadeConversationHandler implements LocalConversationHandlerObserv
 
     @Override
     public void addObserver(FacadeConversationHandlerObserver observer) {
+        System.out.printf("OBSERVER CALLED\n");
         this.observers.add(observer);
         this.notifyListenerPortNegociated();
     }

@@ -2,10 +2,10 @@ package project.insa.idchatsystem.Conversations.ConversationHandler;
 
 import project.insa.idchatsystem.Conversations.Conversation.Conversation;
 import project.insa.idchatsystem.Message;
-import project.insa.idchatsystem.Observers.Conversations.ConversationHandlerObservable;
-import project.insa.idchatsystem.Observers.Conversations.LocalConversationHandlerObservable;
-import project.insa.idchatsystem.Observers.Conversations.ConversationHandlerObserver;
-import project.insa.idchatsystem.Observers.Conversations.ConversationObserver;
+import project.insa.idchatsystem.Observers.Conversations.Observables.ConversationHandlerObservable;
+import project.insa.idchatsystem.Observers.Conversations.Observers.ConversationHandlerObserver;
+import project.insa.idchatsystem.Observers.Conversations.Observers.ConversationObserver;
+import project.insa.idchatsystem.Observers.Conversations.Observers.LocalConversationHandlerObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 
 import java.util.ArrayList;
@@ -14,13 +14,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
-public abstract class AbstractLocalConversationHandler implements ConversationObserver, ConversationHandlerObservable {
+public abstract class AbstractConversationHandler implements ConversationObserver, ConversationHandlerObservable {
     protected ArrayList<Conversation> conversations;
     protected Conversation currentConversation = null;
     protected HashMap<Integer, User> users; // Copy of UserModel's hashmap to identify every user
     protected ArrayList<ConversationHandlerObserver> observers;
     protected final ExecutorService conversationThreadPool;
-    public AbstractLocalConversationHandler(){
+    public AbstractConversationHandler(){
         this.observers = new ArrayList<>();
         this.conversations = new ArrayList<>();
         this.users = new HashMap<>(); // Empty for now
@@ -144,6 +144,15 @@ public abstract class AbstractLocalConversationHandler implements ConversationOb
 
     public void messagesRetrieved(ArrayList<Message> retrievedMessages) {
         this.notifyObserversRetrievedMessages(retrievedMessages);
+    }
+    @Override
+    public void addObserver(ConversationHandlerObserver observer) {
+        this.observers.add(observer);
+    }
+
+    @Override
+    public void deleteObserver(ConversationHandlerObserver obs) {
+        this.observers.remove(obs);
     }
 
 }

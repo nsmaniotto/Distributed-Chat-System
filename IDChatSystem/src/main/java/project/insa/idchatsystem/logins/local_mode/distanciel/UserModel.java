@@ -1,9 +1,9 @@
 package project.insa.idchatsystem.logins.local_mode.distanciel;
 
 import project.insa.idchatsystem.Exceptions.Uninitialized;
-import project.insa.idchatsystem.Observers.Server.ServerLoginControllerObserver;
-import project.insa.idchatsystem.Observers.logins.UserModelEmittersObserver;
-import project.insa.idchatsystem.Observers.logins.UsersStatusObserver;
+import project.insa.idchatsystem.Observers.Server.Observers.ServerLoginControllerObserver;
+import project.insa.idchatsystem.Observers.logins.Observers.UserModelEmittersObserver;
+import project.insa.idchatsystem.Observers.logins.Observers.UsersStatusObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 import project.insa.idchatsystem.logins.AbstractUserModel;
 import project.insa.idchatsystem.logins.local_mode.distanciel.Facades.UserModelEmitters;

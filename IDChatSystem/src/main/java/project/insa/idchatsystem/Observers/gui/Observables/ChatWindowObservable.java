@@ -1,8 +1,8 @@
 
-package project.insa.idchatsystem.Observers.gui;
+package project.insa.idchatsystem.Observers.gui.Observables;
 
 import project.insa.idchatsystem.Message;
-import project.insa.idchatsystem.gui.UserView;
+import project.insa.idchatsystem.Observers.gui.Observers.ChatWindowObserver;
 
 public interface ChatWindowObservable {
     public void addChatWindowObserver(ChatWindowObserver observer);

@@ -1,6 +1,6 @@
 package project.insa.idchatsystem.logins.local_mode.distanciel.Facades;
 
-import project.insa.idchatsystem.Observers.logins.UserModelEmittersObserver;
+import project.insa.idchatsystem.Observers.logins.Observers.UserModelEmittersObserver;
 import project.insa.idchatsystem.logins.local_mode.distanciel.Local.LocalUserModelEmitter;
 
 import java.util.ArrayList;

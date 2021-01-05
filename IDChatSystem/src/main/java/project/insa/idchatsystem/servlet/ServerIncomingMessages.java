@@ -1,7 +1,7 @@
 package project.insa.idchatsystem.servlet;
 
-import project.insa.idchatsystem.Observers.Server.ServerIncomingMessagesObservable;
-import project.insa.idchatsystem.Observers.Server.ServerIncomingMessagesObserver;
+import project.insa.idchatsystem.Observers.Server.Observables.ServerIncomingMessagesObservable;
+import project.insa.idchatsystem.Observers.Server.Observers.ServerIncomingMessagesObserver;
 
 import java.io.BufferedReader;
 import java.io.IOException;

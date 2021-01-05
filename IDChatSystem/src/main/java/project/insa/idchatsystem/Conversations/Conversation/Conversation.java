@@ -2,8 +2,8 @@ package project.insa.idchatsystem.Conversations.Conversation;
 
 import project.insa.idchatsystem.Exceptions.Uninitialized;
 import project.insa.idchatsystem.Message;
-import project.insa.idchatsystem.Observers.Conversations.ConversationObservable;
-import project.insa.idchatsystem.Observers.Conversations.ConversationObserver;
+import project.insa.idchatsystem.Observers.Conversations.Observables.ConversationObservable;
+import project.insa.idchatsystem.Observers.Conversations.Observers.ConversationObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 import project.insa.idchatsystem.database.MessageDatabase;
 

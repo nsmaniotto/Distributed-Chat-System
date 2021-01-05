@@ -1,4 +1,4 @@
-package project.insa.idchatsystem.Observers.Conversations;
+package project.insa.idchatsystem.Observers.Conversations.Observers;
 
 import project.insa.idchatsystem.Message;
 

@@ -1,4 +1,4 @@
-package project.insa.idchatsystem.Observers;
+package project.insa.idchatsystem.Observers.gui.Observables;
 
 import project.insa.idchatsystem.User.distanciel.User;
 

@@ -2,9 +2,9 @@ package project.insa.idchatsystem.gui;
 
 import project.insa.idchatsystem.Exceptions.Uninitialized;
 import project.insa.idchatsystem.Message;
-import project.insa.idchatsystem.Observers.gui.ChatWindowObservable;
-import project.insa.idchatsystem.Observers.gui.ChatWindowObserver;
-import project.insa.idchatsystem.Observers.gui.UserViewObserver;
+import project.insa.idchatsystem.Observers.gui.Observables.ChatWindowObservable;
+import project.insa.idchatsystem.Observers.gui.Observers.ChatWindowObserver;
+import project.insa.idchatsystem.Observers.gui.Observers.UserViewObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 
 import javax.swing.*;
@@ -12,7 +12,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
