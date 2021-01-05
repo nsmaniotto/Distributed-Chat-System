@@ -38,7 +38,7 @@ public class LocalUserModelReceiver implements Runnable {
                 socket.receive(packet);
                 String received = new String(packet.getData(), 0, packet.getLength());
                 if(!received.equals("")) {
-                    System.out.printf(".(LocalUserModelReceiver.java:40) : RECEIVED : %s\n",received);
+//                    System.out.printf(".(LocalUserModelReceiver.java:40) : RECEIVED : %s\n",received);
                     this.model.notifyNewMsg(received);
                 }
 

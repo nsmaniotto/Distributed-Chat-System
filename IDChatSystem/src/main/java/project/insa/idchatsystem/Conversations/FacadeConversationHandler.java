@@ -26,8 +26,10 @@ public class FacadeConversationHandler implements LocalConversationHandlerObserv
         this.observers = new ArrayList<>();
         this.addObserver(obs);
         this.distantHandler = DistantConversationHandler.getInstance();
+        this.distantHandler.addObserver(this);
         if(local) {
             this.localHandler = LocalConversationHandler.getInstance();
+            System.out.printf(".(FacadeConversationHandler.java:32) - FacadeConversationHandler : construction LocalConversationHandler\n");
             this.localHandler.addObserver(this);
             new Thread(this.localHandler).start();
         }
@@ -78,6 +80,7 @@ public class FacadeConversationHandler implements LocalConversationHandlerObserv
 
     @Override
     public void newMessageSent(Message sentMessage) {
+        System.out.printf(".(FacadeConversationHandler.java:81) - newMessageSent\n");
         this.observers.forEach( observer -> observer.newMessageSent(sentMessage) );
     }
     @Override

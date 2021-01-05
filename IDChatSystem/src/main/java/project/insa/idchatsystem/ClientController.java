@@ -103,7 +103,7 @@ public class ClientController implements FacadeConversationHandlerObserver, User
 
     @Override
     public void newMessageSending(Message sendingMessage) {
-        System.out.printf("CONTROLLEUR newMessageSending\n");
+        System.out.printf(".(ClientController.java:106) - newMessageSending : currentConv : %s\n",this.conversationHandler.getCurrentConversation());
         if(this.conversationHandler.getCurrentConversation() != null) {
             this.conversationHandler.getCurrentConversation().send(sendingMessage,this.conversationHandler.getCurrentConversation().getCorrespondent());
         }
@@ -111,7 +111,7 @@ public class ClientController implements FacadeConversationHandlerObserver, User
 
     @Override
     public void userSelected(UserView userview) {
-        System.out.printf("CONTROLLEUR : userSelected\n");
+        System.out.printf(".(ClientController.java:114) - userSelected\n");
         this.conversationHandler.open(userview.getUser());
     }
 }

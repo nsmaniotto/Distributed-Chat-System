@@ -95,7 +95,7 @@ public class LocalConversation extends Conversation implements Runnable {
      */
     @Override
     public void send(Message message, User corresp) {
-        System.out.printf("-------------------------------------------------------------SENDED : %s\n",message);
+        System.out.printf(".(LocalConversation.java:98) - send : message %s\n",message);
         try {
             message.setSource(User.getCurrentUser());
             message.setDestination(this.correspondent);
@@ -118,8 +118,8 @@ public class LocalConversation extends Conversation implements Runnable {
         outputStreamLink.println(message.toStream());
         
         // Store the message in the local database
-        this.storeMessage(message);
-        
+        this.storeMessage(message);//ORIGINE DU BUG : fait planter le thread
+        System.out.printf(".(LocalConversation.java:122) - send : BUG????\n");
         // Notify the handler that a new message has been sent
         this.notifyObserversSentMessage(message);
     }

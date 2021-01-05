@@ -27,13 +27,13 @@ public abstract class AbstractUserModel implements ObservableUserModel {
         return true;
     }
     public void addOnlineUser(User user) {
-        System.out.printf("AbstractUserModel : ONLINE USER %s\n",user);
+//        System.out.printf("AbstractUserModel : ONLINE USER %s\n",user);
         boolean new_user = this.users.containsKey(user.get_id());
         this.users.put(user.get_id(),user);//Replace automatically the previous version if already in the HashMap
         this.notifyNewUserObservers(user);
     }
     public void removeOnlineUser(int id) {
-        System.out.printf("AbstractUserModel : DISCONNECTED USER %d\n",id);
+//        System.out.printf("AbstractUserModel : DISCONNECTED USER %d\n",id);
         User removed_user = this.users.remove(id);
         if(removed_user == null) {
             System.out.printf("%d was not connected%n",id);

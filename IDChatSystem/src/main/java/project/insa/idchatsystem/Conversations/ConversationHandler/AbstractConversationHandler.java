@@ -126,6 +126,7 @@ public abstract class AbstractConversationHandler implements ConversationObserve
 
     @Override
     public void newMessageSent(Message sentMessage) {
+        System.out.printf(".(AbstractConversationHandler.java:129) - newMessageSent\n");
         this.observers.forEach( observer -> observer.newMessageSent(sentMessage) );
     }
     //GETTERS
@@ -135,7 +136,7 @@ public abstract class AbstractConversationHandler implements ConversationObserve
     }
     /* GETTERS/SETTERS */
     public Conversation getCurrentConversation() {
-        System.out.printf("-------------------getCurrentConversation %s\n",this.currentConversation);
+        System.out.printf(".(AbstractConversationHandler.java:138) - getCurrentConversation : %s\n",this.currentConversation);
         return this.currentConversation;
     }
     public void notifyObserversRetrievedMessages(ArrayList<Message> retrievedMessages) {
@@ -147,6 +148,7 @@ public abstract class AbstractConversationHandler implements ConversationObserve
     }
     @Override
     public void addObserver(ConversationHandlerObserver observer) {
+        System.out.printf(".(AbstractConversationHandler.java:151) - addObserver\n");
         this.observers.add(observer);
     }
 

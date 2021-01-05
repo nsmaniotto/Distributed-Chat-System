@@ -389,6 +389,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
     }
     @Override
     public void startCommunicationWith(UserView userview) {
+        System.out.printf(".(ChatWindow.java:392) - startCommunicationWith : this.userSelected(userview) : %b\n",this.userSelected(userview));
         if(this.userSelected(userview))//Transmit to view if user found
             this.chatWindowObserver.userSelected(userview);
     }
@@ -517,7 +518,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
 
             // Notify the view that there is a new message to be sent
             this.notifyObserverSendingMessage(newMessage);
-            System.out.printf("CHATWINDOW NOTIFY SEND\n");
+            System.out.printf(".(ChatWindow.java:520) : NOTIFY SEND\n");
         }
     }
     

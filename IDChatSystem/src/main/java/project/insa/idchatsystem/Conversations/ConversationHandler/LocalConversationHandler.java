@@ -25,7 +25,6 @@ import java.util.HashMap;
 public class LocalConversationHandler extends AbstractConversationHandler implements LocalConversationHandlerObservable,Runnable {
     private static LocalConversationHandler INSTANCE;
     private ArrayList<LocalConversation> conversations;
-    private LocalConversation currentConversation = null;
     
     private HashMap<Integer,User> users; // Copy of UserModel's hashmap to identify every user
 
@@ -96,6 +95,7 @@ public class LocalConversationHandler extends AbstractConversationHandler implem
                         // Instantiate a new conversation with the given socket
                         //TODO : transmettre en paramètres les observeurs à notifier
                         newConversation = new LocalConversation(correspondent, conversationSocket);
+                        newConversation.addConversationObserver(this);
                         
                         this.addConversation(newConversation);
                     } else {
@@ -120,12 +120,14 @@ public class LocalConversationHandler extends AbstractConversationHandler implem
      * @param correspondent : User - reference of the correspondent
      */
     public void open(User correspondent) {
+        System.out.printf(".(LocalConversationHandler.java:123) - open : %s\n",correspondent);
         // Check if we aleady have a conversation instance with this correspondent
         LocalConversation conversation = (LocalConversation)this.findConversationByCorrespondent(correspondent);
         
         if(conversation == null) {
             // --> We want to initiate the communication with our correspondent
             // Instantiate a socket that will send a request to the correspondent ConversationHandler
+            System.out.printf(".(LocalConversationHandler.java:130) - open : Create\n");
             Socket conversationSocket = null;
 
             try {
@@ -142,6 +144,7 @@ public class LocalConversationHandler extends AbstractConversationHandler implem
         }
         
         if(conversation != this.currentConversation) {
+            System.out.printf(".(LocalConversationHandler.java:147) - open : Set current\n");
             // Close the previous conversation
             this.closeCurrentConversation();
 
@@ -162,13 +165,14 @@ public class LocalConversationHandler extends AbstractConversationHandler implem
     }
     @Override
     public void addObserver(LocalConversationHandlerObserver observer) {
-        this.observers.add(observer);
+        System.out.printf(".(LocalConversationHandler.java:168) - addObserver\n");
+        super.addObserver(observer);
         this.notifyListenerPortNegociated();
     }
 
     @Override
     public void deleteObserver(LocalConversationHandlerObserver obs) {
-        this.observers.remove(obs);
+        super.deleteObserver(obs);
     }
 
 }

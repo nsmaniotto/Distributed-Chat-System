@@ -79,7 +79,7 @@ public class View implements Runnable, ChatWindowObserver {
 
     @Override
     public void newMessageSending(Message sendingMessage) {
-
+        System.out.printf(".(View.java:82) : newMessageSending\n");
         this.viewObserver.newMessageSending(sendingMessage);
     }
 
