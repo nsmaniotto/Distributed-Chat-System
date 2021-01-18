@@ -66,6 +66,7 @@ public class ClientController implements FacadeConversationHandlerObserver, User
 
     @Override
     public void newMessageReceived(Message receivedMessage, boolean isCurrentConversation) {
+        System.out.printf(".(ClientController.java:69) - newMessageReceived : \n");
         if(isCurrentConversation) {
             this.view.displayMessage(receivedMessage);
         } else {
@@ -79,6 +80,7 @@ public class ClientController implements FacadeConversationHandlerObserver, User
             Because the message has just been sent, it means the opened conversation's 
             correspondent is the same as the message's destination
         */
+        System.out.printf(".(ClientController.java:82) - newMessageSent : \n");
         this.view.displayMessage(sentMessage);
     }
 
@@ -89,6 +91,7 @@ public class ClientController implements FacadeConversationHandlerObserver, User
 
     @Override
     public void messagesRetrieved(ArrayList<Message> retrievedMessages) {
+        System.out.printf(".(ClientController.java:94) - messagesRetrieved : \n");
         retrievedMessages.forEach( message -> this.view.displayMessage(message) );
     }
     /* GETTERS/SETTERS */

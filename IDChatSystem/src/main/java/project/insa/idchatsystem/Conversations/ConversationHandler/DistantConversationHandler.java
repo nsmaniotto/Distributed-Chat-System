@@ -5,6 +5,9 @@ import project.insa.idchatsystem.Observers.Server.Observers.ServerConvController
 import project.insa.idchatsystem.User.distanciel.User;
 import project.insa.idchatsystem.servlet.ServerController;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class DistantConversationHandler extends AbstractConversationHandler implements ServerConvControllerObserver {
     private static DistantConversationHandler INSTANCE;
     private ServerController server;
@@ -42,5 +45,21 @@ public class DistantConversationHandler extends AbstractConversationHandler impl
     @Override
     public void notifyNewMessage(String message) {
         System.out.printf(".(DistantConversationHandler.java:44) - notifyNewMessage : %s\n",message);
+
+        Pattern pattern_getMessage = Pattern.compile("(?<id>[0-9]+),(?<msg>.*)");
+        Matcher m = pattern_getMessage.matcher(message);
+        String message_extracted = "";
+        int idCorresp = -2;
+        while (m.find()){
+            message_extracted = m.group("msg");
+            idCorresp = Integer.parseInt(m.group("id"));
+            DistantConversation conv = (DistantConversation) this.findConversationByCorrespondent(new User("",idCorresp,""));
+            System.out.printf(".(DistantConversationHandler.java:57) - notifyNewMessage : step1\n");
+            if(conv != null) {
+                System.out.printf(".(DistantConversationHandler.java:59) - notifyNewMessage : step2\n");
+                conv.onReceive(message_extracted);
+            }
+            //System.out.printf("ASKFORUPDATE %s\n", other);
+        }
     }
 }

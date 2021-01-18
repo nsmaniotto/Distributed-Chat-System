@@ -408,6 +408,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
      * @param message 
      */
     public void displayMessage(Message message) {
+        System.out.printf(".(ChatWindow.java:411) - displayMessage : \n");
         //TODO Generate the graphical instance
         JPanel messageInstancePanel = this.generateDisplayedMessage(message);
         
@@ -433,6 +434,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
      * @return corresponding displayed message
      */
     private JPanel generateDisplayedMessage(Message message) {
+        System.out.printf(".(ChatWindow.java:436) - generateDisplayedMessage : \n");
         JPanel messagePanel = new JPanel(new GridBagLayout());
         messagePanel.setBorder(BorderFactory.createEmptyBorder(
                 10, //top
