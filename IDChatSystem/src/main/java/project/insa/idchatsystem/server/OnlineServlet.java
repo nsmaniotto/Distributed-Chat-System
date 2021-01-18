@@ -1,6 +1,3 @@
-
-import project.insa.idchatsystem.User.distanciel.User;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -52,6 +49,7 @@ public class OnlineServlet extends HttpServlet {
             return super.put(key, value);
         }
     }
+
     public HashMapPerso users = new HashMapPerso();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

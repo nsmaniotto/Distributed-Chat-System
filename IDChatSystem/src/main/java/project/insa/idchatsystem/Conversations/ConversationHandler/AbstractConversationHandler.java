@@ -136,7 +136,7 @@ public abstract class AbstractConversationHandler implements ConversationObserve
     }
     /* GETTERS/SETTERS */
     public Conversation getCurrentConversation() {
-        System.out.printf(".(AbstractConversationHandler.java:138) - getCurrentConversation : %s\n",this.currentConversation);
+//        System.out.printf(".(AbstractConversationHandler.java:138) - getCurrentConversation : %s\n",this.currentConversation);
         return this.currentConversation;
     }
     public void notifyObserversRetrievedMessages(ArrayList<Message> retrievedMessages) {

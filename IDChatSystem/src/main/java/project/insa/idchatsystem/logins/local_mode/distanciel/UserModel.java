@@ -22,8 +22,8 @@ public class UserModel extends AbstractUserModel implements ServerLoginControlle
         observers = new ArrayList<>();
         this.emitters = new UserModelEmitters(this,emitter_port,others,others != null);
         this.receivers = new UserModelReceivers(this,receiver_port);
-        this.serverController = ServerController.getInstance();
-        this.serverController.publish("Connected");
+        this.serverController = new ServerController("login");
+        this.serverController.publish("ready");
         this.serverController.addLoginListener(this);
         this.setUsername(String.format("--user%d",id));
         new Thread(this.emitters).start();
@@ -42,7 +42,7 @@ public class UserModel extends AbstractUserModel implements ServerLoginControlle
     public boolean setUsername(String username) {
         this.emitters.askUpdate();
         try {
-            this.serverController.sendMessage(String.format("login,update,%d",User.get_current_id()),null);
+            this.serverController.sendMessage(String.format("update,%d",User.get_current_id()),null);
         } catch (Uninitialized uninitialized) {
             uninitialized.printStackTrace();
         }
@@ -84,7 +84,8 @@ public class UserModel extends AbstractUserModel implements ServerLoginControlle
     public void diffuseNewUsername(){
         String response = User.current_user_transfer_string();
         this.emitters.diffuseNewUsername(response);
-        this.serverController.sendMessage(String.format("login,%s",response),null);
+        this.serverController.sendMessage(String.format("%s",response),null);
+        System.out.printf(".(UserModel.java:88) - diffuseNewUsername : %s\n",response);
     }
 
     @Override
@@ -137,6 +138,6 @@ public class UserModel extends AbstractUserModel implements ServerLoginControlle
 
     @Override
     public void newMsgToSend(String message) {
-        this.serverController.sendMessage(String.format("login,%s",message),null);
+        this.serverController.sendMessage(String.format("%s",message),null);
     }
 }

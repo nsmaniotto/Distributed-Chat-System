@@ -10,34 +10,23 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class ServerIncomingMessages implements Runnable, ServerIncomingMessagesObservable {
-    private final String URLServlet;
     private ServerIncomingMessagesObserver observer;
     public ServerIncomingMessages(){
-        URLServlet = "";
     }
     public void run() {
-        URL obj;
-        try {
-            obj = new URL(URLServlet);
-            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-            con.setRequestMethod("GET");
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(con.getInputStream()));
-            while (true) {
-                String input = in.readLine();
-                if(input != null)
-                    this.notifyNewMessage(input);
+        while(true) {
+            this.askForUpdate();
+            try {
                 Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
         }
-
     }
 
     @Override
-    public void notifyNewMessage(String message) {
-        observer.notifyNewMessage(message);
+    public void askForUpdate() {
+        observer.askForUpdate();
     }
 
     @Override

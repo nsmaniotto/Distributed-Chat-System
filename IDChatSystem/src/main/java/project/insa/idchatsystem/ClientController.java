@@ -24,6 +24,8 @@ public class ClientController implements FacadeConversationHandlerObserver, User
     
     public ClientController(int id,
                             int loginReceiverPort, int loginEmiterPort, ArrayList<Integer> loginBroadcast) throws NoPortAvailable {
+        System.out.printf(".(ClientController.java:27) - ClientController : id : %d\n",id);
+        User.init_current_user(id,loginBroadcast != null);
         // Conversation handler init
         this.conversationHandler = FacadeConversationHandler.getInstance(loginBroadcast != null,this);
         this.conversationHandler.addObserver(this);

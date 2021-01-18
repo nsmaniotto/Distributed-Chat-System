@@ -1,14 +1,16 @@
 package project.insa.idchatsystem.Conversations.ConversationHandler;
 
 import project.insa.idchatsystem.Conversations.Conversation.DistantConversation;
+import project.insa.idchatsystem.Observers.Server.Observers.ServerConvControllerObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 import project.insa.idchatsystem.servlet.ServerController;
 
-public class DistantConversationHandler extends AbstractConversationHandler {
+public class DistantConversationHandler extends AbstractConversationHandler implements ServerConvControllerObserver {
     private static DistantConversationHandler INSTANCE;
     private ServerController server;
     private DistantConversationHandler(){
-        this.server = ServerController.getInstance();
+        this.server = new ServerController("conv");
+        this.server.addConvListener(this);
     }
     public static DistantConversationHandler getInstance() {
         if(DistantConversationHandler.INSTANCE == null){
@@ -35,5 +37,10 @@ public class DistantConversationHandler extends AbstractConversationHandler {
             // Open the new current conversation
             this.currentConversation.open();
         }
+    }
+
+    @Override
+    public void notifyNewMessage(String message) {
+        System.out.printf(".(DistantConversationHandler.java:44) - notifyNewMessage : %s\n",message);
     }
 }

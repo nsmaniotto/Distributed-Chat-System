@@ -9,7 +9,7 @@ public class User {
 
     private String username;
 
-    private int id = -1;
+    private int id = -3;
 
     private final String ipAddress;
     private boolean local_user;
@@ -31,6 +31,7 @@ public class User {
 
     public static void init_current_user(int id,boolean local) {
         User.current_id = id;
+        User.current_username = String.format("--user%d",id);
         User.current_ipAddress = User.calculate_current_ip();
         User.current_local_user = local;
     }

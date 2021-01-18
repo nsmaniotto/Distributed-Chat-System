@@ -47,10 +47,14 @@ public class FacadeConversationHandler implements LocalConversationHandlerObserv
     }
     /* GETTERS/SETTERS */
     public Conversation getCurrentConversation() {
-        if(this.localHandler != null && this.localHandler.getCurrentConversation() != null)
+        if(this.localHandler != null && this.localHandler.getCurrentConversation() != null) {
+            System.out.printf(".(FacadeConversationHandler.java:51) - getCurrentConversation : local\n");
             return this.localHandler.getCurrentConversation();
-        else
+        }
+        else{
+            System.out.printf(".(FacadeConversationHandler.java:51) - getCurrentConversation : distant\n");
             return this.distantHandler.getCurrentConversation();
+        }
     }
     public void open(User correspondent) {
         if(this.local && correspondent.isLocal_user())

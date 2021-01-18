@@ -19,9 +19,9 @@ public class UserModelReceivers implements UserModelReceiverObserver  {
     @Override
     public void notifyNewMsg(String msg) {
 //        System.out.printf(".(UserModelReceivers.java:21) : MSG : %s\n",msg);
-        Pattern pattern_new_host = Pattern.compile("login,(?<username>[A-Za-z_.0-9]+),(?<id>[0-9]+),(?<ip>[0-9]+[.][0-9]+[.][0-9]+[.][0-9]+),(?<convListPort>[0-9]+),(?<local>[tf])");
-        Pattern pattern_disconnected = Pattern.compile("login,(?<id>[0-9]+),disconnected");
-        Pattern pattern_update = Pattern.compile("login,update");
+        Pattern pattern_new_host = Pattern.compile("(?<username>[A-Za-z_.0-9]+),(?<id>[0-9]+),(?<ip>[0-9]+[.][0-9]+[.][0-9]+[.][0-9]+),(?<convListPort>[0-9]+),(?<local>[tf])");
+        Pattern pattern_disconnected = Pattern.compile("(?<id>[0-9]+),disconnected");
+        Pattern pattern_update = Pattern.compile("update");
         //Extraction of the informations of the packet thanks to a regex and named group
         Matcher m = pattern_new_host.matcher(msg);
         while (m.find()){
