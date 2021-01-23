@@ -28,7 +28,6 @@ public class ClientController implements FacadeConversationHandlerObserver, User
         User.init_current_user(id,loginBroadcast != null);
         // Conversation handler init
         this.conversationHandler = FacadeConversationHandler.getInstance(loginBroadcast != null,this);
-        this.conversationHandler.addObserver(this);
 
         // View init
         this.view = new View();
@@ -66,7 +65,7 @@ public class ClientController implements FacadeConversationHandlerObserver, User
 
     @Override
     public void newMessageReceived(Message receivedMessage, boolean isCurrentConversation) {
-        System.out.printf(".(ClientController.java:69) - newMessageReceived : \n");
+        System.out.printf(".(ClientController.java:69) - newMessageReceived : opened ? %s\n",isCurrentConversation ? "true" : "false");
         if(isCurrentConversation) {
             this.view.displayMessage(receivedMessage);
         } else {

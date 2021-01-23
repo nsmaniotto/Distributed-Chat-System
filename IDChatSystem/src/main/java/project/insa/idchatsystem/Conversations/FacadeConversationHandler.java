@@ -96,6 +96,7 @@ public class FacadeConversationHandler implements LocalConversationHandlerObserv
     @Override
     public void messagesRetrieved(ArrayList<Message> retrievedMessages) {
         this.observers.forEach(obs -> obs.messagesRetrieved(retrievedMessages));
+
     }
 
     @Override
@@ -106,8 +107,12 @@ public class FacadeConversationHandler implements LocalConversationHandlerObserv
     @Override
     public void addObserver(FacadeConversationHandlerObserver observer) {
         System.out.printf("OBSERVER CALLED\n");
-        this.observers.add(observer);
-        this.notifyListenerPortNegociated();
+        if(this.observers.contains(observer))
+            System.out.printf(".(FacadeConversationHandler.java:110) - addObserver : Duplicate observer\n");
+        else {
+            this.observers.add(observer);
+            this.notifyListenerPortNegociated();
+        }
     }
 
     @Override

@@ -380,6 +380,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
             userview.setPriority(maxPriotity+1);
             //Uniformize priorities
             this.uniformizePriorities();
+            this.chatWindowObserver.userSelected(userview);
             return true;
         }
         else {

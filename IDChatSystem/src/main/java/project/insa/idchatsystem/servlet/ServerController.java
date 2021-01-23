@@ -39,6 +39,7 @@ public class ServerController implements ServerIncomingMessagesObserver, ServerC
     public void notifyNewMessage(String message) {
         //Analyse message
         //check if login message
+        System.out.printf(".(ServerController.java:42) - notifyNewMessage : %s\n",message);
         Pattern pattern = Pattern.compile("(?<login>login),(?<msgRcvd>.*)");
         Matcher m = pattern.matcher(message);
         while (m.find()){
