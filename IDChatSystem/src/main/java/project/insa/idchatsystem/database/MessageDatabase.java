@@ -155,14 +155,16 @@ public class MessageDatabase {
         // Create the MySQL insert prepared statement to prevent injection
         PreparedStatement preparedStatement;
         try {
-            preparedStatement = this.conn.prepareStatement(prepareQuery);
+            if(this.conn != null) {
+                preparedStatement = this.conn.prepareStatement(prepareQuery);
             
-            preparedStatement.setInt(1, message.getSource().get_id());
-            preparedStatement.setInt(2, message.getDestination().get_id());
-            preparedStatement.setString(3, message.getText());
-            preparedStatement.setTimestamp(4, message.getTimestamp());
-            
-            preparedStatement.execute();
+                preparedStatement.setInt(1, message.getSource().get_id());
+                preparedStatement.setInt(2, message.getDestination().get_id());
+                preparedStatement.setString(3, message.getText());
+                preparedStatement.setTimestamp(4, message.getTimestamp());
+
+                preparedStatement.execute();
+            }
         } catch (SQLException ex) {
             System.out.println("(MessageDatabase) : EXCEPTION AT CREATING/EXECUTING PREPARED STATEMENT : " + ex);
             Logger.getLogger(MessageDatabase.class.getName()).log(Level.SEVERE, null, ex);
@@ -193,26 +195,27 @@ public class MessageDatabase {
         ResultSet queryResultSet = this.executeQuery(query);
         
         // Convert result set to messages array
-        
-        try {
-            while(queryResultSet.next()){
-                // Retrieve values by column name
-                int sourceID  = queryResultSet.getInt(DB_MESSAGE_ROW_SOURCE_ID);
-                User source = user1.get_id() == sourceID ? user1 : user2;
-                int destinationID = queryResultSet.getInt(DB_MESSAGE_ROW_DESTINATION_ID);
-                User destination = user1.get_id() == destinationID ? user1 : user2;
-                String text = queryResultSet.getString(DB_MESSAGE_ROW_TEXT);
-                Timestamp timestamp = queryResultSet.getTimestamp(DB_MESSAGE_ROW_TIMESTAMP);
-                
-                // Generate a message from retrieved values
-                Message generatedMessage = new Message(source, destination, text, timestamp);
-                
-                // Add previously generated message to the returned array
-                resultMessages.add(generatedMessage);
+        if(queryResultSet != null) {
+            try {
+                while(queryResultSet.next()){
+                    // Retrieve values by column name
+                    int sourceID  = queryResultSet.getInt(DB_MESSAGE_ROW_SOURCE_ID);
+                    User source = user1.get_id() == sourceID ? user1 : user2;
+                    int destinationID = queryResultSet.getInt(DB_MESSAGE_ROW_DESTINATION_ID);
+                    User destination = user1.get_id() == destinationID ? user1 : user2;
+                    String text = queryResultSet.getString(DB_MESSAGE_ROW_TEXT);
+                    Timestamp timestamp = queryResultSet.getTimestamp(DB_MESSAGE_ROW_TIMESTAMP);
+
+                    // Generate a message from retrieved values
+                    Message generatedMessage = new Message(source, destination, text, timestamp);
+
+                    // Add previously generated message to the returned array
+                    resultMessages.add(generatedMessage);
+                }
+            } catch (SQLException ex) {
+                System.out.println("(MessageDatabase) : EXCEPTION AT CONVERTING RESULTSET TO MESSAGES : " + ex);
+                Logger.getLogger(MessageDatabase.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (SQLException ex) {
-            System.out.println("(MessageDatabase) : EXCEPTION AT CONVERTING RESULTSET TO MESSAGES : " + ex);
-            Logger.getLogger(MessageDatabase.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         return resultMessages;

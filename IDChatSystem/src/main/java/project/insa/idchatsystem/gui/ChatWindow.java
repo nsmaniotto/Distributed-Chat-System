@@ -60,7 +60,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         this.frame.setSize(800,600);
         this.frame.setLayout(new GridBagLayout());
         this.frame.setLocationRelativeTo(null);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.initLookAndFeel();
         this.frame.getContentPane().setBackground(Window.COLOR_SOFTWHITE);
         /* END: frame initialization */
