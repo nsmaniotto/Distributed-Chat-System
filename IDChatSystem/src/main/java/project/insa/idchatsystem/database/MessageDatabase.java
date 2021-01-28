@@ -33,10 +33,11 @@ public class MessageDatabase {
     private final String DB_MESSAGE_ROW_TIMESTAMP = "TIMESTAMP";
     
     // JDBC driver name and database URL
-    private final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";  
+    private final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
     private final int DB_PORT = 3306;
     private final String DB_SERVER_URL = "jdbc:mysql://localhost:" + DB_PORT;
     private final String DB_DATABASE_URL = DB_SERVER_URL + "/" + DB_NAME;
+//            +"?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC";
 
     // Database credentials
     private final String USER = "idchatsystem_usr";

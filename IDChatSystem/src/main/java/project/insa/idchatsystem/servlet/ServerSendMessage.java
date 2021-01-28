@@ -22,7 +22,7 @@ public class ServerSendMessage implements ServerSendMessageObservable {
     private ServerSendMessageObserver obs;
     public ServerSendMessage(String protocole){
 
-        URLServlet = "http://localhost:8080/NathanRobinServlet/";
+        URLServlet = "https://srv-gei-tomcat.insa-toulouse.fr/NathanRobinServlet/";
         this.protocole = protocole;
     }
     public void sendPost(String message, User corresp){
