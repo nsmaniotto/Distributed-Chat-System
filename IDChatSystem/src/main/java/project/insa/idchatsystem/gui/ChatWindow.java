@@ -117,6 +117,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         this.correspondentInfoLabel = new JLabel("BBBBB#yy", JLabel.LEFT);
 
         this.chatScrollPane = new JScrollPane(this.chatHistoryPanel);
+        this.chatScrollPane.setAutoscrolls(true);
         this.chatScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         this.chatScrollPane.setBackground(Color.GRAY/*Window.COLOR_SOFTWHITE*/);
 
@@ -410,12 +411,15 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
      */
     public void displayMessage(Message message) {
         System.out.printf(".(ChatWindow.java:411) - displayMessage : \n");
-        //TODO Generate the graphical instance
+        // Generate the graphical instance
         JPanel messageInstancePanel = this.generateDisplayedMessage(message);
         
-        //TODO Add the instance to the display conversation
+        // Add the instance to the display conversation
         this.chatHistoryPanel.add(messageInstancePanel);
         this.chatHistoryPanel.validate();
+        
+        // Scroll down to see the latest message
+        this.chatScrollPane.getVerticalScrollBar().setValue(this.chatScrollPane.getVerticalScrollBar().getMaximum());
     }
     
     /**
