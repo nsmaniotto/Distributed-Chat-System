@@ -10,7 +10,7 @@ public class Main2 {
     public static void main(String [] argv) throws InterruptedException {
         int DUREE_DIFF_EMISSION = 5000;
         Thread.sleep(DUREE_DIFF_EMISSION*2);//On veut être sûr que le premier utilisateur est celui de Main1
-        UserModel model = new UserModel(1,2701,2706,new ArrayList<>(){{
+        UserModel model = new UserModel("1",2701,2706,new ArrayList<>(){{
             add(2700);
         }});
         model.setUsername("user1");
@@ -19,13 +19,13 @@ public class Main2 {
             Main2.print_HashMap(model.getOnlineUsers());
         }
         HashMap hashmap_th = new HashMap();
-        hashmap_th.put(0,new User("user0",0,"127.0.0.1"));
+        hashmap_th.put(0,new User("user0","0","127.0.0.1"));
         if(model.getOnlineUsers().equals(hashmap_th))
             System.out.println("--------------------------------------------TEST OK--------------------------------------");
         else
             System.out.println("---------------------------------------------ECHEC---------------------------------------");
     }
-    public static void print_HashMap(HashMap<Integer, User> users) {
+    public static void print_HashMap(HashMap<String, User> users) {
         System.out.println("Liste des utilisateurs distants connus : ");
         users.forEach((k,v)->System.out.printf("%s\n",v.toString()));
     }

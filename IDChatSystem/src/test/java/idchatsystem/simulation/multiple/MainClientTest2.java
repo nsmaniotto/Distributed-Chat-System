@@ -9,6 +9,6 @@ import project.insa.idchatsystem.Exceptions.NoPortAvailable;
 
 public class MainClientTest2 {
     public static void main(String [] argv) throws NoPortAvailable {
-        ClientTest clientTest2 = new ClientTest(20, 2001, 2011, 2000);
+        ClientTest clientTest2 = new ClientTest("20", 2001, 2011, 2000);
     }
 }

@@ -7,14 +7,14 @@ import project.insa.idchatsystem.User.distanciel.User;
 
 public class ClientTest1 {    
     public static void main(String [] argv) throws NoPortAvailable {
-        int id = 1;
+        String id = "1";
         
         // Creating the conversation handler
         LocalConversationHandler conversationHandler = new LocalConversationHandler( );
         new Thread(conversationHandler).start();
         
         // Create fake users
-        User user2 = new User("User_2", 2, "127.0.0.1");
+        User user2 = new User("User_2", "2", "127.0.0.1");
         
         conversationHandler.addKnownUser(user2);
         

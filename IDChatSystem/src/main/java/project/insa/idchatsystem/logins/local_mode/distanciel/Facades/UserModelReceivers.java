@@ -19,14 +19,14 @@ public class UserModelReceivers implements UserModelReceiverObserver  {
     @Override
     public void notifyNewMsg(String msg) {
 //        System.out.printf(".(UserModelReceivers.java:21) : MSG : %s\n",msg);
-        Pattern pattern_new_host = Pattern.compile("(?<username>[A-Za-z_.0-9]+),(?<id>[0-9]+),(?<ip>[0-9]+[.][0-9]+[.][0-9]+[.][0-9]+),(?<convListPort>[0-9]+),(?<local>[tf])");
-        Pattern pattern_disconnected = Pattern.compile("(?<id>[0-9]+),disconnected");
+        Pattern pattern_new_host = Pattern.compile("(?<username>[A-Za-z_.0-9]+),(?<id>[0-9a-z-]*),(?<ip>[0-9]+[.][0-9]+[.][0-9]+[.][0-9]+),(?<convListPort>[0-9]+),(?<local>[tf])");
+        Pattern pattern_disconnected = Pattern.compile("(?<id>[0-9a-z-]*),disconnected");
         Pattern pattern_update = Pattern.compile("update");
         //Extraction of the informations of the packet thanks to a regex and named group
         Matcher m = pattern_new_host.matcher(msg);
         while (m.find()){
             //System.out.println("NEW USER");
-            User new_user = new User(m.group("username"),Integer.parseInt(m.group("id")),m.group("ip"),m.group("local").equals("t"));
+            User new_user = new User(m.group("username"),m.group("id"),m.group("ip"),m.group("local").equals("t"));
             new_user.setConversationHandlerListenerPort(Integer.parseInt(m.group("convListPort")));
 //            System.out.printf("UserModelReceivers : ONLINE USER\n");
             this.model.addOnlineUser(new_user);//Add or refresh informations of the user based on the id
@@ -35,7 +35,7 @@ public class UserModelReceivers implements UserModelReceiverObserver  {
         while (m.find()){
             System.out.printf("User %s disconnection signal\n",m.group("id"));
 //            System.out.printf("UserModelReceivers : OFFLINE USER\n");
-            this.model.removeOnlineUser(Integer.parseInt(m.group("id")));//Add or refresh informations of the user based on the id
+            this.model.removeOnlineUser(m.group("id"));//Add or refresh informations of the user based on the id
         }
         m = pattern_update.matcher(msg);
         while (m.find()){

@@ -39,7 +39,7 @@ public class UserView extends JPanel implements UserViewObservable {
     //TODO change colors to notify new message
     protected void initComponents() {
         this.mainPanel = new JPanel();
-        this.usernameLabel = new JLabel(String.format("%s #%d",this.user.get_username(),this.user.get_id()));
+        this.usernameLabel = new JLabel(String.format("%s #%s",this.user.get_username(),this.user.get_id()));
         this.selectButton = new JButton("Select");
     }
 
@@ -121,12 +121,12 @@ public class UserView extends JPanel implements UserViewObservable {
     }
     public void setUsername(String username){
         this.user.setUsername(username);
-        this.usernameLabel.setText(String.format("%s #%d",this.user.get_username(),this.user.get_id()));
+        this.usernameLabel.setText(String.format("%s #%s",this.user.get_username(),this.user.get_id()));
     }
     public void setLastSeen(Timestamp timestamp){
         this.user.setLastSeen(timestamp);
     }
-    public int getId(){
+    public String getId(){
         return this.user.get_id();
     }
     @Override

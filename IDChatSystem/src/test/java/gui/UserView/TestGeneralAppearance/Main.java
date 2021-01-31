@@ -8,7 +8,7 @@ import java.awt.*;
 
 public class Main {
     public static void main(String [] argv ) {
-        User user = new User("fondue",24, "172.168.1.2");
+        User user = new User("fondue","24", "172.168.1.2");
         UserView view = new UserView(user);
         view.initListeners(null);
         JFrame frame = new JFrame();

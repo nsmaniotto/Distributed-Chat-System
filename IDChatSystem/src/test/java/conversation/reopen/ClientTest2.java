@@ -14,7 +14,7 @@ public class ClientTest2 {
         new Thread(conversationHandler).start();
         
         // Create fake users
-        User user1 = new User("User_1", 1, "127.0.0.1");
+        User user1 = new User("User_1", "1", "127.0.0.1");
         //User user3 = new User("User_3", 3, "127.0.0.1");
         
         conversationHandler.addKnownUser(user1);

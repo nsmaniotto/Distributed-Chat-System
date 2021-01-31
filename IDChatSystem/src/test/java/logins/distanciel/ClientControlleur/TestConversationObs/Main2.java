@@ -9,6 +9,6 @@ public class Main2 {
     public static void main (String [] argv) throws NoPortAvailable {
         ArrayList<Integer> others2 = new ArrayList<>();
         others2.add(2000);
-        ControllerEncapsulation controller_appli2 = new ControllerEncapsulation(1,4000,4500,others2);
+        ControllerEncapsulation controller_appli2 = new ControllerEncapsulation("1",4000,4500,others2);
     }
 }

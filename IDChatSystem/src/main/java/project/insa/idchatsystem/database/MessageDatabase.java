@@ -159,8 +159,8 @@ public class MessageDatabase {
             if(this.conn != null) {
                 preparedStatement = this.conn.prepareStatement(prepareQuery);
             
-                preparedStatement.setInt(1, message.getSource().get_id());
-                preparedStatement.setInt(2, message.getDestination().get_id());
+                preparedStatement.setString(1, message.getSource().get_id());
+                preparedStatement.setString(2, message.getDestination().get_id());
                 preparedStatement.setString(3, message.getText());
                 preparedStatement.setTimestamp(4, message.getTimestamp());
 
@@ -200,10 +200,10 @@ public class MessageDatabase {
             try {
                 while(queryResultSet.next()){
                     // Retrieve values by column name
-                    int sourceID  = queryResultSet.getInt(DB_MESSAGE_ROW_SOURCE_ID);
-                    User source = user1.get_id() == sourceID ? user1 : user2;
-                    int destinationID = queryResultSet.getInt(DB_MESSAGE_ROW_DESTINATION_ID);
-                    User destination = user1.get_id() == destinationID ? user1 : user2;
+                    String sourceID  = queryResultSet.getString(DB_MESSAGE_ROW_SOURCE_ID);
+                    User source = user1.get_id().equals(sourceID) ? user1 : user2;
+                    String destinationID = queryResultSet.getString(DB_MESSAGE_ROW_DESTINATION_ID);
+                    User destination = user1.get_id().equals(destinationID) ? user1 : user2;
                     String text = queryResultSet.getString(DB_MESSAGE_ROW_TEXT);
                     Timestamp timestamp = queryResultSet.getTimestamp(DB_MESSAGE_ROW_TIMESTAMP);
 

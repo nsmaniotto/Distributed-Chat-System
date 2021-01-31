@@ -11,8 +11,8 @@ public class DatabaseTest {
         
         db.init();
         
-        User fakeCurrentUser = new User("User1", 10, "127.0.0.1");
-        User fakeCorrespondent = new User("User2", 20, "127.0.0.1");
+        User fakeCurrentUser = new User("User1", "10", "127.0.0.1");
+        User fakeCorrespondent = new User("User2", "20", "127.0.0.1");
         
         Message fakeMessage1 = new Message("hello");
         fakeMessage1.setSource(fakeCurrentUser);

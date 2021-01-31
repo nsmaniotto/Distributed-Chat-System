@@ -15,7 +15,7 @@ public class ControllerEncapsulation implements FacadeConversationHandlerObserve
     private UserModel userModel;
     //private DistantUserModel centralizedUserModel;
 
-    public ControllerEncapsulation(int id,
+    public ControllerEncapsulation(String id,
                                    int usermodel_receiver_port, int usermodel_emitter_port, ArrayList<Integer> others) throws NoPortAvailable {
         this.userModel = new UserModel(id,usermodel_receiver_port,usermodel_emitter_port,others);
         //TODO : Remplacer par la facade

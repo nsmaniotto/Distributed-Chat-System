@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ModelEncapsulation extends UserModel {
-    public ModelEncapsulation(int id, int receiver_port, int emitter_port, ArrayList<Integer>others) {
+    public ModelEncapsulation(String id, int receiver_port, int emitter_port, ArrayList<Integer>others) {
         super(id,receiver_port,emitter_port,others);
         System.out.println("--------------------------------------DEBUT CHAMP TEST : tester LLocalUserModel si erreur avant------------------------------------------");
         this.testAjoutNouvelUtilisateur(receiver_port);
@@ -20,7 +20,7 @@ public class ModelEncapsulation extends UserModel {
     public boolean testAjoutNouvelUtilisateur (int receiver_port) {
         int port_emetteur_test = 2000;
         //On affiche les utilisateurs en mémoire
-        HashMap<Integer, User> users = this.getOnlineUsers();
+        HashMap<String, User> users = this.getOnlineUsers();
         this.printOnlineUsers(users);
         //On compte le nb d'utilisateurs
         int nb_users_avant = users.size();
@@ -41,7 +41,7 @@ public class ModelEncapsulation extends UserModel {
                     e.printStackTrace();
                 }
                 //On affiche les utilisateurs en mémoire
-                HashMap<Integer, User> users_updated = this.getOnlineUsers();
+                HashMap<String, User> users_updated = this.getOnlineUsers();
                 this.printOnlineUsers(users_updated);
                 //On compte le nb d'utilisateurs
                 int nb_users_apres = users_updated.size();
@@ -64,7 +64,7 @@ public class ModelEncapsulation extends UserModel {
         System.out.println("------------------------------------ECHEC-------------------------------");
         return false;
     }
-    public void printOnlineUsers (HashMap < Integer, User > users){
+    public void printOnlineUsers (HashMap < String, User > users){
         if(users.size()==0){
             System.out.println("Pas d'utilisateur");
         }

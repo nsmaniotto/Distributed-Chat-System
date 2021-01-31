@@ -35,9 +35,9 @@ public class UserModelEmitters implements Runnable {
     public void stopperEmission(){
         this.emission = false;
     }
-    public void disconnect(int id) {
+    public void disconnect(String id) {
         this.stopperEmission();
-        String disconnected_str = String.format("%d,disconnected",id);
+        String disconnected_str = String.format("%s,disconnected",id);
         this.sendMessage(disconnected_str);
         this.state = "disconnected";
     }

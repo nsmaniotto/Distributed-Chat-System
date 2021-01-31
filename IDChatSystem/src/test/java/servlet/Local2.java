@@ -10,7 +10,7 @@ public class Local2 {
         ArrayList<Integer> broadcast = new ArrayList<>();
         broadcast.add(1500);
         try {
-            ClientController controller = new ClientController(1,1501,2001,broadcast);
+            ClientController controller = new ClientController("1",1501,2001,broadcast);
         } catch (NoPortAvailable noPortAvailable) {
             noPortAvailable.printStackTrace();
         }

@@ -9,7 +9,7 @@ import java.util.HashMap;
 public class Main1 {
     public static void main(String [] argv) {
         int DUREE_DIFF_EMISSION = 5000;
-        UserModel model = new UserModel(0,2700,2705, new ArrayList<>() {{
+        UserModel model = new UserModel("0",2700,2705, new ArrayList<>() {{
             add(2701);
         }});
         model.setUsername("user0");
@@ -22,13 +22,13 @@ public class Main1 {
             Main1.print_HashMap(model.getOnlineUsers());
         }
         HashMap hashmap_th = new HashMap();
-        hashmap_th.put(1,new User("user1",1,"127.0.0.1"));
+        hashmap_th.put("1",new User("user1","1","127.0.0.1"));
         if(model.getOnlineUsers().equals(hashmap_th))
             System.out.println("--------------------------------------------TEST OK--------------------------------------");
         else
             System.out.println("---------------------------------------------ECHEC---------------------------------------");
     }
-    public static void print_HashMap(HashMap<Integer, User> users) {
+    public static void print_HashMap(HashMap<String, User> users) {
         System.out.println("Liste des utilisateurs distants connus : ");
         users.forEach((k,v)->System.out.printf("%s\n",v.toString()));
     }

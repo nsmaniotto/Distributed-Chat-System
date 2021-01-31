@@ -35,13 +35,13 @@ public class ServerSendMessage implements ServerSendMessageObservable {
                 con.setDoInput(true);
 
                 Map<String,String> arguments = new HashMap<>();
-                arguments.put("message", String.format("message=%d,%d,%s,%s&",
-                        User.get_current_id(), corresp == null ? -1 : corresp.get_id(),this.protocole,
+                arguments.put("message", String.format("message=%s,%s,%s,%s&",
+                        User.get_current_id(), corresp == null ? "" : corresp.get_id(),this.protocole,
                         message));
                 StringJoiner sj = new StringJoiner("&");
                 for(Map.Entry<String,String> entry : arguments.entrySet())
-                    sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "="
-                            + URLEncoder.encode(entry.getValue(), "UTF-8"));
+                    sj.add(URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8) + "="
+                            + URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8));
                 byte[] out = sj.toString().getBytes(StandardCharsets.UTF_8);
                 int length = out.length;
 
@@ -59,12 +59,8 @@ public class ServerSendMessage implements ServerSendMessageObservable {
                         String line = " ";
                         while(line != null) {
                             line = in.readLine();
-//                            if(line != null)
-//                                System.out.printf(".(ServerSendMessage.java:63) - %s sendPost : Read : %s\n",this.protocole,line == null ? "null" : line);
                             if(this.obs != null && line != null)
                                 this.obs.notifyNewMessage(line);
-//                            else if(this.obs == null)
-//                                System.out.printf(".(ServerSendMessage.java:68) - %s sendPost : Missed message\n",this.protocole);
                         }
                     }
                     catch (Exception e) {

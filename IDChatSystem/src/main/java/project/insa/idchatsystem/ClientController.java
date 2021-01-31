@@ -15,16 +15,16 @@ import java.util.ArrayList;
 import project.insa.idchatsystem.database.MessageDatabase;
 
 public class ClientController implements FacadeConversationHandlerObserver, UsersStatusObserver, ViewObserver {
-    private View view;
+    private final View view;
     private final MessageDatabase database;
     private final FacadeConversationHandler conversationHandler;
     private final UserModel userModel;
     /*
     private DistantUserModel centralizedUserModel;*/
     
-    public ClientController(int id,
+    public ClientController(String id,
                             int loginReceiverPort, int loginEmiterPort, ArrayList<Integer> loginBroadcast) throws NoPortAvailable {
-        System.out.printf(".(ClientController.java:27) - ClientController : id : %d\n",id);
+        System.out.printf(".(ClientController.java:27) - ClientController : id : %s\n",id);
         User.init_current_user(id,loginBroadcast != null);
         // Conversation handler init
         this.conversationHandler = FacadeConversationHandler.getInstance(loginBroadcast != null,this);

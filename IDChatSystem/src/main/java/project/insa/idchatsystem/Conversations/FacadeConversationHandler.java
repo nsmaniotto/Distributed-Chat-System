@@ -119,8 +119,8 @@ public class FacadeConversationHandler implements LocalConversationHandlerObserv
     public void deleteObserver(FacadeConversationHandlerObserver observer) {
         this.observers.remove(observer);
     }
-    public HashMap<Integer,User> getUsers() {
-        HashMap<Integer,User> merged_hashmap_users = new HashMap<>();
+    public HashMap<String,User> getUsers() {
+        HashMap<String,User> merged_hashmap_users = new HashMap<>();
         if(this.local)
             merged_hashmap_users.putAll(this.localHandler.getUsers());
         merged_hashmap_users.putAll(this.distantHandler.getUsers());// Not useful as all users are stored in both of the handlers

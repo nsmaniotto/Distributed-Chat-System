@@ -17,7 +17,7 @@ import project.insa.idchatsystem.User.distanciel.User;
  * @author smani
  */
 public class ClientTest {
-    public ClientTest(int id, int loginReceiverPort, int loginEmiterPort, int broadcastPort) throws NoPortAvailable {
+    public ClientTest(String id, int loginReceiverPort, int loginEmiterPort, int broadcastPort) throws NoPortAvailable {
         ArrayList<Integer> arrayBroadCast = new ArrayList<Integer>();
         arrayBroadCast.add(2001);
         ClientController controller = new ClientController(id,loginReceiverPort,loginEmiterPort,arrayBroadCast);

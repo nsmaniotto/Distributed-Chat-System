@@ -17,7 +17,7 @@ public class UserModel extends AbstractUserModel implements ServerLoginControlle
     private final ServerController serverController;
     private final UserModelReceivers receivers;
     private ArrayList<UsersStatusObserver> observers;
-    public UserModel(int id, int receiver_port, int emitter_port, ArrayList<Integer> others)  {
+    public UserModel(String id, int receiver_port, int emitter_port, ArrayList<Integer> others)  {
         super(id, others != null);
         observers = new ArrayList<>();
         this.emitters = new UserModelEmitters(this,emitter_port,others,others != null);
@@ -25,7 +25,7 @@ public class UserModel extends AbstractUserModel implements ServerLoginControlle
         this.serverController = new ServerController("login");
         this.serverController.publish("ready");
         this.serverController.addLoginListener(this);
-        this.setUsername(String.format("--user%d",id));
+        this.setUsername(String.format("--user%s",id));
         new Thread(this.emitters).start();
         new Thread(() -> {
             while(true){
@@ -42,7 +42,7 @@ public class UserModel extends AbstractUserModel implements ServerLoginControlle
     public boolean setUsername(String username) {
         this.emitters.askUpdate();
         try {
-            this.serverController.sendMessage(String.format("update,%d",User.get_current_id()),null);
+            this.serverController.sendMessage(String.format("update,%s",User.get_current_id()),null);
         } catch (Uninitialized uninitialized) {
             uninitialized.printStackTrace();
         }
@@ -64,7 +64,7 @@ public class UserModel extends AbstractUserModel implements ServerLoginControlle
     public void stopperEmission(){
         this.emitters.stopperEmission();
         try {
-            this.serverController.publish(String.format("login,%d,disconnected",User.get_current_id()));
+            this.serverController.publish(String.format("login,%s,disconnected",User.get_current_id()));
         } catch (Uninitialized uninitialized) {
             uninitialized.printStackTrace();
         }

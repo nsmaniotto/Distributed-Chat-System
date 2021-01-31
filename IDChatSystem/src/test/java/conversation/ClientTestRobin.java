@@ -19,7 +19,7 @@ import java.util.HashMap;
  */
 public class ClientTestRobin {
     public ClientTestRobin() throws NoPortAvailable {
-        int id = 20;
+        String id = "20";
         ArrayList<Integer> arrayBroadCast = new ArrayList<Integer>();
         arrayBroadCast.add(2000);
         ClientController controller = new ClientController(id,2001,2011,arrayBroadCast);
@@ -30,7 +30,7 @@ public class ClientTestRobin {
         } catch (Exception ignored) {
             
         }
-        HashMap<Integer,User> userHashMap = controller.getConversationHandler().getUsers();
+        HashMap<String,User> userHashMap = controller.getConversationHandler().getUsers();
         User user = userHashMap.get(userHashMap.keySet().toArray()[0]);
         controller.getConversationHandler().open(user); // Sending a message to Nathan
         controller.getConversationHandler().getCurrentConversation().send(new Message("Hi Nathan !"),controller.getConversationHandler().getCurrentConversation().getCorrespondent());

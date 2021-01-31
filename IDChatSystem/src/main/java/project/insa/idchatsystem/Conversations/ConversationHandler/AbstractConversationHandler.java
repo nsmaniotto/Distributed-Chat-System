@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public abstract class AbstractConversationHandler implements ConversationObserver, ConversationHandlerObservable {
     protected ArrayList<Conversation> conversations;
     protected Conversation currentConversation = null;
-    protected HashMap<Integer, User> users; // Copy of UserModel's hashmap to identify every user
+    protected HashMap<String, User> users; // Copy of UserModel's hashmap to identify every user
     protected ArrayList<ConversationHandlerObserver> observers;
     protected final ExecutorService conversationThreadPool;
     public AbstractConversationHandler(){
@@ -131,7 +131,7 @@ public abstract class AbstractConversationHandler implements ConversationObserve
     }
     //GETTERS
 
-    public HashMap<Integer,User> getUsers() {
+    public HashMap<String,User> getUsers() {
         return users;
     }
     /* GETTERS/SETTERS */

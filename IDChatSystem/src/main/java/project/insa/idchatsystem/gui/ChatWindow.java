@@ -397,7 +397,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
 
 
 
-    public void displayUsername(String username, int id) {
+    public void displayUsername(String username, String id) {
         if(this.usernameLabel != null) {
             this.usernameLabel.setText(username + " #" + id);
         }
