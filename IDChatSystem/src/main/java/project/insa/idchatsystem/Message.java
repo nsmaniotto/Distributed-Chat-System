@@ -78,5 +78,18 @@ public class Message extends Data {
     public String toString() {
         return String.format("%s, %s",this.text,this.timestamp.toString());
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof Message))
+            return false;
+        Message other = (Message) o;
+        if (this.getSource().equals(other.getSource()) && this.getDestination().equals(other.getDestination()) && this.getTimestamp().equals(other.getTimestamp()))
+            return true;
+        else
+            return false;
+    }
     
 }

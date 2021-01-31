@@ -289,6 +289,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         this.updateOnlineUsers();
     }
     public void onlineUser(User user){
+//        System.out.printf(".(ChatWindow.java:292) - onlineUser : %s\n",user);
         UserView v = new UserView(user);
         v.initListeners(this);
         this.usersContainer.add(v);

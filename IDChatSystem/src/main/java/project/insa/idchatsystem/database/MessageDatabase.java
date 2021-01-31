@@ -145,6 +145,14 @@ public class MessageDatabase {
     
     public void storeMessage(Message message) {
         // MySQL insert statement
+        ArrayList<Message> history = this.retrieveOrderedMessagesByConversationBetween(message.getSource(),message.getDestination());
+        if(history.contains(message))
+            return;
+        System.out.printf(".(MessageDatabase.java:148) - storeMessage : storeCALLEDONCE\n");
+        System.out.printf(".(MessageDatabase.java:152) - storeMessage : from %s\n",message.getSource());
+        System.out.printf(".(MessageDatabase.java:152) - storeMessage : to %s\n",message.getDestination());
+        System.out.printf(".(MessageDatabase.java:154) - storeMessage : Whereas history contains\n");
+        history.forEach(message1 -> System.out.printf(".(MessageDatabase.java:154) - storeMessage : %s\n",message1));
         String prepareQuery = "INSERT INTO " + DB_MESSAGE_TABLE_NAME + "("
                 + DB_MESSAGE_ROW_SOURCE_ID
                 + "," + DB_MESSAGE_ROW_DESTINATION_ID

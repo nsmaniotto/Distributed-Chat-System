@@ -31,7 +31,7 @@ public class LocalConversation extends Conversation implements Runnable {
 
     @Override
     public void run() {
-        this.loadConversation();
+//        this.loadConversation();
         
         // Listen on the current socket
         this.listen();
@@ -47,6 +47,9 @@ public class LocalConversation extends Conversation implements Runnable {
         // Retrieve past messages
         try {
             history = MessageDatabase.getInstance().retrieveOrderedMessagesByConversationBetween(User.getCurrentUser(), this.correspondent);
+            System.out.printf(".(LocalConversation.java:50) - loadConversation : \n");
+            history.forEach(message -> System.out.println(message));
+            System.out.printf(".(LocalConversation.java:51) - loadConversation : \n");
         } catch (Uninitialized e) {
             // Current user (thereforce message source) is not initialized
             System.out.println("Conversation: EXCEPTION WHILE RETRIEVING PAST MESSAGES " + e);

@@ -133,7 +133,7 @@ public class UserView extends JPanel implements UserViewObservable {
     public boolean equals(Object o){
         if(o instanceof UserView){
             UserView v = (UserView) o;
-            return this.getId()==v.getId();
+            return this.getId().equals(v.getId());
         } else {
             return false;
         }

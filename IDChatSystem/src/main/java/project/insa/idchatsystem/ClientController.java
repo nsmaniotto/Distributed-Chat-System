@@ -90,8 +90,10 @@ public class ClientController implements FacadeConversationHandlerObserver, User
 
     @Override
     public void messagesRetrieved(ArrayList<Message> retrievedMessages) {
-        System.out.printf(".(ClientController.java:94) - messagesRetrieved : \n");
-        retrievedMessages.forEach( message -> this.view.displayMessage(message) );
+        retrievedMessages.forEach( message -> {
+//            System.out.printf(".(ClientController.java:94) - messagesRetrieved : %s\n",message);
+            this.view.displayMessage(message);
+        } );
     }
     /* GETTERS/SETTERS */
     public FacadeConversationHandler getConversationHandler() {
