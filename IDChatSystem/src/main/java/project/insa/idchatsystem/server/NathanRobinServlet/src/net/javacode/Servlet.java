@@ -132,7 +132,7 @@ public class Servlet extends HttpServlet {
 			else {
 				if(idDest.equals("")) {
 					for (Object idObj : users.keySet().toArray()) {
-						int id = (Integer)(idObj);
+						String id = (String)(idObj);
 						addToCache(id,new StructMsg(idSrc,idDest,other),proto);
 					}
 				}
