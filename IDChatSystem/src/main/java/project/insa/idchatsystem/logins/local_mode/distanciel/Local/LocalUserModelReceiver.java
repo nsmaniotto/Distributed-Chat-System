@@ -11,11 +11,11 @@ public class LocalUserModelReceiver implements Runnable {
     private DatagramSocket socket;
     //Format of UDP packets : username,id,ipAddress with :
     // - username : max 25 letters
-    // - id : between 0 and 1 000 000 > 100 000 -> between 1 and 7 digits
+    // - id : between 36 characters
     // - ipAdress : maximum 3*4 + 3 = 15 characters
     // - lastSeen : 23-24 characters
     // - conversationHandlerListenerPort : 65535 = 5 characters
-    // Result = 25 + 7 + 15 + 24 + 5 = 76 character -> we will take 256 characters
+    // Result = 25 + 36 + 15 + 24 + 5 = 76 character -> we will take 256 characters
     protected byte[] in_buf = new byte[256];
 
     public LocalUserModelReceiver(UserModelReceiverObserver model, int in_port_broadcast) {
@@ -38,7 +38,6 @@ public class LocalUserModelReceiver implements Runnable {
                 socket.receive(packet);
                 String received = new String(packet.getData(), 0, packet.getLength());
                 if(!received.equals("")) {
-//                    System.out.printf(".(LocalUserModelReceiver.java:40) : RECEIVED : %s\n",received);
                     this.model.notifyNewMsg(received);
                 }
 

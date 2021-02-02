@@ -29,7 +29,6 @@ public class FacadeConversationHandler implements LocalConversationHandlerObserv
         this.distantHandler.addObserver(this);
         if(local) {
             this.localHandler = LocalConversationHandler.getInstance();
-            System.out.printf(".(FacadeConversationHandler.java:32) - FacadeConversationHandler : construction LocalConversationHandler\n");
             this.localHandler.addObserver(this);
             new Thread(this.localHandler).start();
         }
@@ -48,11 +47,9 @@ public class FacadeConversationHandler implements LocalConversationHandlerObserv
     /* GETTERS/SETTERS */
     public Conversation getCurrentConversation() {
         if(this.localHandler != null && this.localHandler.getCurrentConversation() != null) {
-            System.out.printf(".(FacadeConversationHandler.java:51) - getCurrentConversation : local\n");
             return this.localHandler.getCurrentConversation();
         }
         else{
-            System.out.printf(".(FacadeConversationHandler.java:51) - getCurrentConversation : distant\n");
             return this.distantHandler.getCurrentConversation();
         }
     }
@@ -84,7 +81,6 @@ public class FacadeConversationHandler implements LocalConversationHandlerObserv
 
     @Override
     public void newMessageSent(Message sentMessage) {
-        System.out.printf(".(FacadeConversationHandler.java:81) - newMessageSent\n");
         this.observers.forEach( observer -> observer.newMessageSent(sentMessage) );
     }
     @Override
@@ -106,7 +102,6 @@ public class FacadeConversationHandler implements LocalConversationHandlerObserv
 
     @Override
     public void addObserver(FacadeConversationHandlerObserver observer) {
-        System.out.printf("OBSERVER CALLED\n");
         if(this.observers.contains(observer))
             System.out.printf(".(FacadeConversationHandler.java:110) - addObserver : Duplicate observer\n");
         else {

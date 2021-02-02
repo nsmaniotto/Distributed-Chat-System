@@ -15,8 +15,10 @@ public class UserModelEmitters implements Runnable {
     public UserModelEmitters(UserModelEmittersObserver obs,int emitter_port, ArrayList<Integer> others,boolean local) {
         this.local = local;
         this.obs = obs;
-        if(this.local)
-            localEmitter = new LocalUserModelEmitter(emitter_port,others);
+        if(this.local) {
+            localEmitter = new LocalUserModelEmitter(emitter_port, others);
+            new Thread(localEmitter).start();
+        }
         this.last_user_updated_string = "";
     }
     public void sendMessage(String message) {

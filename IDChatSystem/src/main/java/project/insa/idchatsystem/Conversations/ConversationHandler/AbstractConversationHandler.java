@@ -62,7 +62,7 @@ public abstract class AbstractConversationHandler implements ConversationObserve
      * @param newConversation : Conversation - conversation to add
      */
     protected void addConversation(Conversation newConversation) {
-        System.out.printf("ADD CONVERSATION\n");
+//        System.out.printf("ADD CONVERSATION\n");
         // Add this new conversation to our array list, used for conversation search
         this.conversations.add(newConversation);
 
@@ -110,7 +110,7 @@ public abstract class AbstractConversationHandler implements ConversationObserve
     }
     public void removeKnownUser(User user){
         this.users.remove(user.get_id(),user);
-        System.out.printf("CONVERSATIONHANDLER : Removing user %s\n",user);
+//        System.out.printf("CONVERSATIONHANDLER : Removing user %s\n",user);
     }
     public void offlineUser(User user) {
         this.removeKnownUser(user);
@@ -126,7 +126,6 @@ public abstract class AbstractConversationHandler implements ConversationObserve
 
     @Override
     public void newMessageSent(Message sentMessage) {
-        System.out.printf(".(AbstractConversationHandler.java:129) - newMessageSent\n");
         this.observers.forEach( observer -> observer.newMessageSent(sentMessage) );
     }
     //GETTERS
@@ -148,7 +147,6 @@ public abstract class AbstractConversationHandler implements ConversationObserve
     }
     @Override
     public void addObserver(ConversationHandlerObserver observer) {
-        System.out.printf(".(AbstractConversationHandler.java:151) - addObserver\n");
         this.observers.add(observer);
     }
 

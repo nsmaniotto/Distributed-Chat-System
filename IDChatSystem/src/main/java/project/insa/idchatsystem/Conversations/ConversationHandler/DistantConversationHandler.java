@@ -44,9 +44,9 @@ public class DistantConversationHandler extends AbstractConversationHandler impl
 
     @Override
     public void notifyNewMessage(String message) {
-        System.out.printf(".(DistantConversationHandler.java:44) - notifyNewMessage : %s\n",message);
+//        System.out.printf(".(DistantConversationHandler.java:44) - notifyNewMessage : %s\n",message);
 
-        Pattern pattern_getMessage = Pattern.compile("(?<id>[a-z0-9-]+),(?<msg>.*)");
+        Pattern pattern_getMessage = Pattern.compile("(?<id>[a-z0-9-]*),(?<msg>.*)");
         Matcher m = pattern_getMessage.matcher(message);
         String message_extracted = "";
         String idCorresp = "";
@@ -54,9 +54,7 @@ public class DistantConversationHandler extends AbstractConversationHandler impl
             message_extracted = m.group("msg");
             idCorresp = m.group("id");
             DistantConversation conv = (DistantConversation) this.findConversationByCorrespondent(new User("",idCorresp,""));
-            System.out.printf(".(DistantConversationHandler.java:57) - notifyNewMessage : step1\n");
             if(conv != null) {
-                System.out.printf(".(DistantConversationHandler.java:59) - notifyNewMessage : step2\n");
                 conv.onReceive(message_extracted);
             }
             //System.out.printf("ASKFORUPDATE %s\n", other);

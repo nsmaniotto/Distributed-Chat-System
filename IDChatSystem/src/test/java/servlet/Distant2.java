@@ -2,13 +2,11 @@ package servlet;
 
 import project.insa.idchatsystem.ClientController;
 import project.insa.idchatsystem.Exceptions.NoPortAvailable;
+import project.insa.idchatsystem.Main;
 
 public class Distant2 {
-    public static void main(String[] args) {
-        try {
-            ClientController controller = new ClientController("3",1503,2003,null);
-        } catch (NoPortAvailable noPortAvailable) {
-            noPortAvailable.printStackTrace();
-        }
+    public static void main(String[] args) throws Exception {
+        String [] arguments = {"local","noClean","3"};
+        Main.main(arguments);
     }
 }

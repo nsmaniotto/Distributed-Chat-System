@@ -10,6 +10,6 @@ public class Main3 {
         ArrayList<Integer> loginsReceivers = new ArrayList<>();
         loginsReceivers.add(1501);
         loginsReceivers.add(1500);
-        ClientController controller = new ClientController("2",1502,2002, loginsReceivers);
+        ClientController controller = new ClientController("2",true,false);
     }
 }

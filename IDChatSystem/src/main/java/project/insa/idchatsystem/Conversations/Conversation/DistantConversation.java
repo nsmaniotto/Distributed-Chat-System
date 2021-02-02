@@ -17,7 +17,7 @@ public class DistantConversation extends Conversation {
     }
     @Override
     public void send(Message message,User corresp) {
-        System.out.printf(".(DistantConversation.java:20) - send : %s\n",String.format("%s,%s",corresp.get_id(),message.toStream()));
+//        System.out.printf(".(DistantConversation.java:20) - send : %s\n",String.format("%s,%s",corresp.get_id(),message.toStream()));
         this.server.sendMessage(String.format("%s,%s",corresp.get_id(),message.toStream()),corresp);
     }
 

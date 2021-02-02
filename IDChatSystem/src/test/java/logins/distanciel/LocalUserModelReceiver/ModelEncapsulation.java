@@ -33,7 +33,6 @@ public class ModelEncapsulation extends UserModel {
                     socket.getLocalAddress(), receiver_port);
             try {
                 socket.send(outPacket);
-                System.out.printf("Envoi du packet %s\n",message);
                 //On attend quelques secondes
                 try {
                     Thread.sleep(5000);

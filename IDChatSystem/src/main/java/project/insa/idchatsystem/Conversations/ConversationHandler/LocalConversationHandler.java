@@ -120,20 +120,18 @@ public class LocalConversationHandler extends AbstractConversationHandler implem
      * @param correspondent : User - reference of the correspondent
      */
     public void open(User correspondent) {
-        System.out.printf(".(LocalConversationHandler.java:123) - open : %s\n",correspondent);
         // Check if we aleady have a conversation instance with this correspondent
         LocalConversation conversation = (LocalConversation)this.findConversationByCorrespondent(correspondent);
         
         if(conversation == null) {
             // --> We want to initiate the communication with our correspondent
             // Instantiate a socket that will send a request to the correspondent ConversationHandler
-            System.out.printf(".(LocalConversationHandler.java:130) - open : Create\n");
             Socket conversationSocket = null;
 
             try {
                 conversationSocket = new Socket(InetAddress.getByName(correspondent.get_ipAddress()), correspondent.getConversationHandlerListenerPort());
             } catch(IOException e) {
-                System.out.println("EXCEPTION: CANNOT CREATE CONVERSATION SOCKET TOWARDS " + correspondent.get_ipAddress() + ":" + correspondent.getConversationHandlerListenerPort() + " (" + e + ")");
+//                System.out.println("EXCEPTION: CANNOT CREATE CONVERSATION SOCKET TOWARDS " + correspondent.get_ipAddress() + ":" + correspondent.getConversationHandlerListenerPort() + " (" + e + ")");
                 System.exit(0);
             }
 
@@ -144,7 +142,6 @@ public class LocalConversationHandler extends AbstractConversationHandler implem
         }
         
         if(conversation != this.currentConversation) {
-            System.out.printf(".(LocalConversationHandler.java:147) - open : Set current\n");
             // Close the previous conversation
             this.closeCurrentConversation();
 
@@ -165,7 +162,6 @@ public class LocalConversationHandler extends AbstractConversationHandler implem
     }
     @Override
     public void addObserver(LocalConversationHandlerObserver observer) {
-        System.out.printf(".(LocalConversationHandler.java:168) - addObserver\n");
         super.addObserver(observer);
         this.notifyListenerPortNegociated();
     }

@@ -70,7 +70,7 @@ public abstract class Conversation implements ConversationObservable, Runnable {
     /* CONVERSATION OBSERVER METHODS */
     @Override
     public void addConversationObserver(ConversationObserver observer) {
-        System.out.printf(".(Conversation.java:73) - addConversationObserver : %s\n",observer);
+//        System.out.printf(".(Conversation.java:73) - addConversationObserver : %s\n",observer);
         this.conversationHandlerObserver = observer;
     }
 
@@ -81,9 +81,9 @@ public abstract class Conversation implements ConversationObservable, Runnable {
 
     @Override
     public void notifyObserversSentMessage(Message sentMessage) {
-        System.out.printf(".(Conversation.java:84) - notifyObserversSentMessage : this.conversationHandlerObserver : %s\n",this.conversationHandlerObserver);
+//        System.out.printf(".(Conversation.java:84) - notifyObserversSentMessage : this.conversationHandlerObserver : %s\n",this.conversationHandlerObserver);
         if(this.conversationHandlerObserver != null) {
-            System.out.printf(".(Conversation.java:84) - notifyObserversSentMessage\n");
+//            System.out.printf(".(Conversation.java:84) - notifyObserversSentMessage\n");
             this.conversationHandlerObserver.newMessageSent(sentMessage);
         }
     }

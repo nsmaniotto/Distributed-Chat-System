@@ -2,17 +2,13 @@ package servlet;
 
 import project.insa.idchatsystem.ClientController;
 import project.insa.idchatsystem.Exceptions.NoPortAvailable;
+import project.insa.idchatsystem.Main;
 
 import java.util.ArrayList;
 
 public class Local2 {
-    public static void main(String[] args) {
-        ArrayList<Integer> broadcast = new ArrayList<>();
-        broadcast.add(1500);
-        try {
-            ClientController controller = new ClientController("1",1501,2001,broadcast);
-        } catch (NoPortAvailable noPortAvailable) {
-            noPortAvailable.printStackTrace();
-        }
+    public static void main(String[] args) throws Exception {
+        String [] arguments = {"local","noClean","1"};
+        Main.main(arguments);
     }
 }

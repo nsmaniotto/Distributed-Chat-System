@@ -20,7 +20,7 @@ public class ClientTest {
     public ClientTest(String id, int loginReceiverPort, int loginEmiterPort, int broadcastPort) throws NoPortAvailable {
         ArrayList<Integer> arrayBroadCast = new ArrayList<Integer>();
         arrayBroadCast.add(2001);
-        ClientController controller = new ClientController(id,loginReceiverPort,loginEmiterPort,arrayBroadCast);
+        ClientController controller = new ClientController(id,true,false);
         try {
             Thread.sleep(5000);//On laisse le temps d'entrer le login
         } catch (InterruptedException e) {

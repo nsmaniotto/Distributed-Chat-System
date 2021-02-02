@@ -64,7 +64,6 @@ public class LoginWindow extends Window {
             public void keyPressed(KeyEvent e) {
                 int key = e.getKeyCode();
                 if(key ==KeyEvent.VK_ENTER){
-                    System.out.printf("PRESSED\n");
                     SwingUtilities.invokeLater(new Runnable() {
                         public void run() {
                             //On enter check if the username is not already taken

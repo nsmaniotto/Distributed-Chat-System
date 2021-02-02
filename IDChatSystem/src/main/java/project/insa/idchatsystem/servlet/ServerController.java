@@ -16,7 +16,6 @@ public class ServerController implements ServerIncomingMessagesObserver, ServerC
     private ServerLoginControllerObserver loginObs;
     private ServerConvControllerObserver convObs;
     public ServerController(String protocole) {
-        System.out.printf(".(ServerController.java:19) - ServerController : \n");
         incomingMessages = new ServerIncomingMessages();
         incomingMessages.addOserver(this);
         sendMessages = new ServerSendMessage(protocole);

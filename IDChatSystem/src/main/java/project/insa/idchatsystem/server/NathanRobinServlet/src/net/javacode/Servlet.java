@@ -68,11 +68,11 @@ public class Servlet extends HttpServlet {
     @Override
     public void service(ServletRequest req, ServletResponse resp) throws IOException, ServletException {
         String message = req.getParameter("message");
-    	Pattern pattern_message = Pattern.compile("message=(?<idSrc>[0-9a-z-]*),(?<idDest>[-]?[0-9a-z-]+),(?<other>[^&]+)[&]$");
+    	Pattern pattern_message = Pattern.compile("message=(?<idSrc>[0-9a-z-]*),(?<idDest>[-]?[0-9a-z-]*),(?<other>[^&]+)[&]$");
         if(message!=null) {
 	        Matcher m = pattern_message.matcher(message);
 	        //System.out.println(message);
-	        //Parsage des paramètres 
+	        //Parsage des paramï¿½tres 
 	        String idSrc = "";
 	        String idDest = "";
 	        String other = "";

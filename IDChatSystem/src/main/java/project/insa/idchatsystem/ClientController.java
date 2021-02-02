@@ -7,12 +7,14 @@ import project.insa.idchatsystem.Observers.Conversations.Observers.FacadeConvers
 import project.insa.idchatsystem.Observers.logins.Observers.UsersStatusObserver;
 import project.insa.idchatsystem.Observers.gui.Observers.ViewObserver;
 import project.insa.idchatsystem.User.distanciel.User;
+import project.insa.idchatsystem.database.LoginsBroadcastDatabase;
 import project.insa.idchatsystem.gui.UserView;
 import project.insa.idchatsystem.gui.View;
 import project.insa.idchatsystem.logins.local_mode.distanciel.UserModel;
 
 import java.util.ArrayList;
 import project.insa.idchatsystem.database.MessageDatabase;
+import project.insa.idchatsystem.tools.TestPort;
 
 public class ClientController implements FacadeConversationHandlerObserver, UsersStatusObserver, ViewObserver {
     private final View view;
@@ -22,12 +24,12 @@ public class ClientController implements FacadeConversationHandlerObserver, User
     /*
     private DistantUserModel centralizedUserModel;*/
     
-    public ClientController(String id,
-                            int loginReceiverPort, int loginEmiterPort, ArrayList<Integer> loginBroadcast) throws NoPortAvailable {
-        System.out.printf(".(ClientController.java:27) - ClientController : id : %s\n",id);
-        User.init_current_user(id,loginBroadcast != null);
+    public ClientController(String id, boolean local, boolean cleanReceiversPorts) throws NoPortAvailable {
+//        System.out.printf(".(ClientController.java:27) - ClientController : id : %s\n",id);
+        User.init_current_user(id,local);
+
         // Conversation handler init
-        this.conversationHandler = FacadeConversationHandler.getInstance(loginBroadcast != null,this);
+        this.conversationHandler = FacadeConversationHandler.getInstance(local,this);
 
         // View init
         this.view = new View();
@@ -35,7 +37,27 @@ public class ClientController implements FacadeConversationHandlerObserver, User
         new Thread(view).start();
 
         // At this stage, the login controller is running in the same thread as the ClientController but the reception and emission operates in two others
-        this.userModel = new UserModel(id,loginReceiverPort,loginEmiterPort,loginBroadcast);
+        boolean twoPortsFound = false;
+        int port = 1025;
+        int portEmission = -1;
+        int portReception = -1;
+        while (!twoPortsFound && port < 65535) {
+            boolean portAvailable= TestPort.portIsavailable(port);
+            if(portAvailable) {
+                if(portEmission == -1)
+                    portEmission = port;
+                else {
+                    portReception = port;
+                    twoPortsFound = true;
+                }
+            }
+            port++;
+        }
+        System.out.printf(".(ClientController.java:56) - ClientController : port emitter %d port receiver %d\n",portEmission,portReception);
+        LoginsBroadcastDatabase logins = new LoginsBroadcastDatabase(cleanReceiversPorts);
+        ArrayList<Integer> portsBroadcast = logins.getPortReceivers();
+        logins.writePortReceiver(portReception);
+        this.userModel = new UserModel(id,portReception,portEmission,portsBroadcast);
         this.userModel.addUserModelObserver(this);
 
         // Initialize local database
@@ -65,7 +87,7 @@ public class ClientController implements FacadeConversationHandlerObserver, User
 
     @Override
     public void newMessageReceived(Message receivedMessage, boolean isCurrentConversation) {
-        System.out.printf(".(ClientController.java:69) - newMessageReceived : opened ? %s\n",isCurrentConversation ? "true" : "false");
+//        System.out.printf(".(ClientController.java:69) - newMessageReceived : opened ? %s\n",isCurrentConversation ? "true" : "false");
         if(isCurrentConversation) {
             this.view.displayMessage(receivedMessage);
         } else {
@@ -79,7 +101,7 @@ public class ClientController implements FacadeConversationHandlerObserver, User
             Because the message has just been sent, it means the opened conversation's 
             correspondent is the same as the message's destination
         */
-        System.out.printf(".(ClientController.java:82) - newMessageSent : \n");
+//        System.out.printf(".(ClientController.java:82) - newMessageSent : \n");
         this.view.displayMessage(sentMessage);
     }
 
@@ -109,7 +131,7 @@ public class ClientController implements FacadeConversationHandlerObserver, User
 
     @Override
     public void newMessageSending(Message sendingMessage) {
-        System.out.printf(".(ClientController.java:106) - newMessageSending : currentConv : %s\n",this.conversationHandler.getCurrentConversation());
+//        System.out.printf(".(ClientController.java:106) - newMessageSending : currentConv : %s\n",this.conversationHandler.getCurrentConversation());
         if(this.conversationHandler.getCurrentConversation() != null) {
             this.conversationHandler.getCurrentConversation().send(sendingMessage,this.conversationHandler.getCurrentConversation().getCorrespondent());
         }
@@ -117,7 +139,7 @@ public class ClientController implements FacadeConversationHandlerObserver, User
 
     @Override
     public void userSelected(UserView userview) {
-        System.out.printf(".(ClientController.java:114) - userSelected\n");
+//        System.out.printf(".(ClientController.java:114) - userSelected\n");
         this.conversationHandler.open(userview.getUser());
     }
 }

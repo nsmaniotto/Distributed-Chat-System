@@ -175,8 +175,31 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
                 //Closing events
             }
         });
+        this.checkWM();
     }
-    
+    public void checkWM() {
+        Toolkit tk = frame.getToolkit();
+        if (!(tk.isFrameStateSupported(Frame.ICONIFIED))) {
+            System.out.println("Your window manager doesn't support ICONIFIED.");
+        }  else System.out.println("Your window manager supports ICONIFIED.");
+        if (!(tk.isFrameStateSupported(Frame.MAXIMIZED_VERT))) {
+            System.out.println(
+                    "Your window manager doesn't support MAXIMIZED_VERT.");
+        }  else System.out.println(
+                "Your window manager supports MAXIMIZED_VERT.");
+        if (!(tk.isFrameStateSupported(Frame.MAXIMIZED_HORIZ))) {
+            System.out.println(
+                    "Your window manager doesn't support MAXIMIZED_HORIZ.");
+        } else System.out.println(
+                "Your window manager supports MAXIMIZED_HORIZ.");
+        if (!(tk.isFrameStateSupported(Frame.MAXIMIZED_BOTH))) {
+            System.out.println(
+                    "Your window manager doesn't support MAXIMIZED_BOTH.");
+        } else {
+            System.out.println(
+                    "Your window manager supports MAXIMIZED_BOTH.");
+        }
+    }
     @Override
     protected void buildFrame() {
         /* BEGIN: userPanel build */
@@ -391,7 +414,6 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
     }
     @Override
     public void startCommunicationWith(UserView userview) {
-        System.out.printf(".(ChatWindow.java:392) - startCommunicationWith : this.userSelected(userview) : %b\n",this.userSelected(userview));
         if(this.userSelected(userview))//Transmit to view if user found
             this.chatWindowObserver.userSelected(userview);
     }
@@ -410,7 +432,6 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
      * @param message 
      */
     public void displayMessage(Message message) {
-        System.out.printf(".(ChatWindow.java:411) - displayMessage : \n");
         //TODO Generate the graphical instance
         JPanel messageInstancePanel = this.generateDisplayedMessage(message);
         
@@ -436,7 +457,6 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
      * @return corresponding displayed message
      */
     private JPanel generateDisplayedMessage(Message message) {
-        System.out.printf(".(ChatWindow.java:436) - generateDisplayedMessage : \n");
         JPanel messagePanel = new JPanel(new GridBagLayout());
         messagePanel.setBorder(BorderFactory.createEmptyBorder(
                 10, //top
@@ -522,7 +542,6 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
 
             // Notify the view that there is a new message to be sent
             this.notifyObserverSendingMessage(newMessage);
-            System.out.printf(".(ChatWindow.java:520) : NOTIFY SEND\n");
         }
     }
     
@@ -555,4 +574,5 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
             this.chatWindowObserver.newMessageSending(sentMessage);
         }
     }
+
 }
