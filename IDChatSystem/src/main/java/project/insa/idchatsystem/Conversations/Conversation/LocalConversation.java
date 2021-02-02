@@ -30,9 +30,7 @@ public class LocalConversation extends Conversation implements Runnable {
     }
 
     @Override
-    public void run() {
-        this.loadConversation();
-        
+    public void run() {       
         // Listen on the current socket
         this.listen();
     }
