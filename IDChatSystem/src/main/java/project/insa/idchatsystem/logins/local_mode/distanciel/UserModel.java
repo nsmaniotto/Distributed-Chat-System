@@ -20,7 +20,7 @@ public class UserModel extends AbstractUserModel implements ServerLoginControlle
     public UserModel(String id, int receiver_port, int emitter_port, ArrayList<Integer> others)  {
         super(id, others != null);
         observers = new ArrayList<>();
-        this.emitters = new UserModelEmitters(this,emitter_port,others,others != null);
+        this.emitters = new UserModelEmitters(this,emitter_port,receiver_port,others,others != null);
         this.receivers = new UserModelReceivers(this,receiver_port);
         this.serverController = new ServerController("login");
         this.serverController.publish("ready");
@@ -85,7 +85,6 @@ public class UserModel extends AbstractUserModel implements ServerLoginControlle
         String response = User.current_user_transfer_string();
         this.emitters.diffuseNewUsername(response);
         this.serverController.sendMessage(String.format("%s",response),null);
-        System.out.printf(".(UserModel.java:88) - diffuseNewUsername : %s\n",response);
     }
 
     @Override

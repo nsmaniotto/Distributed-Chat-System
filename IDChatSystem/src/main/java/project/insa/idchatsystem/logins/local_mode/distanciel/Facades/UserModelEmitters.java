@@ -12,11 +12,11 @@ public class UserModelEmitters implements Runnable {
     protected String state = "connected";
     private UserModelEmittersObserver obs;
     private boolean local;
-    public UserModelEmitters(UserModelEmittersObserver obs,int emitter_port, ArrayList<Integer> others,boolean local) {
+    public UserModelEmitters(UserModelEmittersObserver obs,int emitter_port, int receiver_port, ArrayList<Integer> others,boolean local) {
         this.local = local;
         this.obs = obs;
         if(this.local) {
-            localEmitter = new LocalUserModelEmitter(emitter_port, others);
+            localEmitter = new LocalUserModelEmitter(emitter_port, receiver_port,others);
             new Thread(localEmitter).start();
         }
         this.last_user_updated_string = "";

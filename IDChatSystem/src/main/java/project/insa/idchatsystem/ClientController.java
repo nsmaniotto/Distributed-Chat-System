@@ -78,7 +78,6 @@ public class ClientController implements FacadeConversationHandlerObserver, User
 
     @Override
     public void onlineUser(User user) {
-        //System.out.printf("CONTROLLER : Online user : %s\n",user);
         this.conversationHandler.addKnownUser(user);
         this.view.onlineUser(user);
     }

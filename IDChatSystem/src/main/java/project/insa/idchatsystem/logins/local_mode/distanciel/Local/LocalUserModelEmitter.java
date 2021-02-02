@@ -8,9 +8,13 @@ import java.util.ArrayList;
 
 public class LocalUserModelEmitter implements Runnable {
     private ArrayList<Integer> liste_ports_others;
+    private int receiver_port;
     private DatagramSocket socket;
-    public LocalUserModelEmitter(int emitter_port,ArrayList<Integer> others){
+    public LocalUserModelEmitter(int emitter_port,int receiver_port,ArrayList<Integer> others){
+        this.receiver_port = receiver_port;
         this.liste_ports_others = others;
+        this.liste_ports_others.remove(Integer.valueOf(this.receiver_port));
+        System.out.printf(".(LocalUserModelEmitter.java:16) - LocalUserModelEmitter : longueur %d\n",others.size());
         try {
             this.socket = new DatagramSocket(emitter_port);
         } catch (SocketException e) {
@@ -19,8 +23,8 @@ public class LocalUserModelEmitter implements Runnable {
     }
     public void sendBroadcast(String msg) {
         String full_msg = String.format("login,%s",msg);
-        System.out.printf(".(LocalUserModelEmitter.java:20) - sendBroadcast : %s\n",msg);
         for(int port:this.liste_ports_others) {
+            System.out.printf(".(LocalUserModelEmitter.java:25) - sendBroadcast : port : %d\n",port);
             DatagramPacket outPacket = null;
             try {
                 outPacket = new DatagramPacket(full_msg.getBytes(),
@@ -48,6 +52,7 @@ public class LocalUserModelEmitter implements Runnable {
                 ArrayList<Integer> merged = new ArrayList<>();
                 merged.addAll(ports);
                 merged.addAll(this.liste_ports_others);
+                merged.remove(Integer.valueOf(this.receiver_port));
                 this.liste_ports_others = merged;
             } catch (InterruptedException e) {
                 e.printStackTrace();

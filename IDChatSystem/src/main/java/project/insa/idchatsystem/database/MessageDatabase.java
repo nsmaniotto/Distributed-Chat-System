@@ -117,11 +117,11 @@ public class MessageDatabase extends AbstractDatabase {
         String query = "SELECT " + DB_MESSAGE_ROW_SOURCE_ID + "," + DB_MESSAGE_ROW_DESTINATION_ID
                             + "," + DB_MESSAGE_ROW_TEXT+ "," + DB_MESSAGE_ROW_TIMESTAMP 
                 + " FROM " + DB_TABLE_NAME
-                + " WHERE " + DB_MESSAGE_ROW_SOURCE_ID + "=" + user1.get_id()
-                    + " AND " + DB_MESSAGE_ROW_DESTINATION_ID + "=" + user2.get_id()
-                + " OR " + DB_MESSAGE_ROW_SOURCE_ID + "=" + user2.get_id()
-                    + " AND " + DB_MESSAGE_ROW_DESTINATION_ID + "=" + user1.get_id();
-        
+                + " WHERE (" + DB_MESSAGE_ROW_SOURCE_ID + "='" + user1.get_id()
+                    + "' AND " + DB_MESSAGE_ROW_DESTINATION_ID + "='" + user2.get_id()
+                + "') OR (" + DB_MESSAGE_ROW_SOURCE_ID + "='" + user2.get_id()
+                    + "' AND " + DB_MESSAGE_ROW_DESTINATION_ID + "='" + user1.get_id() + "')";
+        System.out.printf(".(MessageDatabase.java:124) - retrieveOrderedMessagesByConversationBetween : %s\n",query);
         // Execute query
         ResultSet queryResultSet = this.executeQuery(query);
         
