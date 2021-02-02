@@ -114,7 +114,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
                 );
         this.correspondentPanel.setBackground(Color.white);
 
-        this.correspondentInfoLabel = new JLabel("", JLabel.LEFT);
+        this.correspondentInfoLabel = new JLabel("Select your correspondent!", JLabel.LEFT);
 
         this.chatScrollPane = new JScrollPane(this.chatHistoryPanel);
         this.chatScrollPane.setAutoscrolls(true);
