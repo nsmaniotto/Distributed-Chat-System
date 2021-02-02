@@ -143,32 +143,75 @@ public class MessageDatabase {
     
     /* QUERIES */
     
-    public void storeMessage(Message message) {
-        // MySQL insert statement
-        String prepareQuery = "INSERT INTO " + DB_MESSAGE_TABLE_NAME + "("
-                + DB_MESSAGE_ROW_SOURCE_ID
-                + "," + DB_MESSAGE_ROW_DESTINATION_ID
-                + "," + DB_MESSAGE_ROW_TEXT
-                + "," + DB_MESSAGE_ROW_TIMESTAMP
-                + ")"
-                + "VALUES (?, ?, ?, ?)";
-
-        // Create the MySQL insert prepared statement to prevent injection
-        PreparedStatement preparedStatement;
-        try {
-            if(this.conn != null) {
-                preparedStatement = this.conn.prepareStatement(prepareQuery);
-            
-                preparedStatement.setInt(1, message.getSource().get_id());
-                preparedStatement.setInt(2, message.getDestination().get_id());
-                preparedStatement.setString(3, message.getText());
-                preparedStatement.setTimestamp(4, message.getTimestamp());
-
-                preparedStatement.execute();
-            }
-        } catch (SQLException ex) {
-            System.out.println("(MessageDatabase) : EXCEPTION AT CREATING/EXECUTING PREPARED STATEMENT : " + ex);
+    public boolean checkForDuplicate(Message message) {
+        /*try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
             Logger.getLogger(MessageDatabase.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
+        boolean messageExists = false;
+        
+        // Timestamp - 1s, to string format
+        String timestampStringToCompare = new Timestamp(message.getTimestamp().getTime() - 1000).toString();
+        
+        ArrayList<Message> resultMessages = new ArrayList<Message>();
+        
+        // Query to retrieve messages similar and close in time from 'message'
+        String query = "SELECT *" 
+                + " FROM " + DB_MESSAGE_TABLE_NAME
+                + " WHERE " + DB_MESSAGE_ROW_SOURCE_ID + "=" + message.getSource().get_id()
+                + " AND " + DB_MESSAGE_ROW_DESTINATION_ID + "=" + message.getDestination().get_id()
+                + " AND " + DB_MESSAGE_ROW_TEXT + "= \"" + message.getText() + "\""
+                ;//+ " AND " + DB_MESSAGE_ROW_TIMESTAMP + " >= \"" + timestampStringToCompare + "\"";
+        
+        // Execute query
+        ResultSet queryResultSet = this.executeQuery(query);
+        
+        // Check for returned values
+        if(queryResultSet != null) {
+            try {
+                // Check if the result set is empty: .next() == false means empty
+                if(queryResultSet.next()) {
+                    messageExists = true;
+                    System.out.println("(MessageDatabase) : Message already exists");
+                }
+            } catch (SQLException ex) {
+                System.out.println("(MessageDatabase) : EXCEPTION AT CHECKING FOR DUPLICATES : " + ex);
+                Logger.getLogger(MessageDatabase.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        return messageExists;
+    }
+    
+    public void storeMessage(Message message) {
+        if(!this.checkForDuplicate(message)) {
+            // MySQL insert statement
+            String prepareQuery = "INSERT INTO " + DB_MESSAGE_TABLE_NAME + "("
+                    + DB_MESSAGE_ROW_SOURCE_ID
+                    + "," + DB_MESSAGE_ROW_DESTINATION_ID
+                    + "," + DB_MESSAGE_ROW_TEXT
+                    + "," + DB_MESSAGE_ROW_TIMESTAMP
+                    + ")"
+                    + "VALUES (?, ?, ?, ?)";
+
+            // Create the MySQL insert prepared statement to prevent injection
+            PreparedStatement preparedStatement;
+            try {
+                if(this.conn != null) {
+                    preparedStatement = this.conn.prepareStatement(prepareQuery);
+
+                    preparedStatement.setInt(1, message.getSource().get_id());
+                    preparedStatement.setInt(2, message.getDestination().get_id());
+                    preparedStatement.setString(3, message.getText());
+                    preparedStatement.setTimestamp(4, message.getTimestamp());
+
+                    preparedStatement.execute();
+                }
+            } catch (SQLException ex) {
+                System.out.println("(MessageDatabase) : EXCEPTION AT CREATING/EXECUTING PREPARED STATEMENT : " + ex);
+                Logger.getLogger(MessageDatabase.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
