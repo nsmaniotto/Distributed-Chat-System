@@ -114,7 +114,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
                 );
         this.correspondentPanel.setBackground(Color.white);
 
-        this.correspondentInfoLabel = new JLabel("BBBBB#yy", JLabel.LEFT);
+        this.correspondentInfoLabel = new JLabel("Select your correspondent!", JLabel.LEFT);
 
         this.chatScrollPane = new JScrollPane(this.chatHistoryPanel);
         this.chatScrollPane.setAutoscrolls(true);
@@ -381,7 +381,8 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
             userview.setPriority(maxPriotity+1);
             //Uniformize priorities
             this.uniformizePriorities();
-            this.chatWindowObserver.userSelected(userview);
+            
+            this.openChatWith(userview);
             return true;
         }
         else {
@@ -401,6 +402,24 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
     public void displayUsername(String username, int id) {
         if(this.usernameLabel != null) {
             this.usernameLabel.setText(username + " #" + id);
+        }
+    }
+    
+    private void openChatWith(UserView userview) {
+        User correspondent = userview.getUser();
+        String correspondentInfo = correspondent.get_username() + "#" + correspondent.get_id();
+        
+        boolean chatIsOpened = this.correspondentInfoLabel.getText().equalsIgnoreCase(correspondentInfo);
+        
+        if(!chatIsOpened) {
+            // Update correspondent information label
+            this.correspondentInfoLabel.setText(correspondentInfo);
+            
+            // Clear chat messages
+            this.chatHistoryPanel.removeAll();
+            this.chatHistoryPanel.validate();
+            
+            this.chatWindowObserver.userSelected(userview);
         }
     }
     

@@ -25,14 +25,15 @@ public class ClientTestRobin {
         ClientController controller = new ClientController(id,2001,2011,arrayBroadCast);
         
         /* TESTING TCP COMMUNICATIONS */
-        try {
+        /*try {
             Thread.sleep(10000);//waiting for input login
         } catch (Exception ignored) {
             
         }
         HashMap<Integer,User> userHashMap = controller.getConversationHandler().getUsers();
-        User user = userHashMap.get(userHashMap.keySet().toArray()[0]);
-        controller.getConversationHandler().open(user); // Sending a message to Nathan
+        User user = userHashMap.get(userHashMap.keySet().toArray()[0]);*/
+        
+        /*controller.getConversationHandler().open(user); // Sending a message to Nathan
         controller.getConversationHandler().getCurrentConversation().send(new Message("Hi Nathan !"),controller.getConversationHandler().getCurrentConversation().getCorrespondent());
         
         try {
@@ -50,5 +51,6 @@ public class ClientTestRobin {
         }
 
         controller.getConversationHandler().getCurrentConversation().send(new Message(":-)"),controller.getConversationHandler().getCurrentConversation().getCorrespondent());
+        */
     }
 }
