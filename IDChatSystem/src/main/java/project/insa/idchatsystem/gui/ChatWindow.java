@@ -12,6 +12,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -168,37 +169,6 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
                 updateTabs();
             }
         });
-        this.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                super.windowClosing(e);
-                //Closing events
-            }
-        });
-        this.checkWM();
-    }
-    public void checkWM() {
-        Toolkit tk = frame.getToolkit();
-        if (!(tk.isFrameStateSupported(Frame.ICONIFIED))) {
-            System.out.println("Your window manager doesn't support ICONIFIED.");
-        }  else System.out.println("Your window manager supports ICONIFIED.");
-        if (!(tk.isFrameStateSupported(Frame.MAXIMIZED_VERT))) {
-            System.out.println(
-                    "Your window manager doesn't support MAXIMIZED_VERT.");
-        }  else System.out.println(
-                "Your window manager supports MAXIMIZED_VERT.");
-        if (!(tk.isFrameStateSupported(Frame.MAXIMIZED_HORIZ))) {
-            System.out.println(
-                    "Your window manager doesn't support MAXIMIZED_HORIZ.");
-        } else System.out.println(
-                "Your window manager supports MAXIMIZED_HORIZ.");
-        if (!(tk.isFrameStateSupported(Frame.MAXIMIZED_BOTH))) {
-            System.out.println(
-                    "Your window manager doesn't support MAXIMIZED_BOTH.");
-        } else {
-            System.out.println(
-                    "Your window manager supports MAXIMIZED_BOTH.");
-        }
     }
     @Override
     protected void buildFrame() {
@@ -302,15 +272,6 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         this.frame.getContentPane().add(this.chatPanel, chatPanelConstraints);
         /* END: frame build */
     }
-    public void updateUsers(HashMap<Integer,User> users){
-        //On récupère les utilisateurs
-        //On les classes par login par ordre alphabétique
-        //On less ajoute à la liste des utilisateurs connectés
-        users.forEach((k,user) -> {
-            this.onlineUser(user);
-        });
-        this.updateOnlineUsers();
-    }
     public void onlineUser(User user){
 //        System.out.printf(".(ChatWindow.java:292) - onlineUser : %s\n",user);
         UserView v = new UserView(user);
@@ -341,7 +302,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
             }
         }
     }
-    private void updateOnlineUsers(){
+    private synchronized void updateOnlineUsers(){
         this.onlineUsersPanel.removeAll();
         this.offlineUsersPanel.removeAll();
         this.recentUsersPanel.removeAll();
@@ -350,7 +311,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
                 this.onlineUsersPanel.add(userComp);
         });
     }
-    private void updateOfflineUsers(){
+    private synchronized void updateOfflineUsers(){
         this.onlineUsersPanel.removeAll();
         this.offlineUsersPanel.removeAll();
         this.recentUsersPanel.removeAll();
@@ -359,7 +320,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
                 this.offlineUsersPanel.add(userComp);
         });
     }
-    public void updateRecentUsers() {
+    public synchronized void updateRecentUsers() {
         this.onlineUsersPanel.removeAll();
         this.offlineUsersPanel.removeAll();
         this.recentUsersPanel.removeAll();
@@ -383,7 +344,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
             System.out.printf("User %s was not connected\n",user);
         }
     }
-    private void uniformizePriorities(){
+    private synchronized void uniformizePriorities(){
         int prevPrio=0;
         for (UserView v : this.usersContainer.getListOrderedByPriority()) {
             if((v.getPriority()-prevPrio)>1) {
@@ -392,7 +353,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
             prevPrio = v.getPriority();
         }
     }
-    public boolean userSelected(UserView userview) {
+    public synchronized boolean userSelected(UserView userview) {
         int index = this.usersContainer.indexOf(userview);
         if(index != -1){
             //Recalculate priorities
@@ -414,8 +375,9 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
     }
     @Override
     public void startCommunicationWith(UserView userview) {
-        if(this.userSelected(userview))//Transmit to view if user found
+        if(this.userSelected(userview)) {//Transmit to view if user found
             this.chatWindowObserver.userSelected(userview);
+        }
     }
 
 
@@ -423,6 +385,11 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
     public void displayUsername(String username, String id) {
         if(this.usernameLabel != null) {
             this.usernameLabel.setText(username + " #" + id);
+            try {
+                this.usernameLabel.setToolTipText(User.get_current_id());
+            } catch (Uninitialized uninitialized) {
+                uninitialized.printStackTrace();
+            }
         }
     }
     
@@ -444,10 +411,15 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
      * Treat and display of a notification according to the given message
      * 
      * @param message : Message - message based on which the notification will be built
-     * @deprecated - to be implemented
      */
     public void displayNotification(Message message) {
-        //TODO
+        ArrayList<UserView> users = this.usersContainer.getListOrderedByName();
+        for(UserView user : users) {
+            if(user.getId().equals(message.getSource().get_id())){
+                user.notificationAvailable();
+                return;
+            }
+        }
     }
     
     /**

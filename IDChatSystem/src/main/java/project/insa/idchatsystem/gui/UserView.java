@@ -39,7 +39,8 @@ public class UserView extends JPanel implements UserViewObservable {
     //TODO change colors to notify new message
     protected void initComponents() {
         this.mainPanel = new JPanel();
-        this.usernameLabel = new JLabel(String.format("%s #%s",this.user.get_username(),this.user.get_id()));
+        this.usernameLabel = new JLabel(String.format("%s #%s",this.user.get_username(),this.user.get_id_to_show()));
+        this.usernameLabel.setToolTipText(this.user.get_id());
         this.selectButton = new JButton("Select");
     }
 
@@ -56,17 +57,15 @@ public class UserView extends JPanel implements UserViewObservable {
     public void initListeners(UserViewObserver observer) {
         UserView parent = this;
         this.selectButton.addActionListener(e -> {
-            System.out.printf(".(UserView.java:59) - initListeners : selectionné %s\n",parent.user);
-            this.mainPanel.setBackground(Color.RED);
-            this.setOpaque(true);
-
-            System.out.printf("%s\n",this.getBackground());
+            parent.mainPanel.setBackground(Color.RED);
+            parent.setOpaque(true);
             parent.userSelected();
         });
         this.observer = observer;
         this.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                parent.notificationSeen();
                 parent.userSelected();
             }
 
@@ -95,7 +94,8 @@ public class UserView extends JPanel implements UserViewObservable {
         this.mainPanel.setBackground(Color.GREEN);
     }
     public void notificationSeen() {
-        this.setOpaque(false);
+        this.mainPanel.setOpaque(false);
+        this.mainPanel.setBackground(new Color(0,0,0,0));
     }
     
     public void userSelected() {
@@ -121,7 +121,8 @@ public class UserView extends JPanel implements UserViewObservable {
     }
     public void setUsername(String username){
         this.user.setUsername(username);
-        this.usernameLabel.setText(String.format("%s #%s",this.user.get_username(),this.user.get_id()));
+        this.usernameLabel.setText(String.format("%s #%s",this.user.get_username(),this.user.get_id_to_show()));
+        this.usernameLabel.setToolTipText(this.user.get_id());
     }
     public void setLastSeen(Timestamp timestamp){
         this.user.setLastSeen(timestamp);

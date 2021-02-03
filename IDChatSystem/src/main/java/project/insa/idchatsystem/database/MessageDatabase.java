@@ -28,14 +28,6 @@ public class MessageDatabase extends AbstractDatabase {
     private final String DB_MESSAGE_ROW_TEXT = "TEXT";
     private final String DB_MESSAGE_ROW_TIMESTAMP = "TIMESTAMP";
 
-
-    // Database credentials
-    private final String USER = "idchatsystem_usr";
-    private final String PASSWORD = "idchatsystem_lgn";
-    
-    // Database utilities
-    private Connection conn;
-    private Statement statement;
     
     public MessageDatabase() {
         super("messages");
@@ -67,13 +59,8 @@ public class MessageDatabase extends AbstractDatabase {
     
     /* QUERIES */
     
-    public void storeMessage(Object message_param) {
-        if (message_param instanceof Message) {
-            Message message = (Message) message_param;
+    public void storeMessage(Message message) {
             // MySQL insert statement
-            ArrayList<Message> history = this.retrieveOrderedMessagesByConversationBetween(message.getSource(), message.getDestination());
-            if (history.contains(message))
-                return;
             String prepareQuery = "INSERT INTO " + DB_TABLE_NAME + "("
                     + DB_MESSAGE_ROW_SOURCE_ID
                     + "," + DB_MESSAGE_ROW_DESTINATION_ID
@@ -92,14 +79,12 @@ public class MessageDatabase extends AbstractDatabase {
                     preparedStatement.setString(2, message.getDestination().get_id());
                     preparedStatement.setString(3, message.getText());
                     preparedStatement.setTimestamp(4, message.getTimestamp());
-
                     preparedStatement.execute();
                 }
             } catch (SQLException ex) {
                 System.out.println("(MessageDatabase) : EXCEPTION AT CREATING/EXECUTING PREPARED STATEMENT : " + ex);
                 Logger.getLogger(MessageDatabase.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
     }
     
     /**
@@ -121,7 +106,6 @@ public class MessageDatabase extends AbstractDatabase {
                     + "' AND " + DB_MESSAGE_ROW_DESTINATION_ID + "='" + user2.get_id()
                 + "') OR (" + DB_MESSAGE_ROW_SOURCE_ID + "='" + user2.get_id()
                     + "' AND " + DB_MESSAGE_ROW_DESTINATION_ID + "='" + user1.get_id() + "')";
-        System.out.printf(".(MessageDatabase.java:124) - retrieveOrderedMessagesByConversationBetween : %s\n",query);
         // Execute query
         ResultSet queryResultSet = this.executeQuery(query);
         

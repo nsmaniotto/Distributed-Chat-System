@@ -121,7 +121,7 @@ public class Servlet extends HttpServlet {
 				return;
 			}
 			else if (!state.equals("")) {
-				System.out.printf("->   %d is %s\n",idSrc,state);
+				System.out.printf("->   %s is %s\n",idSrc,state);
 				setStatus(idSrc,state);
 				if(state.equals("ready"))
 					setWriter(idSrc,writer);
@@ -175,7 +175,9 @@ public class Servlet extends HttpServlet {
 		    	messages = this.users.get(id).cacheLog;
 	    	if(messages != null && messages.size() >0)
 	    		System.out.printf("\t\tsendAll cache\n");
-	    	for(StructMsg message : messages) {
+	    	ArrayList<StructMsg> copy_messages = new ArrayList<>();
+	    	copy_messages.addAll(messages);
+	    	for(StructMsg message : copy_messages) {
 	    		if(message.idSrc != id) {
 		    		System.out.printf("SENDED %s\n",message.msg);
 		    		writer.println(message.msg);

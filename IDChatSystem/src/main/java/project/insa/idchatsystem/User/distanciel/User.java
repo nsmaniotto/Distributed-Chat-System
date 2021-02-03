@@ -10,7 +10,7 @@ public class User {
     private String username;
 
     private String id;
-
+    private static int maxLength = 5;
     private final String ipAddress;
     private boolean local_user;
 
@@ -58,6 +58,13 @@ public class User {
         }
         return User.current_id;
     }
+    public static String get_current_id_to_show() throws Uninitialized {
+        String id = User.get_current_id();
+        if (id.length() > User.maxLength)
+            return id.substring(0,User.maxLength) + "...";
+        else
+            return id;
+    }
 
     public static String get_current_ipAddress() throws Uninitialized {
         if (User.current_id.equals("")) {
@@ -104,6 +111,13 @@ public class User {
 
     public String get_id() {
         return this.id;
+    }
+    public String get_id_to_show() {
+        String id = this.get_id();
+        if (id.length() > User.maxLength)
+            return id.substring(0,User.maxLength) + "...";
+        else
+            return id;
     }
 
     public String get_ipAddress() {

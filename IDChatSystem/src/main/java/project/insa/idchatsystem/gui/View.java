@@ -24,7 +24,7 @@ public class View implements Runnable, ChatWindowObserver {
     public void loginOk(String login) {
         System.out.printf("Opening chat window\n");
         try {
-            this.chat_window.displayUsername(login,User.get_current_id());
+            this.chat_window.displayUsername(login,User.get_current_id_to_show());
         } catch (Uninitialized uninitialized) {
             uninitialized.printStackTrace();
         }
@@ -67,7 +67,6 @@ public class View implements Runnable, ChatWindowObserver {
      */
     public void displayNotification(Message message) {
         assert this.chat_window != null : "You are not logged in";
-        
         this.chat_window.displayNotification(message);
     }
 

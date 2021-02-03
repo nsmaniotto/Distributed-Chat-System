@@ -86,7 +86,6 @@ public class ClientController implements FacadeConversationHandlerObserver, User
 
     @Override
     public void newMessageReceived(Message receivedMessage, boolean isCurrentConversation) {
-//        System.out.printf(".(ClientController.java:69) - newMessageReceived : opened ? %s\n",isCurrentConversation ? "true" : "false");
         if(isCurrentConversation) {
             this.view.displayMessage(receivedMessage);
         } else {
@@ -112,7 +111,6 @@ public class ClientController implements FacadeConversationHandlerObserver, User
     @Override
     public void messagesRetrieved(ArrayList<Message> retrievedMessages) {
         retrievedMessages.forEach( message -> {
-//            System.out.printf(".(ClientController.java:94) - messagesRetrieved : %s\n",message);
             this.view.displayMessage(message);
         } );
     }
@@ -138,7 +136,6 @@ public class ClientController implements FacadeConversationHandlerObserver, User
 
     @Override
     public void userSelected(UserView userview) {
-//        System.out.printf(".(ClientController.java:114) - userSelected\n");
         this.conversationHandler.open(userview.getUser());
     }
 }

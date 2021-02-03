@@ -1,5 +1,6 @@
 package project.insa.idchatsystem.logins.local_mode.distanciel.Facades;
 
+import project.insa.idchatsystem.Exceptions.Uninitialized;
 import project.insa.idchatsystem.Observers.logins.Observers.UserModelReceiverObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 import project.insa.idchatsystem.logins.local_mode.distanciel.Local.LocalUserModelReceiver;
@@ -27,15 +28,27 @@ public class UserModelReceivers implements UserModelReceiverObserver  {
         while (m.find()){
             //System.out.println("NEW USER");
             User new_user = new User(m.group("username"),m.group("id"),m.group("ip"),m.group("local").equals("t"));
-            new_user.setConversationHandlerListenerPort(Integer.parseInt(m.group("convListPort")));
+            try {
+                if(!new_user.get_id().equals(User.get_current_id())) {
+                    this.model.addOnlineUser(new_user);//Add or refresh informations of the user based on the id
+                }
+                new_user.setConversationHandlerListenerPort(Integer.parseInt(m.group("convListPort")));
+            } catch (Uninitialized uninitialized) {
+                uninitialized.printStackTrace();
+            }
 //            System.out.printf("UserModelReceivers : ONLINE USER\n");
-            this.model.addOnlineUser(new_user);//Add or refresh informations of the user based on the id
         }
         m = pattern_disconnected.matcher(msg);
         while (m.find()){
             System.out.printf("User %s disconnection signal\n",m.group("id"));
 //            System.out.printf("UserModelReceivers : OFFLINE USER\n");
-            this.model.removeOnlineUser(m.group("id"));//Add or refresh informations of the user based on the id
+            try {
+                if(!m.group("id").equals(User.get_current_id())) {
+                    this.model.removeOnlineUser(m.group("id"));//Add or refresh informations of the user based on the id
+                }
+            } catch (Uninitialized uninitialized) {
+                uninitialized.printStackTrace();
+            }
         }
         m = pattern_update.matcher(msg);
         while (m.find()){

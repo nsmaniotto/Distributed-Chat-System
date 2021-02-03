@@ -13,7 +13,7 @@ public abstract class Conversation implements ConversationObservable, Runnable {
     protected final User correspondent;
     protected final ArrayList<Message> history;
     protected boolean isOpen;
-    protected ConversationObserver conversationHandlerObserver;
+    protected ConversationObserver conversationObserver;
     public Conversation(User correspondent) {
         this.isOpen = false;
         this.correspondent = correspondent;
@@ -71,32 +71,32 @@ public abstract class Conversation implements ConversationObservable, Runnable {
     @Override
     public void addConversationObserver(ConversationObserver observer) {
 //        System.out.printf(".(Conversation.java:73) - addConversationObserver : %s\n",observer);
-        this.conversationHandlerObserver = observer;
+        this.conversationObserver = observer;
     }
 
     @Override
     public void deleteConversationObserver(ConversationObserver observer) {
-        this.conversationHandlerObserver = null;
+        this.conversationObserver = null;
     }
 
     @Override
     public void notifyObserversSentMessage(Message sentMessage) {
 //        System.out.printf(".(Conversation.java:84) - notifyObserversSentMessage : this.conversationHandlerObserver : %s\n",this.conversationHandlerObserver);
-        if(this.conversationHandlerObserver != null) {
+        if(this.conversationObserver != null) {
 //            System.out.printf(".(Conversation.java:84) - notifyObserversSentMessage\n");
-            this.conversationHandlerObserver.newMessageSent(sentMessage);
+            this.conversationObserver.newMessageSent(sentMessage);
         }
     }
     @Override
     public void notifyObserversReceivedMessage(Message receivedMessage) {
-        if(this.conversationHandlerObserver != null) {
-            this.conversationHandlerObserver.newMessageReceived(receivedMessage, this.isOpen);
+        if(this.conversationObserver != null) {
+            this.conversationObserver.newMessageReceived(receivedMessage, this.isOpen);
         }
     }
     @Override
     public void notifyObserversRetrievedMessages(ArrayList<Message> retrievedMessages) {
-        if(this.conversationHandlerObserver != null) {
-            this.conversationHandlerObserver.messagesRetrieved(retrievedMessages);
+        if(this.conversationObserver != null) {
+            this.conversationObserver.messagesRetrieved(retrievedMessages);
         }
     }
     //GETTERS
