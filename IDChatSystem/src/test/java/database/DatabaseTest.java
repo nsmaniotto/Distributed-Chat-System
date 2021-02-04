@@ -20,6 +20,9 @@ public class DatabaseTest {
         
         db.storeMessage(fakeMessage1);
         
+        // Try duplicate storing
+        db.storeMessage(fakeMessage1);
+        
         ArrayList<Message> retrievedMessages = db.retrieveOrderedMessagesByConversationBetween(fakeCurrentUser, fakeCorrespondent);
         
         System.out.print("\n\n\n\n(DatabaseTest) - Retrieved messages test result : (must contain 'hello' message(s))\n");

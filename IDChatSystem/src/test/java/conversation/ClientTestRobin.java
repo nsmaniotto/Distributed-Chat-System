@@ -25,7 +25,7 @@ public class ClientTestRobin {
         ClientController controller = new ClientController(id,true,false);
         
         /* TESTING TCP COMMUNICATIONS */
-        try {
+        /*try {
             Thread.sleep(10000);//waiting for input login
         } catch (Exception ignored) {
             
@@ -50,5 +50,6 @@ public class ClientTestRobin {
         }
 
         controller.getConversationHandler().getCurrentConversation().send(new Message(":-)"),controller.getConversationHandler().getCurrentConversation().getCorrespondent());
+        */
     }
 }

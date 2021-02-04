@@ -115,9 +115,10 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
                 );
         this.correspondentPanel.setBackground(Color.white);
 
-        this.correspondentInfoLabel = new JLabel("BBBBB#yy", JLabel.LEFT);
+        this.correspondentInfoLabel = new JLabel("Select your correspondent!", JLabel.LEFT);
 
         this.chatScrollPane = new JScrollPane(this.chatHistoryPanel);
+        this.chatScrollPane.setAutoscrolls(true);
         this.chatScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         this.chatScrollPane.setBackground(Color.GRAY/*Window.COLOR_SOFTWHITE*/);
 
@@ -169,7 +170,15 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
                 updateTabs();
             }
         });
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                //Closing events
+            }
+        });
     }
+    
     @Override
     protected void buildFrame() {
         /* BEGIN: userPanel build */
@@ -273,7 +282,6 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         /* END: frame build */
     }
     public void onlineUser(User user){
-//        System.out.printf(".(ChatWindow.java:292) - onlineUser : %s\n",user);
         UserView v = new UserView(user);
         v.initListeners(this);
         this.usersContainer.add(v);
@@ -365,7 +373,8 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
             userview.setPriority(maxPriotity+1);
             //Uniformize priorities
             this.uniformizePriorities();
-            this.chatWindowObserver.userSelected(userview);
+
+            this.openChatWith(userview);
             return true;
         }
         else {
@@ -393,18 +402,40 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         }
     }
     
+    private void openChatWith(UserView userview) {
+        User correspondent = userview.getUser();
+        String correspondentInfo = correspondent.get_username() + "#" + correspondent.get_id();
+
+        boolean chatIsOpened = this.correspondentInfoLabel.getText().equalsIgnoreCase(correspondentInfo);
+
+        if(!chatIsOpened) {
+            // Update correspondent information label
+            this.correspondentInfoLabel.setText(correspondentInfo);
+
+            // Clear chat messages
+            this.chatHistoryPanel.removeAll();
+            this.chatHistoryPanel.validate();
+
+            this.chatWindowObserver.userSelected(userview);
+        }
+    }
+
     /**
      * Treat and display the message according to its data
      * 
      * @param message 
      */
     public void displayMessage(Message message) {
-        //TODO Generate the graphical instance
+        System.out.printf(".(ChatWindow.java:411) - displayMessage : \n");
+        // Generate the graphical instance
         JPanel messageInstancePanel = this.generateDisplayedMessage(message);
         
-        //TODO Add the instance to the display conversation
+        // Add the instance to the display conversation
         this.chatHistoryPanel.add(messageInstancePanel);
         this.chatHistoryPanel.validate();
+
+        // Scroll down to see the latest message
+        this.chatScrollPane.getVerticalScrollBar().setValue(this.chatScrollPane.getVerticalScrollBar().getMaximum());
     }
     
     /**

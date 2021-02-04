@@ -8,6 +8,8 @@ import project.insa.idchatsystem.User.distanciel.User;
 import project.insa.idchatsystem.database.MessageDatabase;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public abstract class Conversation implements ConversationObservable, Runnable {
     protected final User correspondent;
@@ -47,7 +49,16 @@ public abstract class Conversation implements ConversationObservable, Runnable {
             // Current user (thereforce message source) is not initialized
             System.out.println("Conversation: EXCEPTION WHILE SETTING MESSAGE DESTINATION " + e);
         }
-
+        
+        // Wait before storing the message:
+        // In local; give time to the sender to store the message
+        // Because the receiver must check if the message is present on the local database
+        try {
+            Thread.sleep(50);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Conversation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         // Store the new message
         this.storeMessage(newMessage);
 

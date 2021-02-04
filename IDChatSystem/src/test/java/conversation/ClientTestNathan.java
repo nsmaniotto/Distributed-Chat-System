@@ -39,13 +39,13 @@ public class ClientTestNathan {
             uninitialized.printStackTrace();
         }
         
-        try {
+        /*try {
             Thread.sleep(15000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         HashMap<String,User> userHashMap = controller.getConversationHandler().getUsers();
         User user = userHashMap.get(userHashMap.keySet().toArray()[0]);
-        controller.getConversationHandler().open(user); // Opening the first conversation
+        controller.getConversationHandler().open(user); // Opening the first conversation*/
     }
 }
