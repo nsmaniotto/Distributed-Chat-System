@@ -3,6 +3,7 @@ package project.insa.idchatsystem;
 
 import project.insa.idchatsystem.Conversations.FacadeConversationHandler;
 import project.insa.idchatsystem.Exceptions.NoPortAvailable;
+import project.insa.idchatsystem.Exceptions.Uninitialized;
 import project.insa.idchatsystem.Observers.Conversations.Observers.FacadeConversationHandlerObserver;
 import project.insa.idchatsystem.Observers.logins.Observers.UsersStatusObserver;
 import project.insa.idchatsystem.Observers.gui.Observers.ViewObserver;
@@ -65,6 +66,11 @@ public class ClientController implements FacadeConversationHandlerObserver, User
         this.database.init();
 
         this.view.enableLoginTextField();
+        try {
+            System.out.printf(".(ClientController.java:68) - ClientController : %s\n", User.get_current_id());
+        } catch (Uninitialized uninitialized) {
+            uninitialized.printStackTrace();
+        }
     }
 
     public UserModel getUserModel() {
