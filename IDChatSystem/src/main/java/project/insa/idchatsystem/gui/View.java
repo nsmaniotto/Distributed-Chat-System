@@ -48,7 +48,9 @@ public class View implements Runnable, ChatWindowObserver {
         System.out.printf("VIEW : offlineUser %s\n",user);
         this.chat_window.offlineUser(user);
     }
-    
+    public void clearMessages() {
+        this.chat_window.clearMessages();
+    }
     /**
      * Relay the message treatment and display to the chat window
      * 
@@ -59,7 +61,9 @@ public class View implements Runnable, ChatWindowObserver {
         
         this.chat_window.displayMessage(message);
     }
-    
+    public void enableLoginTextField() {
+        this.login_window.enableLoginField();
+    }
     /**
      * Relay the notification treatment and display to the chat window
      * 

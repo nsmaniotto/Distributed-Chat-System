@@ -63,6 +63,8 @@ public class ClientController implements FacadeConversationHandlerObserver, User
         // Initialize local database
         this.database = MessageDatabase.getInstance();
         this.database.init();
+
+        this.view.enableLoginTextField();
     }
 
     public UserModel getUserModel() {
@@ -110,9 +112,8 @@ public class ClientController implements FacadeConversationHandlerObserver, User
 
     @Override
     public void messagesRetrieved(ArrayList<Message> retrievedMessages) {
-        retrievedMessages.forEach( message -> {
-            this.view.displayMessage(message);
-        } );
+        this.view.clearMessages();
+        retrievedMessages.forEach(this.view::displayMessage);
     }
     /* GETTERS/SETTERS */
     public FacadeConversationHandler getConversationHandler() {

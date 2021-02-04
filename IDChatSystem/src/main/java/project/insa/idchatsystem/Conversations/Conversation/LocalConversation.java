@@ -119,7 +119,7 @@ public class LocalConversation extends Conversation implements Runnable {
         outputStreamLink.println(message.toStream());
         
         // Store the message in the local database
-        this.storeMessage(message);//ORIGINE DU BUG : fait planter le thread
+        this.storeMessage(message);
         // Notify the handler that a new message has been sent
         this.notifyObserversSentMessage(message);
     }

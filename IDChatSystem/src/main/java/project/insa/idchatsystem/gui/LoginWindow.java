@@ -36,6 +36,11 @@ public class LoginWindow extends Window {
 
         GridBagConstraints c1 = new GridBagConstraints();
         this.loginTextField = new JTextField();
+        this.loginTextField.setEnabled(false);
+    }
+    public void enableLoginField() {
+        this.loginTextField.setEnabled(true);
+        this.loginTextField.requestFocus();
     }
     @Override
     protected void buildFrame() {

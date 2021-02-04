@@ -421,7 +421,9 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
             }
         }
     }
-    
+    public void clearMessages() {
+        this.chatHistoryPanel.removeAll();
+    }
     /**
      * Create a graphical instance which will be displayed, based on the given message
      * 

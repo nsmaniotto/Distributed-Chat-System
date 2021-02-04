@@ -32,7 +32,7 @@ public class LocalConversationHandler extends AbstractConversationHandler implem
     private final int listenerPort;
     private final int destinationPort;
     private int MINLISTENERPORT = 1500;
-    private int MAXCONVERSATIONSPORTS = 100;
+    private int MAXCONVERSATIONSPORTS = 500;
     
     public LocalConversationHandler() throws NoPortAvailable {
         super();
@@ -46,8 +46,6 @@ public class LocalConversationHandler extends AbstractConversationHandler implem
         }
 
         this.listenerPort = port;
-//        if(this.observers != null)
-//            this.notifyListenerPortNegociated();
 
         this.destinationPort = -1;
     }
@@ -85,7 +83,8 @@ public class LocalConversationHandler extends AbstractConversationHandler implem
                 //String correspondentAddress = conversationSocket.getRemoteSocketAddress().toString(); // Address like '/127.0.0.1:53818'
                 InetAddress correspondentAddress = conversationSocket.getInetAddress(); // Address like '/127.0.0.1'
                 User correspondent = this.findUserByAddress(correspondentAddress.toString().substring(1)); // Find with removed '/'
-                
+
+                //TODO : pb vient de là
                 if(correspondent != null) {
                     // Check if we arleady have a conversation instance with this correspondent
                     LocalConversation newConversation = (LocalConversation)this.findConversationByCorrespondent(correspondent);
@@ -157,7 +156,7 @@ public class LocalConversationHandler extends AbstractConversationHandler implem
     public void notifyListenerPortNegociated() {
         this.observers.forEach(obs -> {
             if(obs instanceof LocalConversationHandlerObserver)
-                ((LocalConversationHandlerObserver)(obs)).listenerPortChosen(this.listenerPort);
+                obs.listenerPortChosen(this.listenerPort);
         });
     }
     @Override
