@@ -18,10 +18,10 @@ public class DatabaseTest {
         fakeMessage1.setSource(fakeCurrentUser);
         fakeMessage1.setDestination(fakeCorrespondent);
         
-        db.storeMessage(fakeMessage1);
+//        db.storeMessage(fakeMessage1);
         
         // Try duplicate storing
-        db.storeMessage(fakeMessage1);
+//        db.storeMessage(fakeMessage1);
         
         ArrayList<Message> retrievedMessages = db.retrieveOrderedMessagesByConversationBetween(fakeCurrentUser, fakeCorrespondent);
         

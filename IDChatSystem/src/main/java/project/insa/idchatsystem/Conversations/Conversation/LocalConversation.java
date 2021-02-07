@@ -39,29 +39,13 @@ public class LocalConversation extends Conversation implements Runnable {
         return null;
     }
 
-    public void loadConversation() {
-        ArrayList<Message> history = new ArrayList<>();
-
-        // Retrieve past messages
-        try {
-            history = MessageDatabase.getInstance().retrieveOrderedMessagesByConversationBetween(User.getCurrentUser(), this.correspondent);
-        } catch (Uninitialized e) {
-            // Current user (thereforce message source) is not initialized
-            System.out.println("Conversation: EXCEPTION WHILE RETRIEVING PAST MESSAGES " + e);
-        }
-
-        // Notify ConversationHandler to display the previously retrieved messages
-        if(!history.isEmpty()) {
-            this.notifyObserversRetrievedMessages(history);
-        }
-    }
 
 
     /**
      * Listening on the current socket for incoming messages
      * 
      */
-    public void listen() {
+    public synchronized void listen() {
         BufferedReader inputStream = null;
         String inputBuffer = null;
         
@@ -78,6 +62,7 @@ public class LocalConversation extends Conversation implements Runnable {
         try {
             while((inputBuffer = inputStream.readLine()) != null) {
                 // We received a new message
+                System.out.printf(".(LocalConversation.java:65) - listen : localReceive\n");
                 this.onReceive(inputBuffer);
             }
         }
@@ -116,7 +101,7 @@ public class LocalConversation extends Conversation implements Runnable {
         outputStreamLink.println(message.toStream());
         
         // Store the message in the local database
-        this.storeMessage(message);
+        this.storeMessage(message,"send LocalConversation");
         // Notify the handler that a new message has been sent
         this.notifyObserversSentMessage(message);
     }

@@ -4,9 +4,11 @@ import project.insa.idchatsystem.ClientController;
 import project.insa.idchatsystem.Exceptions.NoPortAvailable;
 import project.insa.idchatsystem.Main;
 
-public class Distant2 {
+import java.util.ArrayList;
+
+public class Local3 {
     public static void main(String[] args) throws Exception {
-        String [] arguments = {"distant","noClean","3"};
+        String [] arguments = {"local","noClean","10"};
         Main.main(arguments);
     }
 }

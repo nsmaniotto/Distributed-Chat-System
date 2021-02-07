@@ -19,7 +19,6 @@ public class UserModelReceivers implements UserModelReceiverObserver  {
     }
     @Override
     public void notifyNewMsg(String msg) {
-//        System.out.printf(".(UserModelReceivers.java:21) : MSG : %s\n",msg);
         Pattern pattern_new_host = Pattern.compile("(?<username>[A-Za-z_.0-9]+),(?<id>[0-9a-z-]*),(?<ip>[0-9]+[.][0-9]+[.][0-9]+[.][0-9]+),(?<convListPort>[0-9]+),(?<local>[tf])");
         Pattern pattern_disconnected = Pattern.compile("(?<id>[0-9a-z-]*),disconnected");
         Pattern pattern_update = Pattern.compile("update");
@@ -52,7 +51,6 @@ public class UserModelReceivers implements UserModelReceiverObserver  {
         }
         m = pattern_update.matcher(msg);
         while (m.find()){
-            System.out.print("msg ask for update\n");
             this.model.diffuseNewUsername();//Add or refresh informations of the user based on the id
         }
     }

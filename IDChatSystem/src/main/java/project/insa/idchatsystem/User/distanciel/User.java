@@ -22,13 +22,6 @@ public class User {
     private static int current_conversationHandlerListenerPort;
     private static boolean current_local_user;
 
-    /************************Current user methods***************************************/
-    public static void init_current_user(String id) {
-        User.current_id = id;
-        User.current_ipAddress = User.calculate_current_ip();
-        User.current_local_user = true;
-    }
-
     public static void init_current_user(String id,boolean local) {
         User.current_id = id;
         User.current_username = String.format("--user%s",id);
@@ -73,12 +66,13 @@ public class User {
         return User.current_ipAddress;
     }
     public static String current_user_transfer_string() {
-        return String.format("%s,%s,%s,%d,%s",User.current_username,User.current_id,User.current_ipAddress,User.current_conversationHandlerListenerPort,
+        String transfert_string = String.format("%s,%s,%s,%d,%s",User.current_username,User.current_id,User.current_ipAddress,User.current_conversationHandlerListenerPort,
                 User.current_local_user ? "t" : "f");
+        return transfert_string;
     }
 
     public static User getCurrentUser() throws Uninitialized {
-        return new User(User.get_current_username(), User.get_current_id(), User.get_current_ipAddress());
+        return new User(User.get_current_username(), User.get_current_id(), User.get_current_ipAddress(), User.current_local_user);
     }
     public static void setCurrentConversationHandlerListenerPort(int conversationHandlerListenerPort) {
         User.current_conversationHandlerListenerPort = conversationHandlerListenerPort;
@@ -141,7 +135,7 @@ public class User {
     /*********************Utilities methods*****************************/
     @Override
     public String toString() {
-        return String.format("User %s ; id %s ; ipAddress %s ; lastSeen %s ; convListPort %d", this.username, this.id, this.ipAddress, this.lastSeen.toString(),this.conversationHandlerListenerPort);
+        return String.format("User %s ; id %s ; ipAddress %s ; lastSeen %s ; convListPort %d ; local %b", this.username, this.id, this.ipAddress, this.lastSeen.toString(),this.conversationHandlerListenerPort,this.local_user);
     }
 
     public int getConversationHandlerListenerPort() {

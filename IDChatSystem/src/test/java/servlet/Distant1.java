@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class Distant1 {
     public static void main(String[] args) throws Exception {
-        String [] arguments = {"local","noClean","2"};
+        String [] arguments = {"distant","noClean","2"};
         Main.main(arguments);
     }
 }

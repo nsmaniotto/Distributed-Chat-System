@@ -1,6 +1,7 @@
 package project.insa.idchatsystem.Conversations.ConversationHandler;
 
 import project.insa.idchatsystem.Conversations.Conversation.DistantConversation;
+import project.insa.idchatsystem.Conversations.Conversation.LocalConversation;
 import project.insa.idchatsystem.Observers.Server.Observers.ServerConvControllerObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 import project.insa.idchatsystem.servlet.ServerController;
@@ -12,6 +13,7 @@ public class DistantConversationHandler extends AbstractConversationHandler impl
     private static DistantConversationHandler INSTANCE;
     private ServerController server;
     private DistantConversationHandler(){
+        System.out.printf(".(DistantConversationHandler.java:15) - DistantConversationHandler : \n");
         this.server = new ServerController("conv");
         this.server.addConvListener(this);
     }
@@ -41,23 +43,33 @@ public class DistantConversationHandler extends AbstractConversationHandler impl
             this.currentConversation.open();
         }
     }
-
+    @Override
+    public void addKnownUser(User user) {
+        super.addKnownUser(user);
+    }
     @Override
     public void notifyNewMessage(String message) {
-//        System.out.printf(".(DistantConversationHandler.java:44) - notifyNewMessage : %s\n",message);
-
-        Pattern pattern_getMessage = Pattern.compile("(?<id>[a-z0-9-]*),(?<msg>.*)");
+        Pattern pattern_getMessage = Pattern.compile("^(?<id>[a-z0-9-]*),User (?<pseudo>[a-z0-9]+) ; id (?<idSrc>[0-9a-zA-Z-]+) ; (?<resteMsg>.*)$");
         Matcher m = pattern_getMessage.matcher(message);
-        String message_extracted = "";
-        String idCorresp = "";
+        String message_extracted;
+        String idCorresp;
+        String pseudo;
         while (m.find()){
-            message_extracted = m.group("msg");
-            idCorresp = m.group("id");
-            DistantConversation conv = (DistantConversation) this.findConversationByCorrespondent(new User("",idCorresp,""));
-            if(conv != null) {
-                conv.onReceive(message_extracted);
+            message_extracted = m.group("resteMsg");
+            pseudo = m.group("pseudo");
+            idCorresp = m.group("idSrc");
+            User correspondent = this.findUserById(idCorresp);
+            DistantConversation conv = (DistantConversation) this.findConversationByCorrespondent(correspondent);
+            if(conv == null) {
+                conv = new DistantConversation(correspondent, this.server);
+                conv.addConversationObserver(this);
+
+                this.addConversation(conv);
+
             }
-            //System.out.printf("ASKFORUPDATE %s\n", other);
+            if(conv != null) {
+                conv.onReceive(String.format("User %s ; id %s ; ",pseudo,idCorresp)+message_extracted);
+            }
         }
     }
 }

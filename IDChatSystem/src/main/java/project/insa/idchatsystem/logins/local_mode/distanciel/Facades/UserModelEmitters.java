@@ -44,9 +44,7 @@ public class UserModelEmitters implements Runnable {
         this.state = "disconnected";
     }
     private void diffuse(){
-
         this.sendMessage(last_user_updated_string);
-        this.obs.newMsgToSend(last_user_updated_string);
     }
 
     public void diffuseNewUsername(String updatedUserString) {

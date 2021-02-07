@@ -54,10 +54,12 @@ public class ClientController implements FacadeConversationHandlerObserver, User
             }
             port++;
         }
-        System.out.printf(".(ClientController.java:56) - ClientController : port emitter %d port receiver %d\n",portEmission,portReception);
-        LoginsBroadcastDatabase logins = new LoginsBroadcastDatabase(cleanReceiversPorts);
-        ArrayList<Integer> portsBroadcast = logins.getPortReceivers();
-        logins.writePortReceiver(portReception);
+        ArrayList<Integer> portsBroadcast = null;
+        if (local) {
+            LoginsBroadcastDatabase logins = new LoginsBroadcastDatabase(cleanReceiversPorts);
+            portsBroadcast = logins.getPortReceivers();
+            logins.writePortReceiver(portReception);
+        }
         this.userModel = new UserModel(id,portReception,portEmission,portsBroadcast);
         this.userModel.addUserModelObserver(this);
 
@@ -66,11 +68,6 @@ public class ClientController implements FacadeConversationHandlerObserver, User
         this.database.init();
 
         this.view.enableLoginTextField();
-        try {
-            System.out.printf(".(ClientController.java:68) - ClientController : %s\n", User.get_current_id());
-        } catch (Uninitialized uninitialized) {
-            uninitialized.printStackTrace();
-        }
     }
 
     public UserModel getUserModel() {
@@ -135,9 +132,15 @@ public class ClientController implements FacadeConversationHandlerObserver, User
 
     @Override
     public void newMessageSending(Message sendingMessage) {
-//        System.out.printf(".(ClientController.java:106) - newMessageSending : currentConv : %s\n",this.conversationHandler.getCurrentConversation());
-        if(this.conversationHandler.getCurrentConversation() != null) {
-            this.conversationHandler.getCurrentConversation().send(sendingMessage,this.conversationHandler.getCurrentConversation().getCorrespondent());
+        sendingMessage.setDestination(this.conversationHandler.getCurrentConversation().getCorrespondent());
+        try {
+            sendingMessage.setSource(User.getCurrentUser());
+            System.out.printf(".(ClientController.java:138) - newMessageSending : currentConv : %s\n",this.conversationHandler.getCurrentConversation().getCorrespondent().get_id());
+            if(this.conversationHandler.getCurrentConversation() != null) {
+                this.conversationHandler.getCurrentConversation().send(sendingMessage,this.conversationHandler.getCurrentConversation().getCorrespondent());
+            }
+        } catch (Uninitialized uninitialized) {
+            uninitialized.printStackTrace();
         }
     }
 

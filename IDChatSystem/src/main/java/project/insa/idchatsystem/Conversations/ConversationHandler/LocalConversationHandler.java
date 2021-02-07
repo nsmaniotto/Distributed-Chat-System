@@ -31,7 +31,7 @@ public class LocalConversationHandler extends AbstractConversationHandler implem
     private ServerSocket handlerSocket; // Acts as a server listening for incoming connection requests
     private final int listenerPort;
     private final int destinationPort;
-    private int MINLISTENERPORT = 1500;
+    private int MINLISTENERPORT = 10000;
     private int MAXCONVERSATIONSPORTS = 500;
     
     public LocalConversationHandler() throws NoPortAvailable {

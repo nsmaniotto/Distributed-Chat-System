@@ -43,6 +43,11 @@ public abstract class AbstractConversationHandler implements ConversationObserve
 
         return userToFind.get();
     }
+    protected User findUserById(String id) {
+        this.users.forEach((k,v)-> 
+                System.out.printf(".(AbstractConversationHandler.java:48) - findUserById : %s\n",v));
+        return this.users.get(id);
+    }
     /**
      * Find the corresponding conversation in conversations array list
      *
@@ -51,6 +56,7 @@ public abstract class AbstractConversationHandler implements ConversationObserve
      */
     protected Conversation findConversationByCorrespondent(User correspondent) {
         for(Conversation conversation : this.conversations) {
+            System.out.printf(".(AbstractConversationHandler.java:54) - findConversationByCorrespondent : %s\n",conversation.getCorrespondent());
             if (conversation.getCorrespondent().equals(correspondent))
                 return conversation;
         }
@@ -106,7 +112,6 @@ public abstract class AbstractConversationHandler implements ConversationObserve
      */
     public void addKnownUser(User newUser) {
         this.users.put(newUser.get_id(),newUser);
-        //System.out.printf("Adding user %s\n",newUser);
     }
     public void removeKnownUser(User user){
         this.users.remove(user.get_id(),user);

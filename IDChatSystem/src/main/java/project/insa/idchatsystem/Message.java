@@ -42,7 +42,16 @@ public class Message extends Data {
             //this.text = "ERROR: MESSAGE COULD NOT BE DETERMINED";
         }
     }
-    
+
+    @Override
+    public void setDestination(User destination) {
+        super.setDestination(destination);
+    }
+
+    @Override
+    public void setSource(User source) {
+        super.setSource(source);
+    }
     /* UTILITIES */
 
     public Timestamp generateTimeStamp() {

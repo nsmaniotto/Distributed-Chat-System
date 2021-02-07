@@ -12,6 +12,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -540,7 +541,8 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
 
         if(!isMessageEmpty) {
             // Create a message based on the retrieved text
-            Message newMessage = new Message(messageInputText);
+            Message newMessage = null;
+            newMessage = new Message(messageInputText);
 
             // Clear text input
             this.chatTextInputField.setText("");

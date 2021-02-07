@@ -28,6 +28,7 @@ public class FacadeConversationHandler implements LocalConversationHandlerObserv
         this.distantHandler = DistantConversationHandler.getInstance();
         this.distantHandler.addObserver(this);
         if(local) {
+            System.out.printf(".(FacadeConversationHandler.java:31) - FacadeConversationHandler : Adding local conversation support %b\n",local);
             this.localHandler = LocalConversationHandler.getInstance();
             this.localHandler.addObserver(this);
             new Thread(this.localHandler).start();
@@ -60,10 +61,13 @@ public class FacadeConversationHandler implements LocalConversationHandlerObserv
             this.distantHandler.open(correspondent);
     }
     public void addKnownUser(User newUser) {
-        if(this.local && newUser.isLocal_user())
+        if(this.local && (this.local == newUser.isLocal_user())) {
+//            System.out.printf(".(FacadeConversationHandler.java:65) - addKnownUser : local %s\n",newUser);
             this.localHandler.addKnownUser(newUser);
-        else
+        }
+        else {
             this.distantHandler.addKnownUser(newUser);
+        }
     }
     public void removeKnownUser(User user) {
         if(this.local && user.isLocal_user())

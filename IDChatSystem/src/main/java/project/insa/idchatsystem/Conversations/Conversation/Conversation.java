@@ -37,7 +37,7 @@ public abstract class Conversation implements ConversationObservable, Runnable {
      * @param input : String - received stream
      */
     public void onReceive(String input) {
-        System.out.printf("RECEIVED : %s\n",input);
+        System.out.printf(".(Conversation.java:40) - onReceive : %s\n",input);
         // Generate a Message instance from the given input
         Message newMessage = new Message(input);
 
@@ -60,14 +60,14 @@ public abstract class Conversation implements ConversationObservable, Runnable {
         }
         
         // Store the new message
-        this.storeMessage(newMessage);
+        this.storeMessage(newMessage,"onReceive Conversation");
 
         // Notify the handler that a message has been received and must be treated
         this.notifyObserversReceivedMessage(newMessage);
     }
-    protected abstract void loadConversation();
-    protected void storeMessage(Message message) {
-        MessageDatabase.getInstance().storeMessage(message);
+    protected void storeMessage(Message message,String indic) {
+        MessageDatabase.getInstance().storeMessage(message,indic);
+        System.out.printf(".(Conversation.java:70) - storeMessage : from %s\n",indic);
     }
     /**
      * Method making the conversation to close itself
@@ -78,6 +78,22 @@ public abstract class Conversation implements ConversationObservable, Runnable {
     }
     public abstract void send(Message message,User corresp);
 
+    public void loadConversation() {
+        ArrayList<Message> history = new ArrayList<>();
+
+        // Retrieve past messages
+        try {
+            history = MessageDatabase.getInstance().retrieveOrderedMessagesByConversationBetween(User.getCurrentUser(), this.correspondent);
+        } catch (Uninitialized e) {
+            // Current user (thereforce message source) is not initialized
+            System.out.println("Conversation: EXCEPTION WHILE RETRIEVING PAST MESSAGES " + e);
+        }
+
+        // Notify ConversationHandler to display the previously retrieved messages
+        if(!history.isEmpty()) {
+            this.notifyObserversRetrievedMessages(history);
+        }
+    }
     /* CONVERSATION OBSERVER METHODS */
     @Override
     public void addConversationObserver(ConversationObserver observer) {
