@@ -154,5 +154,11 @@ public abstract class AbstractConversationHandler implements ConversationObserve
     public void deleteObserver(ConversationHandlerObserver obs) {
         this.observers.remove(obs);
     }
+    
+    @Override
+    public void wrongCorrespondentConversation(Conversation conversation, User rightUser) {
+        rightUser = this.users.get(rightUser.get_id());
+        conversation.setCorrespondent(rightUser);
+    }
 
 }
