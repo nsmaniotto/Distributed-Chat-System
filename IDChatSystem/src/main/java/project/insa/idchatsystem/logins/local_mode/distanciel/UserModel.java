@@ -6,7 +6,6 @@ import project.insa.idchatsystem.Observers.logins.Observables.ObservableUserMode
 import project.insa.idchatsystem.Observers.logins.Observers.UserModelEmittersObserver;
 import project.insa.idchatsystem.Observers.logins.Observers.UsersStatusObserver;
 import project.insa.idchatsystem.User.distanciel.User;
-import project.insa.idchatsystem.logins.AbstractUserModel;
 import project.insa.idchatsystem.logins.local_mode.distanciel.Facades.UserModelEmitters;
 import project.insa.idchatsystem.logins.local_mode.distanciel.Facades.UserModelReceivers;
 import project.insa.idchatsystem.servlet.ServerController;
@@ -49,7 +48,6 @@ public class UserModel implements ServerLoginControllerObserver, UserModelEmitte
         this.notifyNewUserObservers(user);
     }
     public void removeOnlineUser(String id) {
-//        System.out.printf("AbstractUserModel : DISCONNECTED USER %d\n",id);
         User removed_user = this.users.remove(id);
         if(removed_user == null) {
             System.out.printf("%s was not connected%n",id);
