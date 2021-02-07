@@ -3,7 +3,7 @@ package project.insa.idchatsystem;
 
 import project.insa.idchatsystem.User.distanciel.User;
 
-public class Data {
+public abstract class Data {
     private User source;
 
     private User destination;
@@ -19,7 +19,18 @@ public class Data {
     public Data(User source, User destination) {
         this.source = source;
         this.destination = destination;
+        this.type = null;
     }
+    
+    public boolean isMessage() {
+        return this.type.equals(Message.TYPE);
+    }
+    
+    public static boolean isInformation(String input) {
+        return input.startsWith(Information.TYPE);
+    }
+    
+    public abstract String toStream();
 
     /* GETTERS/SETTERS */
     public User getSource() {
@@ -36,5 +47,9 @@ public class Data {
     
     public void setDestination(User destination) {
         this.destination = destination;
+    }
+    
+    public void setType(String type) {
+        this.type = type;
     }
 }
