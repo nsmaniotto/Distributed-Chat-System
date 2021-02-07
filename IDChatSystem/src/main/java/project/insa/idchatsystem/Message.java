@@ -13,10 +13,14 @@ public class Message extends Data {
     private ArrayList<File> files;
     private Timestamp timestamp;
     
+    public static final String TYPE = "message";
+    
     /* CONSTRUCTORS */
     
     public Message(User source, User destination, String text, Timestamp timestamp) {
         super(source, destination);
+        
+        this.setType(TYPE);
         
         this.text = text;
         this.timestamp = timestamp;
@@ -28,6 +32,8 @@ public class Message extends Data {
      * @param stream : String - raw input retrieved on the network
      */
     public Message(String stream) {
+        this.setType(Message.TYPE); 
+                
         // Apply pattern matching to extract timstamp and text message
         Pattern regex = Pattern.compile("(?<timestamp>\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{1,3});(?<text>.*)");
         Matcher matcher = regex.matcher(stream);
@@ -63,6 +69,7 @@ public class Message extends Data {
      * 
      * @return String - timestamp;message
      */
+    @Override
     public String toStream() {
         String stream = this.getSource()+";"+this.timestamp.toString() + ";" + this.text; // For now, files are not considered
         
