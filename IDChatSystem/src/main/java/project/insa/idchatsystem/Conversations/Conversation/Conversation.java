@@ -55,6 +55,7 @@ public abstract class Conversation implements ConversationObservable, Runnable {
                 this.notifyWrongCorrespondentConversation(information.getSource());
             }
         } else {
+            System.out.printf(".(Conversation.java:58) - onReceive : ELSE\n");
             // Generate a Message instance from the given input
             Message newMessage = new Message(input);
             
@@ -77,10 +78,10 @@ public abstract class Conversation implements ConversationObservable, Runnable {
             }
 
             // Store the new message
-            this.storeMessage((Message)newMessage);
+            this.storeMessage(newMessage);
 
             // Notify the handler that a message has been received and must be treated
-            this.notifyObserversReceivedMessage((Message)newMessage);
+            this.notifyObserversReceivedMessage(newMessage);
         }
     }
     

@@ -50,7 +50,6 @@ public class DistantConversationHandler extends AbstractConversationHandler impl
     }
     @Override
     public void addKnownUser(User user) {
-        System.out.printf(".(DistantConversationHandler.java:50) - addKnownUser : %s\n",user);
         super.addKnownUser(user);
     }
     @Override

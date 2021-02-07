@@ -164,6 +164,7 @@ public class ClientController implements FacadeConversationHandlerObserver, User
 
     @Override
     public void userSelected(UserView userview) {
+        System.out.printf(".(ClientController.java:167) - userSelected : \n");
         this.conversationHandler.open(userview.getUser());
     }
 }

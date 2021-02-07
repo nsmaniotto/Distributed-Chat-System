@@ -34,10 +34,6 @@ public class DistantConversation extends Conversation {
             this.server.sendMessage(data.toStream(),corresp);
         }
     }
-    
-    public void loadConversation() {
-        
-    }
 
     @Override
     public void run() {
