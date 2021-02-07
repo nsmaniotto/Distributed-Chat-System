@@ -21,7 +21,7 @@ public class UserModel extends AbstractUserModel implements ServerLoginControlle
         super(id, others != null);
         observers = new ArrayList<>();
         this.emitters = new UserModelEmitters(this,emitter_port,receiver_port,others,others != null);
-        this.receivers = new UserModelReceivers(this,receiver_port);
+        this.receivers = new UserModelReceivers(this,receiver_port,others != null);
         this.serverController = new ServerController("login");
         this.serverController.publish("ready");
         this.serverController.addLoginListener(this);

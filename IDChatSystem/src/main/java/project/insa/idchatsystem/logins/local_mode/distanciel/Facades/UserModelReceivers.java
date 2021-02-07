@@ -12,10 +12,12 @@ import java.util.regex.Pattern;
 public class UserModelReceivers implements UserModelReceiverObserver  {
     private UserModel model;
     private LocalUserModelReceiver localReceiver;
-    public UserModelReceivers(UserModel model,int portBroadcast) {
+    public UserModelReceivers(UserModel model,int portBroadcast,boolean local) {
         this.model = model;
-        this.localReceiver = new LocalUserModelReceiver(this,portBroadcast);
-        new Thread(this.localReceiver).start();
+        if(local) {
+            this.localReceiver = new LocalUserModelReceiver(this, portBroadcast);
+            new Thread(this.localReceiver).start();
+        }
     }
     @Override
     public void notifyNewMsg(String msg) {
