@@ -2,6 +2,7 @@ package project.insa.idchatsystem.logins.local_mode.distanciel;
 
 import project.insa.idchatsystem.Exceptions.Uninitialized;
 import project.insa.idchatsystem.Observers.Server.Observers.ServerLoginControllerObserver;
+import project.insa.idchatsystem.Observers.logins.Observables.ObservableUserModel;
 import project.insa.idchatsystem.Observers.logins.Observers.UserModelEmittersObserver;
 import project.insa.idchatsystem.Observers.logins.Observers.UsersStatusObserver;
 import project.insa.idchatsystem.User.distanciel.User;
@@ -11,14 +12,19 @@ import project.insa.idchatsystem.logins.local_mode.distanciel.Facades.UserModelR
 import project.insa.idchatsystem.servlet.ServerController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-public class UserModel extends AbstractUserModel implements ServerLoginControllerObserver, UserModelEmittersObserver {
+public class UserModel implements ServerLoginControllerObserver, UserModelEmittersObserver, ObservableUserModel {
     private final UserModelEmitters emitters;
     private final ServerController serverController;
     private final UserModelReceivers receivers;
     private ArrayList<UsersStatusObserver> observers;
+    private HashMap<String, User> users;
+    private final long limite_tolerance_ss_nouvelles = 10000;
     public UserModel(String id, int receiver_port, int emitter_port, ArrayList<Integer> others)  {
-        super(id, others != null);
+        User.init_current_user(id,others != null);
+        this.users = new HashMap<>();
         observers = new ArrayList<>();
         this.emitters = new UserModelEmitters(this,emitter_port,receiver_port,others,others != null);
         this.receivers = new UserModelReceivers(this,receiver_port,others != null);
@@ -34,11 +40,48 @@ public class UserModel extends AbstractUserModel implements ServerLoginControlle
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                checkUserStillActive();
+                this.checkUserStillActive();
             }
         }).start();
     }
-    @Override
+    public void addOnlineUser(User user) {
+        this.users.put(user.get_id(),user);//Replace automatically the previous version if already in the HashMap
+        this.notifyNewUserObservers(user);
+    }
+    public void removeOnlineUser(String id) {
+//        System.out.printf("AbstractUserModel : DISCONNECTED USER %d\n",id);
+        User removed_user = this.users.remove(id);
+        if(removed_user == null) {
+            System.out.printf("%s was not connected%n",id);
+        }
+        else {
+            this.notifyDisconnectedObservers(removed_user);
+        }
+    }
+    protected void checkUserStillActive() {
+        long time = System.currentTimeMillis();
+        ArrayList<String> toRemove = new ArrayList<>();
+        this.users.forEach((k,v) -> {
+            if(time-v.get_lastSeen().getTime() > limite_tolerance_ss_nouvelles) {
+                toRemove.add(k);
+            }
+        });
+        for (String index :toRemove) {
+            this.removeOnlineUser(index);
+        }
+    }
+    public HashMap<String,User> getOnlineUsers() {
+        return this.users;
+    }
+    public boolean checkLocallyAvailable(String username) {
+        for (Map.Entry<String, User> integerUserEntry : this.users.entrySet()) {
+            User user = (User) ((Map.Entry) integerUserEntry).getValue();
+            if (user.get_username().equals(username)) {
+                return false;
+            }
+        }
+        return true;
+    }
     public boolean setUsername(String username) {
         this.emitters.askUpdate();
         try {
@@ -52,7 +95,13 @@ public class UserModel extends AbstractUserModel implements ServerLoginControlle
             e.printStackTrace();
         }
         if(this.checkavailable(username)) {
-            super.setUsername(username);
+            System.out.print("Changing username\n");
+            try {
+                User.set_current_username(username);
+            } catch (Uninitialized uninitialized) {
+                uninitialized.printStackTrace();
+            }
+            this.diffuseNewUsername();
             return true;
         }
         else {
@@ -60,7 +109,6 @@ public class UserModel extends AbstractUserModel implements ServerLoginControlle
             return false;
         }
     }
-    @Override
     public void stopperEmission(){
         this.emitters.stopperEmission();
         try {
@@ -69,7 +117,6 @@ public class UserModel extends AbstractUserModel implements ServerLoginControlle
             uninitialized.printStackTrace();
         }
     }
-    @Override
     public void disconnect() {
         try {
             while(!this.emitters.getState().equals("disconnected")) {
@@ -80,14 +127,12 @@ public class UserModel extends AbstractUserModel implements ServerLoginControlle
             uninitialized.printStackTrace();
         }
     }
-    @Override
     public void diffuseNewUsername(){
         String response = User.current_user_transfer_string();
         this.emitters.diffuseNewUsername(response);
         this.serverController.sendMessage(String.format("%s",response),null);
     }
 
-    @Override
     public boolean checkavailable(String username) {
         this.emitters.askUpdate();
         try {
