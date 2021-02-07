@@ -14,6 +14,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import project.insa.idchatsystem.Conversations.Conversation.Conversation;
 
 /**
  * Based on Singleton pattern, a conversation handler is here to collect
@@ -84,7 +85,6 @@ public class LocalConversationHandler extends AbstractConversationHandler implem
                 InetAddress correspondentAddress = conversationSocket.getInetAddress(); // Address like '/127.0.0.1'
                 User correspondent = this.findUserByAddress(correspondentAddress.toString().substring(1)); // Find with removed '/'
 
-                //TODO : pb vient de là
                 if(correspondent != null) {
                     // Check if we arleady have a conversation instance with this correspondent
                     LocalConversation newConversation = (LocalConversation)this.findConversationByCorrespondent(correspondent);
@@ -92,7 +92,6 @@ public class LocalConversationHandler extends AbstractConversationHandler implem
                     // If we do not have a current conversation instance for this correspondent
                     if(newConversation == null) {
                         // Instantiate a new conversation with the given socket
-                        //TODO : transmettre en paramètres les observeurs à notifier
                         newConversation = new LocalConversation(correspondent, conversationSocket);
                         newConversation.addConversationObserver(this);
                         

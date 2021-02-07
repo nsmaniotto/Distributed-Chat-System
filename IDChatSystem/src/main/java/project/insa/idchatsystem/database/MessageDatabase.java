@@ -100,8 +100,8 @@ public class MessageDatabase extends AbstractDatabase {
         return messageExists;
     }
 
-    public void storeMessage(Message message,String indic) {
-        System.out.printf(".(MessageDatabase.java:104) - storeMessage : %s\n",indic);
+    public void storeMessage(Message message) {
+        System.out.printf(".(MessageDatabase.java:104) - storeMessage\n");
         if (!this.checkForDuplicate(message)) {
             // MySQL insert statement
             String prepareQuery = "INSERT INTO " + DB_TABLE_NAME + "("
