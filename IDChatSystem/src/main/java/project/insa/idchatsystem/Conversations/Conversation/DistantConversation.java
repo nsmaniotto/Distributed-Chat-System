@@ -1,6 +1,6 @@
 package project.insa.idchatsystem.Conversations.Conversation;
 
-import project.insa.idchatsystem.Message;
+import project.insa.idchatsystem.Data;
 import project.insa.idchatsystem.User.distanciel.User;
 import project.insa.idchatsystem.servlet.ServerController;
 
@@ -16,9 +16,9 @@ public class DistantConversation extends Conversation {
 
     }
     @Override
-    public void send(Message message,User corresp) {
-//        System.out.printf(".(DistantConversation.java:20) - send : %s\n",String.format("%s,%s",corresp.get_id(),message.toStream()));
-        this.server.sendMessage(String.format("%s,%s",corresp.get_id(),message.toStream()),corresp);
+    public void send(Data data,User corresp) {
+//        System.out.printf(".(DistantConversation.java:20) - send : %s\n",String.format("%s,%s",corresp.get_id(),data.toStream()));
+        this.server.sendMessage(String.format("%s,%s",corresp.get_id(),data.toStream()),corresp);
     }
 
     @Override
