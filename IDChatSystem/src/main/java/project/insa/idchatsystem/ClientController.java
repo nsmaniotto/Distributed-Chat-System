@@ -14,6 +14,8 @@ import project.insa.idchatsystem.gui.View;
 import project.insa.idchatsystem.logins.local_mode.distanciel.UserModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import project.insa.idchatsystem.database.MessageDatabase;
 import project.insa.idchatsystem.tools.TestPort;
 
@@ -29,8 +31,9 @@ public class ClientController implements FacadeConversationHandlerObserver, User
 //        System.out.printf(".(ClientController.java:27) - ClientController : id : %s\n",id);
         User.init_current_user(id,local);
 
-        // Conversation handler init
-        this.conversationHandler = FacadeConversationHandler.getInstance(local,this);
+        // Initialize local database
+        this.database = MessageDatabase.getInstance();
+        this.database.init();
 
         // View init
         this.view = new View();
@@ -62,10 +65,23 @@ public class ClientController implements FacadeConversationHandlerObserver, User
         }
         this.userModel = new UserModel(id,portReception,portEmission,portsBroadcast);
         this.userModel.addUserModelObserver(this);
+        HashMap<String,User> knownUsers = new HashMap<>();
+        HashMap<String,User> allKnownUsersthis = this.userModel.getOnlineUsers();
+        allKnownUsersthis.forEach(
+                (k,v) -> {
+                    try {
+                        if ((User.getCurrentUser().isLocal_user() ^ v.isLocal_user()))
+                            knownUsers.put(k, v);
 
-        // Initialize local database
-        this.database = MessageDatabase.getInstance();
-        this.database.init();
+                    } catch (Uninitialized uninitialized) {
+                        uninitialized.printStackTrace();
+                    }
+                }
+        );
+        // Conversation handler init
+        this.conversationHandler = FacadeConversationHandler.getInstance(local,this,knownUsers);
+
+
 
         this.view.enableLoginTextField();
     }
@@ -83,8 +99,10 @@ public class ClientController implements FacadeConversationHandlerObserver, User
 
     @Override
     public void onlineUser(User user) {
-        this.conversationHandler.addKnownUser(user);
-        this.view.onlineUser(user);
+        if(this.conversationHandler != null)
+            this.conversationHandler.addKnownUser(user);
+        if(this.view != null)
+            this.view.onlineUser(user);
     }
     
     /* CONVERSATION HANDLER OBSERVER METHODS */

@@ -29,6 +29,7 @@ public class ServerController implements ServerIncomingMessagesObserver, ServerC
         sendMessages.sendPost(String.format("subscribe"),null);
     }
     public void publish(String state) {
+        System.out.printf(".(ServerController.java:32) - publish : \n");
         sendMessages.sendPost(String.format("state,%s",state),null);
     }
     public void sendMessage(String message,User corresp) {

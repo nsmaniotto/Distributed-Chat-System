@@ -21,11 +21,11 @@ public class FacadeConversationHandler implements LocalConversationHandlerObserv
     private int portHandlerLocal;
     private ArrayList<FacadeConversationHandlerObserver> observers;
     private boolean local;
-    private FacadeConversationHandler(boolean local,FacadeConversationHandlerObserver obs) throws NoPortAvailable {
+    private FacadeConversationHandler(boolean local,FacadeConversationHandlerObserver obs,HashMap<String, User> knowUsers) throws NoPortAvailable {
         this.local = local;
         this.observers = new ArrayList<>();
         this.addObserver(obs);
-        this.distantHandler = DistantConversationHandler.getInstance();
+        this.distantHandler = DistantConversationHandler.getInstance(knowUsers);
         this.distantHandler.addObserver(this);
         if(local) {
             System.out.printf(".(FacadeConversationHandler.java:31) - FacadeConversationHandler : Adding local conversation support %b\n",local);
@@ -39,9 +39,9 @@ public class FacadeConversationHandler implements LocalConversationHandlerObserv
      *
      * @return INSTANCE : FacadeConversationHandler - single instance of this class
      */
-    public static FacadeConversationHandler getInstance(boolean local,FacadeConversationHandlerObserver obs) throws NoPortAvailable {
+    public static FacadeConversationHandler getInstance(boolean local,FacadeConversationHandlerObserver obs,HashMap<String, User> knownUsers) throws NoPortAvailable {
         if(FacadeConversationHandler.INSTANCE == null){
-            FacadeConversationHandler.INSTANCE = new FacadeConversationHandler(local,obs);
+            FacadeConversationHandler.INSTANCE = new FacadeConversationHandler(local,obs,knownUsers);
         }
         return FacadeConversationHandler.INSTANCE;
     }

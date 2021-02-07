@@ -9,6 +9,7 @@ import project.insa.idchatsystem.User.distanciel.User;
 import project.insa.idchatsystem.logins.local_mode.distanciel.UserModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ControllerEncapsulation implements FacadeConversationHandlerObserver,UsersStatusObserver {
     private final FacadeConversationHandler conversationHandler;
@@ -19,7 +20,16 @@ public class ControllerEncapsulation implements FacadeConversationHandlerObserve
                                    int usermodel_receiver_port, int usermodel_emitter_port, ArrayList<Integer> others) throws NoPortAvailable {
         this.userModel = new UserModel(id,usermodel_receiver_port,usermodel_emitter_port,others);
         //TODO : Remplacer par la facade
-        this.conversationHandler = FacadeConversationHandler.getInstance(true,this);
+        HashMap<String,User> knownUsers = new HashMap<>();
+        HashMap<String,User> allKnownUsersthis = this.userModel.getOnlineUsers();
+        allKnownUsersthis.forEach(
+                (k,v) -> {
+                    if (!v.isLocal_user()) {
+                        knownUsers.put(k, v);
+                    }
+                }
+        );
+        this.conversationHandler = FacadeConversationHandler.getInstance(true,this,knownUsers);
         this.conversationHandler.addObserver(this);
         this.conversationHandler.addObserver(this);
         this.userModel.addUserModelObserver(this);

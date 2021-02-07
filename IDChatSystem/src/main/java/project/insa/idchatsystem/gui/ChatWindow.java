@@ -427,7 +427,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
      * @param message 
      */
     public void displayMessage(Message message) {
-        System.out.printf(".(ChatWindow.java:411) - displayMessage : \n");
+        System.out.printf(".(ChatWindow.java:411) - displayMessage : %s\n",message);
         // Generate the graphical instance
         JPanel messageInstancePanel = this.generateDisplayedMessage(message);
         

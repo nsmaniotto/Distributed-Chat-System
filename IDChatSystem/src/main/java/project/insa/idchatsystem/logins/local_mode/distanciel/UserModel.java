@@ -28,8 +28,8 @@ public class UserModel implements ServerLoginControllerObserver, UserModelEmitte
         this.emitters = new UserModelEmitters(this,emitter_port,receiver_port,others,others != null);
         this.receivers = new UserModelReceivers(this,receiver_port,others != null);
         this.serverController = new ServerController("login");
-        this.serverController.publish("ready");
         this.serverController.addLoginListener(this);
+        this.serverController.publish("ready");
         this.setUsername(String.format("--user%s",id));
         new Thread(this.emitters).start();
         new Thread(() -> {

@@ -6,20 +6,25 @@ import project.insa.idchatsystem.Observers.Server.Observers.ServerConvController
 import project.insa.idchatsystem.User.distanciel.User;
 import project.insa.idchatsystem.servlet.ServerController;
 
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DistantConversationHandler extends AbstractConversationHandler implements ServerConvControllerObserver {
     private static DistantConversationHandler INSTANCE;
     private ServerController server;
-    private DistantConversationHandler(){
+    private DistantConversationHandler(HashMap<String, User> knownUsers){
         System.out.printf(".(DistantConversationHandler.java:15) - DistantConversationHandler : \n");
+        knownUsers.forEach((k,v) -> {
+            super.addKnownUser(v);
+            System.out.printf(".(DistantConversationHandler.java:20) - DistantConversationHandler : %s\n",v);
+        });
         this.server = new ServerController("conv");
         this.server.addConvListener(this);
     }
-    public static DistantConversationHandler getInstance() {
+    public static DistantConversationHandler getInstance(HashMap<String, User> knownUsers) {
         if(DistantConversationHandler.INSTANCE == null){
-            DistantConversationHandler.INSTANCE = new DistantConversationHandler();
+            DistantConversationHandler.INSTANCE = new DistantConversationHandler(knownUsers);
         }
         return DistantConversationHandler.INSTANCE;
     }
@@ -45,6 +50,7 @@ public class DistantConversationHandler extends AbstractConversationHandler impl
     }
     @Override
     public void addKnownUser(User user) {
+        System.out.printf(".(DistantConversationHandler.java:50) - addKnownUser : %s\n",user);
         super.addKnownUser(user);
     }
     @Override
