@@ -12,6 +12,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import project.insa.idchatsystem.database.MessageDatabase;
 
 public class LocalConversation extends Conversation implements Runnable {
@@ -31,6 +33,12 @@ public class LocalConversation extends Conversation implements Runnable {
 
     @Override
     public void run() {
+        try {
+            this.announceCurrentUser(User.getCurrentUser());
+        } catch (Uninitialized ex) {
+            Logger.getLogger(LocalConversation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         // Listen on the current socket
         this.listen();
     }
@@ -92,11 +100,11 @@ public class LocalConversation extends Conversation implements Runnable {
      * @param message : Message - message we want to send and display
      */
     @Override
-    public void send(Message message, User corresp) {
-//        System.out.printf(".(LocalConversation.java:98) - send : message %s\n",message);
+    public void send(Data data, User corresp) {
+        System.out.printf(".(LocalConversation.java:104) - send : data: %s\n", data);
         try {
-            message.setSource(User.getCurrentUser());
-            message.setDestination(this.correspondent);
+            data.setSource(User.getCurrentUser());
+            data.setDestination(this.correspondent);
         } catch (Uninitialized e) {
             // Current user (thereforce message source) is not initialized
             System.out.println("Conversation: EXCEPTION WHILE SETTING MESSAGE SOURCE " + e);
@@ -113,15 +121,16 @@ public class LocalConversation extends Conversation implements Runnable {
         }        
         
         // Send message through the dedicated socket
-        outputStreamLink.println(message.toStream());
+        outputStreamLink.println(data.toStream());
         
-        // Store the message in the local database
-        this.storeMessage(message);
-        // Notify the handler that a new message has been sent
-        this.notifyObserversSentMessage(message);
+        // Check if the data is a message
+        if(data.isMessage()) {
+            // Store the message in the local database
+            this.storeMessage((Message)data);
+            // Notify the handler that a new message has been sent
+            this.notifyObserversSentMessage((Message)data);
+        }
     }
-
-
     
     /* GETTERS/SETTERS */
     public void setSocket(Socket newSocket) {

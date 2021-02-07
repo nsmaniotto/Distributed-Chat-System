@@ -10,9 +10,11 @@ import project.insa.idchatsystem.database.MessageDatabase;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import project.insa.idchatsystem.Data;
+import project.insa.idchatsystem.Information;
 
 public abstract class Conversation implements ConversationObservable, Runnable {
-    protected final User correspondent;
+    protected User correspondent;
     protected final ArrayList<Message> history;
     protected boolean isOpen;
     protected ConversationObserver conversationObserver;
@@ -37,33 +39,49 @@ public abstract class Conversation implements ConversationObservable, Runnable {
      * @param input : String - received stream
      */
     public void onReceive(String input) {
-        System.out.printf("RECEIVED : %s\n",input);
-        // Generate a Message instance from the given input
-        Message newMessage = new Message(input);
-
-        // Setting message source and destination
-        try {
-            newMessage.setSource(this.correspondent);
-            newMessage.setDestination(User.getCurrentUser());
-        } catch (Uninitialized e) {
-            // Current user (thereforce message source) is not initialized
-            System.out.println("Conversation: EXCEPTION WHILE SETTING MESSAGE DESTINATION " + e);
-        }
+        System.out.printf("RECEIVED : %s\n", input);
         
-        // Wait before storing the message:
-        // In local; give time to the sender to store the message
-        // Because the receiver must check if the message is present on the local database
-        try {
-            Thread.sleep(50);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Conversation.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        // Store the new message
-        this.storeMessage(newMessage);
+        // Generate a Data instance from the input
+        if(Data.isInformation(input)) {
+            // Generate an Information instance from the given input
+            Information information = new Information(input);
+            
+            if(!information.getSource().equals(this.correspondent)) {
+                System.out.println("(Conversation) : WRONG CORRESPONDENT DETECTED");
+                System.out.println("Current correspondent : " + this.correspondent);
+                System.out.println("Right correspondent : " + information.getSource());
+                // Notify the handler that the current correspondent is not the right one
+                // And tell him to update to the right correspondent
+                this.notifyWrongCorrespondentConversation(information.getSource());
+            }
+        } else {
+            // Generate a Message instance from the given input
+            Message newMessage = new Message(input);
+            
+            // Setting message source and destination
+            try {
+                newMessage.setSource(this.correspondent);
+                newMessage.setDestination(User.getCurrentUser());
+            } catch (Uninitialized e) {
+                // Current user (thereforce message source) is not initialized
+                System.out.println("Conversation: EXCEPTION WHILE SETTING MESSAGE DESTINATION " + e);
+            }
 
-        // Notify the handler that a message has been received and must be treated
-        this.notifyObserversReceivedMessage(newMessage);
+            // Wait before storing the message:
+            // In local; give time to the sender to store the message
+            // Because the receiver must check if the message is present on the local database
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Conversation.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            // Store the new message
+            this.storeMessage((Message)newMessage);
+
+            // Notify the handler that a message has been received and must be treated
+            this.notifyObserversReceivedMessage((Message)newMessage);
+        }
     }
     protected abstract void loadConversation();
     protected void storeMessage(Message message) {
@@ -76,7 +94,26 @@ public abstract class Conversation implements ConversationObservable, Runnable {
     public void close() {
         this.isOpen = false;
     }
-    public abstract void send(Message message,User corresp);
+    
+    /**
+     * Announcing to the correspondent who we really are
+     * @param currentUser 
+     */
+    public void announceCurrentUser(User currentUser) {
+        // Build the message that will be send to the correspondent
+        Information information;
+        try {
+            information = new Information(this.correspondent, User.getCurrentUser());
+        
+            // Send the information message to the correspondent
+            this.send(information, this.correspondent);
+        } catch (Uninitialized ex) {
+            System.out.println("Conversation: EXCEPTION RETRIEVING CURRENT USER " + ex);
+            Logger.getLogger(Conversation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public abstract void send(Data data,User corresp);
 
     /* CONVERSATION OBSERVER METHODS */
     @Override
@@ -110,9 +147,19 @@ public abstract class Conversation implements ConversationObservable, Runnable {
             this.conversationObserver.messagesRetrieved(retrievedMessages);
         }
     }
+
+    @Override
+    public void notifyWrongCorrespondentConversation(User rightUser) {
+        this.conversationObserver.wrongCorrespondentConversation(this, rightUser);
+    }
+    
     //GETTERS
     public ArrayList<Message> getHistory() {
         return history;
     }
     public User getCorrespondent(){return this.correspondent;};
+    
+    public void setCorrespondent(User correspondent) {
+        this.correspondent = correspondent;
+    }
 }
