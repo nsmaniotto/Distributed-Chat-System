@@ -24,7 +24,7 @@ public class LoginWindow extends Window {
         /* BEGIN: frame initialization */
         this.frame.setLayout(new GridBagLayout());
         this.frame.setLocationRelativeTo(null);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.initLookAndFeel();
         this.frame.getContentPane().setBackground(Window.COLOR_SOFTWHITE);
         this.frame.setMinimumSize(frame.getMinimumSize());
