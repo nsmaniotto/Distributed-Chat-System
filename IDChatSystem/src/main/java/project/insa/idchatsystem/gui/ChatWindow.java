@@ -201,6 +201,19 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
                 //Closing events
             }
         });
+        this.changeUsernameButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String login = JOptionPane.showInputDialog("Please input a value");
+                if(!chatWindowObserver.setUsername(login)) {
+                    JOptionPane.showMessageDialog(chatWindowReference,"Error, this login is already taken");
+                }
+                else {
+                    chatWindowObserver.loginModify(login);
+                    frame.setVisible(false);
+                }
+            }
+        });
 
         if (SystemTray.isSupported()) {
             showItem.addActionListener(new ActionListener() {

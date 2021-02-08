@@ -30,6 +30,13 @@ public class View implements Runnable, ChatWindowObserver {
         }
         this.chat_window.display();
     }
+    public void loginModify(String login) {
+        try {
+            this.chat_window.displayUsername(login,User.get_current_id_to_show());
+        } catch (Uninitialized uninitialized) {
+            uninitialized.printStackTrace();
+        }
+    }
     public void addObserver(ViewObserver observer){
         this.viewObserver = observer;
     }
