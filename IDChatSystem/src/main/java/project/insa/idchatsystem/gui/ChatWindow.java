@@ -12,6 +12,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -179,13 +180,55 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
                 //Closing events
             }
         });
+        //Check the SystemTray is supported
+        if (!SystemTray.isSupported()) {
+            System.out.println("SystemTray is not supported");
+            return;
+        }
+        final PopupMenu popup = new PopupMenu();
+        BufferedImage i= new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = i.createGraphics();
+        g.setColor(Color.RED);
+        g.fillRect(2, 2, 12, 12);
+        g.dispose();
+        final TrayIcon trayIcon = new TrayIcon(i,"tray",popup);
+        // Create a pop-up menu components
+        MenuItem aboutItem = new MenuItem("About");
+        CheckboxMenuItem cb1 = new CheckboxMenuItem("Set auto size");
+        CheckboxMenuItem cb2 = new CheckboxMenuItem("Set tooltip");
+        Menu displayMenu = new Menu("Display");
+        MenuItem errorItem = new MenuItem("Error");
+        MenuItem warningItem = new MenuItem("Warning");
+        MenuItem infoItem = new MenuItem("Info");
+        MenuItem noneItem = new MenuItem("None");
+        MenuItem exitItem = new MenuItem("Exit");
+
+        //Add components to pop-up menu
+        popup.add(aboutItem);
+        popup.addSeparator();
+        popup.add(cb1);
+        popup.add(cb2);
+        popup.addSeparator();
+        popup.add(displayMenu);
+        displayMenu.add(errorItem);
+        displayMenu.add(warningItem);
+        displayMenu.add(infoItem);
+        displayMenu.add(noneItem);
+        popup.add(exitItem);
+        final SystemTray tray = SystemTray.getSystemTray();
         WindowStateListener listener = new WindowAdapter() {
+            @Override
             public void windowStateChanged(WindowEvent evt) {
                 int oldState = evt.getOldState();
                 int newState = evt.getNewState();
 
                 if ((oldState & Frame.ICONIFIED) == 0 && (newState & Frame.ICONIFIED) != 0) {
                     System.out.println("Frame was iconized");
+                    try {
+                        tray.add(trayIcon);
+                    } catch (AWTException e) {
+                        e.printStackTrace();
+                    }
                     frame.setVisible(false);//hide the window
                 } else if ((oldState & Frame.ICONIFIED) != 0 && (newState & Frame.ICONIFIED) == 0) {
                     System.out.println("Frame was deiconized");
