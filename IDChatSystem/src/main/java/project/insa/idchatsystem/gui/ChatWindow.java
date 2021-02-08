@@ -25,6 +25,11 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
 
 
     /* BEGIN: variables declaration */
+    private PopupMenu popup;
+        private TrayIcon trayIcon;
+        private MenuItem showItem;
+        private SystemTray tray;
+        private MenuItem exitItem;
     private JPanel userPanel;
         private JPanel userInfoPanel;
             private JLabel usernameLabel;
@@ -146,6 +151,22 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         this.chatTextInputField = new JTextField();
 
         this.chatSendButton = new JButton("SEND");
+
+        //system tray initialization
+
+        //Check the SystemTray is supported
+        if (SystemTray.isSupported()) {
+            popup = new PopupMenu();
+            BufferedImage i= new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g = i.createGraphics();
+            g.setColor(Color.RED);
+            g.fillRect(2, 2, 12, 12);
+            g.dispose();
+            trayIcon = new TrayIcon(i,"tray",popup);
+            // Create a pop-up menu components
+            showItem = new MenuItem("Show");
+            exitItem = new MenuItem("Exit");
+        }
         /* END: variables initialization */
         this.updateTabs();
     }
@@ -180,66 +201,50 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
                 //Closing events
             }
         });
-        //Check the SystemTray is supported
-        if (!SystemTray.isSupported()) {
-            System.out.println("SystemTray is not supported");
-            return;
-        }
-        final PopupMenu popup = new PopupMenu();
-        BufferedImage i= new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = i.createGraphics();
-        g.setColor(Color.RED);
-        g.fillRect(2, 2, 12, 12);
-        g.dispose();
-        final TrayIcon trayIcon = new TrayIcon(i,"tray",popup);
-        // Create a pop-up menu components
-        MenuItem showItem = new MenuItem("Show");
-        showItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frame.setVisible(true);
-                frame.setState(Frame.NORMAL);
-            }
-        });
-        MenuItem exitItem = new MenuItem("Exit");
-        exitItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
 
-        //Add components to pop-up menu
-        popup.add(showItem);
-        popup.add(exitItem);
-        final SystemTray tray = SystemTray.getSystemTray();
-        WindowStateListener listener = new WindowAdapter() {
-            @Override
-            public void windowStateChanged(WindowEvent evt) {
-                int oldState = evt.getOldState();
-                int newState = evt.getNewState();
+        if (SystemTray.isSupported()) {
+            showItem.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    frame.setVisible(true);
+                    frame.setState(Frame.NORMAL);
+                }
+            });
+            exitItem.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.exit(0);
+                }
+            });
 
-                if ((oldState & Frame.ICONIFIED) == 0 && (newState & Frame.ICONIFIED) != 0) {
-                    System.out.println("Frame was iconized");
-                    try {
-                        tray.add(trayIcon);
-                    } catch (AWTException e) {
-                        e.printStackTrace();
+            WindowStateListener listener = new WindowAdapter() {
+                @Override
+                public void windowStateChanged(WindowEvent evt) {
+                    int oldState = evt.getOldState();
+                    int newState = evt.getNewState();
+
+                    if ((oldState & Frame.ICONIFIED) == 0 && (newState & Frame.ICONIFIED) != 0) {
+                        System.out.println("Frame was iconized");
+                        try {
+                            tray.add(trayIcon);
+                        } catch (AWTException e) {
+                            e.printStackTrace();
+                        }
+                        frame.setVisible(false);//hide the window
+                    } else if ((oldState & Frame.ICONIFIED) != 0 && (newState & Frame.ICONIFIED) == 0) {
+                        System.out.println("Frame was deiconized");
+                        tray.remove(trayIcon);
                     }
-                    frame.setVisible(false);//hide the window
-                } else if ((oldState & Frame.ICONIFIED) != 0 && (newState & Frame.ICONIFIED) == 0) {
-                    System.out.println("Frame was deiconized");
-                    tray.remove(trayIcon);
-                }
 
-                if ((oldState & Frame.MAXIMIZED_BOTH) == 0 && (newState & Frame.MAXIMIZED_BOTH) != 0) {
-                    System.out.println("Frame was maximized");
-                } else if ((oldState & Frame.MAXIMIZED_BOTH) != 0 && (newState & Frame.MAXIMIZED_BOTH) == 0) {
-                    System.out.println("Frame was minimized");
+                    if ((oldState & Frame.MAXIMIZED_BOTH) == 0 && (newState & Frame.MAXIMIZED_BOTH) != 0) {
+                        System.out.println("Frame was maximized");
+                    } else if ((oldState & Frame.MAXIMIZED_BOTH) != 0 && (newState & Frame.MAXIMIZED_BOTH) == 0) {
+                        System.out.println("Frame was minimized");
+                    }
                 }
-            }
-        };
-        frame.addWindowStateListener(listener);
+            };
+            frame.addWindowStateListener(listener);
+        }
     }
     
     @Override
@@ -342,6 +347,15 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         chatPanelConstraints.weighty = 1.0;
         chatPanelConstraints.fill = GridBagConstraints.BOTH;
         this.frame.getContentPane().add(this.chatPanel, chatPanelConstraints);
+
+
+
+        //Add components to pop-up menu
+        if (SystemTray.isSupported()) {
+            popup.add(showItem);
+            popup.add(exitItem);
+            tray = SystemTray.getSystemTray();
+        }
         /* END: frame build */
     }
     public void onlineUser(User user){
