@@ -28,6 +28,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         private JPanel userInfoPanel;
             private JLabel usernameLabel;
             private JButton changeUsernameButton;
+            private JButton minimizeButton;
         private JTabbedPane conversationTabs;
             private JScrollPane recentConversationsTab;
             private JPanel recentUsersPanel;
@@ -178,6 +179,26 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
                 //Closing events
             }
         });
+        WindowStateListener listener = new WindowAdapter() {
+            public void windowStateChanged(WindowEvent evt) {
+                int oldState = evt.getOldState();
+                int newState = evt.getNewState();
+
+                if ((oldState & Frame.ICONIFIED) == 0 && (newState & Frame.ICONIFIED) != 0) {
+                    System.out.println("Frame was iconized");
+                    frame.setVisible(false);//hide the window
+                } else if ((oldState & Frame.ICONIFIED) != 0 && (newState & Frame.ICONIFIED) == 0) {
+                    System.out.println("Frame was deiconized");
+                }
+
+                if ((oldState & Frame.MAXIMIZED_BOTH) == 0 && (newState & Frame.MAXIMIZED_BOTH) != 0) {
+                    System.out.println("Frame was maximized");
+                } else if ((oldState & Frame.MAXIMIZED_BOTH) != 0 && (newState & Frame.MAXIMIZED_BOTH) == 0) {
+                    System.out.println("Frame was minimized");
+                }
+            }
+        };
+        frame.addWindowStateListener(listener);
     }
     
     @Override
@@ -583,5 +604,4 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
             this.chatWindowObserver.newMessageSending(sentMessage);
         }
     }
-
 }
