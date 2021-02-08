@@ -193,27 +193,24 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         g.dispose();
         final TrayIcon trayIcon = new TrayIcon(i,"tray",popup);
         // Create a pop-up menu components
-        MenuItem aboutItem = new MenuItem("About");
-        CheckboxMenuItem cb1 = new CheckboxMenuItem("Set auto size");
-        CheckboxMenuItem cb2 = new CheckboxMenuItem("Set tooltip");
-        Menu displayMenu = new Menu("Display");
-        MenuItem errorItem = new MenuItem("Error");
-        MenuItem warningItem = new MenuItem("Warning");
-        MenuItem infoItem = new MenuItem("Info");
-        MenuItem noneItem = new MenuItem("None");
+        MenuItem showItem = new MenuItem("Show");
+        showItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.setVisible(true);
+                frame.setState(Frame.NORMAL);
+            }
+        });
         MenuItem exitItem = new MenuItem("Exit");
+        exitItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
 
         //Add components to pop-up menu
-        popup.add(aboutItem);
-        popup.addSeparator();
-        popup.add(cb1);
-        popup.add(cb2);
-        popup.addSeparator();
-        popup.add(displayMenu);
-        displayMenu.add(errorItem);
-        displayMenu.add(warningItem);
-        displayMenu.add(infoItem);
-        displayMenu.add(noneItem);
+        popup.add(showItem);
         popup.add(exitItem);
         final SystemTray tray = SystemTray.getSystemTray();
         WindowStateListener listener = new WindowAdapter() {
@@ -232,6 +229,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
                     frame.setVisible(false);//hide the window
                 } else if ((oldState & Frame.ICONIFIED) != 0 && (newState & Frame.ICONIFIED) == 0) {
                     System.out.println("Frame was deiconized");
+                    tray.remove(trayIcon);
                 }
 
                 if ((oldState & Frame.MAXIMIZED_BOTH) == 0 && (newState & Frame.MAXIMIZED_BOTH) != 0) {
