@@ -210,7 +210,6 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
                 }
                 else {
                     chatWindowObserver.loginModify(login);
-                    frame.setVisible(false);
                 }
             }
         });
