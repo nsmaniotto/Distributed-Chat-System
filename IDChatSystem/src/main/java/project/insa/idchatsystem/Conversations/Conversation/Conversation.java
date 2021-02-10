@@ -108,14 +108,14 @@ public abstract class Conversation implements ConversationObservable, Runnable {
             information = new Information(this.correspondent, User.getCurrentUser());
         
             // Send the information message to the correspondent
-            this.send(information, this.correspondent);
+            this.send(information);
         } catch (Uninitialized ex) {
             System.out.println("Conversation: EXCEPTION RETRIEVING CURRENT USER " + ex);
             Logger.getLogger(Conversation.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
-    public abstract void send(Data data,User corresp);
+    public abstract void send(Data data);
 
     public void loadConversation() {
         ArrayList<Message> history = new ArrayList<>();
