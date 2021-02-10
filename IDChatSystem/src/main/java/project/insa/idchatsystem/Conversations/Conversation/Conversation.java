@@ -168,7 +168,9 @@ public abstract class Conversation implements ConversationObservable, Runnable {
 
     @Override
     public void notifyWrongCorrespondentConversation(User rightUser) {
-        this.conversationObserver.wrongCorrespondentConversation(this, rightUser);
+        if(this.conversationObserver != null) {
+            this.conversationObserver.wrongCorrespondentConversation(this, rightUser);
+        }
     }
     
     //GETTERS
