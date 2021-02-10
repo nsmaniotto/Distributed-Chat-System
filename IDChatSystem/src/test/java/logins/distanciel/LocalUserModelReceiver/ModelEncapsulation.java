@@ -35,7 +35,7 @@ public class ModelEncapsulation extends UserModel {
                 socket.send(outPacket);
                 //On attend quelques secondes
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

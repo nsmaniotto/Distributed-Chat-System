@@ -23,7 +23,7 @@ public class UserModelReceivers implements UserModelReceiverObserver  {
     public void notifyNewMsg(String msg) {
         Pattern pattern_new_host = Pattern.compile("(?<username>[A-Za-z_.0-9]+),(?<id>[0-9a-z-]*),(?<ip>[0-9]+[.][0-9]+[.][0-9]+[.][0-9]+),(?<convListPort>[0-9]+),(?<local>[tf])");
         Pattern pattern_disconnected = Pattern.compile("(?<id>[0-9a-z-]*),disconnected");
-        Pattern pattern_update = Pattern.compile("update");
+        Pattern pattern_update = Pattern.compile("update,.+");
         //Extraction of the informations of the packet thanks to a regex and named group
         Matcher m = pattern_new_host.matcher(msg);
         while (m.find()){

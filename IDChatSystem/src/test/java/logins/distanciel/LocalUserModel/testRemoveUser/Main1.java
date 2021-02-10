@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public class Main1 {
     public static void main(String [] argv) {
-        int DUREE_DIFF_EMISSION = 5000;
+        int DUREE_DIFF_EMISSION = 500;
         UserModel model = new UserModel("0",2700,2705, new ArrayList<>() {{
             add(2701);
         }});

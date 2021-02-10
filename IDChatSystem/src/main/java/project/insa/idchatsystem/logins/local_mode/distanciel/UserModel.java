@@ -21,6 +21,8 @@ public class UserModel implements ServerLoginControllerObserver, UserModelEmitte
     private ArrayList<UsersStatusObserver> observers;
     private HashMap<String, User> users;
     private final long limite_tolerance_ss_nouvelles = 10000;
+
+
     public UserModel(String id, int receiver_port, int emitter_port, ArrayList<Integer> others)  {
         User.init_current_user(id,others != null);
         this.users = new HashMap<>();
@@ -43,10 +45,12 @@ public class UserModel implements ServerLoginControllerObserver, UserModelEmitte
             }
         }).start();
     }
+
     public void addOnlineUser(User user) {
         this.users.put(user.get_id(),user);//Replace automatically the previous version if already in the HashMap
         this.notifyNewUserObservers(user);
     }
+
     public void removeOnlineUser(String id) {
         User removed_user = this.users.remove(id);
         if(removed_user == null) {
@@ -56,6 +60,7 @@ public class UserModel implements ServerLoginControllerObserver, UserModelEmitte
             this.notifyDisconnectedObservers(removed_user);
         }
     }
+
     protected void checkUserStillActive() {
         long time = System.currentTimeMillis();
         ArrayList<String> toRemove = new ArrayList<>();
@@ -68,9 +73,11 @@ public class UserModel implements ServerLoginControllerObserver, UserModelEmitte
             this.removeOnlineUser(index);
         }
     }
+
     public HashMap<String,User> getOnlineUsers() {
         return this.users;
     }
+
     public boolean checkLocallyAvailable(String username) {
         for (Map.Entry<String, User> integerUserEntry : this.users.entrySet()) {
             User user = (User) ((Map.Entry) integerUserEntry).getValue();
@@ -80,19 +87,15 @@ public class UserModel implements ServerLoginControllerObserver, UserModelEmitte
         }
         return true;
     }
+
     public boolean setUsername(String username) {
         this.emitters.askUpdate();
-        try {
-            this.serverController.sendMessage(String.format("update,%s",User.get_current_id()),null);
-        } catch (Uninitialized uninitialized) {
-            uninitialized.printStackTrace();
-        }
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        if(this.checkavailable(username)) {
+        if(this.checkLocallyAvailable(username)) {
             System.out.print("Changing username\n");
             try {
                 User.set_current_username(username);
@@ -107,6 +110,7 @@ public class UserModel implements ServerLoginControllerObserver, UserModelEmitte
             return false;
         }
     }
+
     public void stopperEmission(){
         this.emitters.stopperEmission();
         try {
@@ -115,6 +119,7 @@ public class UserModel implements ServerLoginControllerObserver, UserModelEmitte
             uninitialized.printStackTrace();
         }
     }
+
     public void disconnect() {
         try {
             while(!this.emitters.getState().equals("disconnected")) {
@@ -125,21 +130,13 @@ public class UserModel implements ServerLoginControllerObserver, UserModelEmitte
             uninitialized.printStackTrace();
         }
     }
+
     public void diffuseNewUsername(){
         String response = User.current_user_transfer_string();
         this.emitters.diffuseNewUsername(response);
         this.serverController.sendMessage(String.format("%s",response),null);
     }
 
-    public boolean checkavailable(String username) {
-        this.emitters.askUpdate();
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return this.checkLocallyAvailable(username);
-    }
 
     @Override
     public void addUserModelObserver(UsersStatusObserver obs) {
@@ -180,6 +177,6 @@ public class UserModel implements ServerLoginControllerObserver, UserModelEmitte
 
     @Override
     public void newMsgToSend(String message) {
-        this.serverController.sendMessage(String.format("%s",message),null);
+        this.serverController.sendMessage(message,null);
     }
 }

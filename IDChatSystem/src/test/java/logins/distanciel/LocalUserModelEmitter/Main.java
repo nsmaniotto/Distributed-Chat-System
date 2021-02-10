@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String [] args) {
         System.out.println("-------------------------------------------DEBUT ZONE TEST-------------------------------------------");
-        int DUREE_DIFF_EMISSION = 5000;
+        int DUREE_DIFF_EMISSION = 500;
 
         //Création des ports sur lesquels écoutent les autres clients et création des clients qui écoutes
         ArrayList<Integer> others = new ArrayList<Integer>();

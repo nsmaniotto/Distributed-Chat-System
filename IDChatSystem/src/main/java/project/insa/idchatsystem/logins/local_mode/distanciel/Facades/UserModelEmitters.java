@@ -1,6 +1,8 @@
 package project.insa.idchatsystem.logins.local_mode.distanciel.Facades;
 
+import project.insa.idchatsystem.Exceptions.Uninitialized;
 import project.insa.idchatsystem.Observers.logins.Observers.UserModelEmittersObserver;
+import project.insa.idchatsystem.User.distanciel.User;
 import project.insa.idchatsystem.logins.local_mode.distanciel.Local.LocalUserModelEmitter;
 
 import java.util.ArrayList;
@@ -29,7 +31,16 @@ public class UserModelEmitters implements Runnable {
     }
     public void askUpdate() {
         //ask to the other users to send their infos
-        this.sendMessage("update");
+        try {
+            this.sendMessage(String.format("update,%s", User.get_current_id()));
+        } catch (Uninitialized uninitialized) {
+            uninitialized.printStackTrace();
+        }
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
     public String getState(){
         return this.state;
@@ -57,7 +68,7 @@ public class UserModelEmitters implements Runnable {
             //System.out.println("I am in a loooooooooop");
             this.diffuse();
             try {
-                Thread.sleep(5000);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

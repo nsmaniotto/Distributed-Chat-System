@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public class Main2 {
     public static void main(String [] argv) throws InterruptedException {
-        int DUREE_DIFF_EMISSION = 5000;
+        int DUREE_DIFF_EMISSION = 500;
         Thread.sleep(DUREE_DIFF_EMISSION*2);//On veut être sûr que le premier utilisateur est celui de Main1
         UserModel model = new UserModel("1",2701,2706,new ArrayList<>(){{
             add(2700);

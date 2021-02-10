@@ -24,7 +24,7 @@ public class ClientTestNathan {
         arrayBroadCast.add(2001);
         ClientController controller = new ClientController(id,true,true);
         try {
-            Thread.sleep(5000);//On laisse le temps d'entrer le login
+            Thread.sleep(500);//On laisse le temps d'entrer le login
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -40,7 +40,7 @@ public class ClientTestNathan {
         }
         
         /*try {
-            Thread.sleep(15000);
+            Thread.sleep(1500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
