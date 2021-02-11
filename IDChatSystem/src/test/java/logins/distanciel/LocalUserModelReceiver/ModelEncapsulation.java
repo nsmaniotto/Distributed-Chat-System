@@ -71,12 +71,6 @@ public class ModelEncapsulation extends UserModel {
     }
 
     @Override
-    public boolean checkavailable(String username) {
-        System.out.println("Error checkavailable is not available for this test");
-        return false;
-    }
-
-    @Override
     public void diffuseNewUsername() {
         System.out.println("Error diffuseNewUsername is not available for this test");
     }

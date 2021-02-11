@@ -15,45 +15,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import net.javacode.*;
 /**
  * Servlet implementation class Servlet
  */
 @WebServlet("/")
 public class Servlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	class StructMsg{
-		public String idSrc;
-		public String idDest;
-		public String msg;
-		public StructMsg(String idSrc,String idDest,String msg) {
-			this.idSrc = idSrc;
-			this.idDest = idDest;
-			this.msg = msg;
-		}
-	}
+    private HashMap<String,StructUser> users;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
     public Servlet() {
         super();
+        users = new HashMap<String,StructUser>();
         // TODO Auto-generated constructor stub
-    }
-    class StructUser {
-        public PrintWriter writer = null;
-        public ArrayList<StructMsg> cacheLog = null;
-        public ArrayList<StructMsg> cacheConv = null;
-        public String state = "disconnected";
-        public StructUser(PrintWriter writer,ArrayList<StructMsg> cacheLog,ArrayList<StructMsg> cacheConv,String state) {
-            this.writer = writer;
-            this.cacheLog = cacheLog;
-            this.cacheConv = cacheConv;
-            this.state = state;
-        }
-        public StructUser(PrintWriter writer,ArrayList<StructMsg> cacheLog,ArrayList<StructMsg> cacheConv) {
-            this.cacheLog = cacheLog;
-            this.cacheConv = cacheConv;
-        }
     }
     class HashMapPerso extends HashMap<String,StructUser> {
         @Override
@@ -61,7 +38,6 @@ public class Servlet extends HttpServlet {
             return super.put(key, value);
         }
     }
-    public HashMapPerso users = new HashMapPerso();
     @Override
     public void init() {
     }

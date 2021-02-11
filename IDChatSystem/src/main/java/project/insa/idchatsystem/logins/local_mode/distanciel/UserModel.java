@@ -134,7 +134,6 @@ public class UserModel implements ServerLoginControllerObserver, UserModelEmitte
     public void diffuseNewUsername(){
         String response = User.current_user_transfer_string();
         this.emitters.diffuseNewUsername(response);
-        this.serverController.sendMessage(String.format("%s",response),null);
     }
 
 
