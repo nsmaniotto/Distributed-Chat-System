@@ -13,6 +13,9 @@ public class ClientTest1 {
         LocalConversationHandler conversationHandler = new LocalConversationHandler( );
         new Thread(conversationHandler).start();
         
+        // Simulate this user
+        User user1 = new User("User_1", "1", "127.0.0.1");
+        
         // Create fake users
         User user2 = new User("User_2", "2", "127.0.0.1");
         
@@ -29,7 +32,10 @@ public class ClientTest1 {
         conversationHandler.open(user2);
         
         // Sending messages
-        conversationHandler.getCurrentConversation().send(new Message("Now waiting for you to close the conversation"),conversationHandler.getCurrentConversation().getCorrespondent());
+        Message message1 = new Message("Now waiting for you to close the conversation");
+        message1.setSource(user1);
+        message1.setDestination(user2);
+        conversationHandler.getCurrentConversation().send(message1);
         
         // Giving some some time for user2 to close the conversation
         try {
@@ -39,6 +45,9 @@ public class ClientTest1 {
         }
         
         // Try sending another message
-        conversationHandler.getCurrentConversation().send(new Message("Are you still here ?"),conversationHandler.getCurrentConversation().getCorrespondent());
+        Message message2 = new Message("Are you still here ?");
+        message1.setSource(user1);
+        message2.setDestination(user2);
+        conversationHandler.getCurrentConversation().send(message2);
     }
 }

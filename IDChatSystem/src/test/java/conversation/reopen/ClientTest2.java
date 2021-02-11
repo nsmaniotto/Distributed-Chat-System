@@ -13,9 +13,11 @@ public class ClientTest2 {
         LocalConversationHandler conversationHandler = new LocalConversationHandler();
         new Thread(conversationHandler).start();
         
+        // Simulate this user
+        User user2 = new User("User_2", "2", "127.0.0.1");
+        
         // Create fake users
         User user1 = new User("User_1", "1", "127.0.0.1");
-        //User user3 = new User("User_3", 3, "127.0.0.1");
         
         conversationHandler.addKnownUser(user1);
         //conversationHandler.addKnownUser(user3);
@@ -24,7 +26,10 @@ public class ClientTest2 {
         conversationHandler.open(user1);
         
         // Sending messages to user1
-        conversationHandler.getCurrentConversation().send(new Message("Waiting 10s for your messages"),conversationHandler.getCurrentConversation().getCorrespondent());
+        Message message1 = new Message("Waiting 10s for your messages");
+        message1.setSource(user2);
+        message1.setDestination(user1);
+        conversationHandler.getCurrentConversation().send(message1);
         
         // Receiving some messages from user1 (waiting)
         try {
@@ -34,7 +39,10 @@ public class ClientTest2 {
         }
         
         // Simulate closing of the ocnversation
-        conversationHandler.getCurrentConversation().send(new Message("Closing the conversation"),conversationHandler.getCurrentConversation().getCorrespondent());
+        Message message2 = new Message("Closing the conversation");
+        message2.setSource(user2);
+        message2.setDestination(user1);
+        conversationHandler.getCurrentConversation().send(message2);
         conversationHandler.closeCurrentConversation();
         
         // Waiting before going back on the conversation
@@ -48,6 +56,9 @@ public class ClientTest2 {
         conversationHandler.open(user1);
         
         // Sending messages to user1
-        conversationHandler.getCurrentConversation().send(new Message("I am back !"),conversationHandler.getCurrentConversation().getCorrespondent());
+        Message message3 = new Message("I am back !");
+        message3.setSource(user2);
+        message3.setDestination(user1);
+        conversationHandler.getCurrentConversation().send(message3);
     }
 }
