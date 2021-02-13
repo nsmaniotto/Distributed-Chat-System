@@ -15,28 +15,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import net.javacode.*;
 /**
  * Servlet implementation class Servlet
  */
 @WebServlet("/")
 public class Servlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    private HashMap<String,StructUser> users;
+    private HashMap<String,StructUser> users = new HashMap<String,StructUser>();;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
     public Servlet() {
         super();
-        users = new HashMap<String,StructUser>();
-        // TODO Auto-generated constructor stub
-    }
-    class HashMapPerso extends HashMap<String,StructUser> {
-        @Override
-        public StructUser put(String key, StructUser value) {
-            return super.put(key, value);
-        }
     }
     @Override
     public void init() {
@@ -93,14 +84,12 @@ public class Servlet extends HttpServlet {
 				System.out.println("-------------------------------------------------------------");
 				System.out.printf("->   %d subscribed\n",idSrc);
 				if (!users.containsKey(idSrc))
-					users.put(idSrc, new StructUser(null,new ArrayList<StructMsg>(),new ArrayList<StructMsg>()));
+					users.put(idSrc, new StructUser(new ArrayList<StructMsg>(),new ArrayList<StructMsg>()));
 				return;
 			}
 			else if (!state.equals("")) {
 				System.out.printf("->   %s is %s\n",idSrc,state);
 				setStatus(idSrc,state);
-				if(state.equals("ready"))
-					setWriter(idSrc,writer);
 			}
 			else if(getMessages && users.get(idSrc) != null && users.get(idSrc).state.equals("ready")) {
 				sendAll(idSrc,resp,proto);
@@ -121,7 +110,7 @@ public class Servlet extends HttpServlet {
     }
     public void addToCache(String id,StructMsg message,String protocole) {
     	if(!users.containsKey(id)) {
-    		this.users.put(id, new StructUser(null,new ArrayList<StructMsg>(),new ArrayList<StructMsg>()));
+    		this.users.put(id, new StructUser(new ArrayList<StructMsg>(),new ArrayList<StructMsg>()));
     	}
     	StructUser storage = this.users.get(id);
     	System.out.printf("\t\taddToCache %s : %s\n",protocole,message.msg);
@@ -174,18 +163,10 @@ public class Servlet extends HttpServlet {
 			e.printStackTrace();
 		}
     }
-    public void setWriter(String id,PrintWriter writer) {
-    	System.out.println("\t\tsetWriter");
-    	StructUser user = this.users.get(id);
-    	if(user != null) {
-        	user.writer = writer;
-        	this.users.put(id,user);
-    	}
-    }
     public void setStatus(String id,String status) {
     	System.out.println("setStatus");
     	if(!users.containsKey(id)) {
-    		this.users.put(id, new StructUser(null,new ArrayList<StructMsg>(),new ArrayList<StructMsg>(),status));
+    		this.users.put(id, new StructUser(new ArrayList<StructMsg>(),new ArrayList<StructMsg>(),status));
     	}
     	else {
     		StructUser user = this.users.get(id);
