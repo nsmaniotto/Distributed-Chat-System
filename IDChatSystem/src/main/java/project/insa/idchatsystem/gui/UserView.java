@@ -7,8 +7,10 @@ import project.insa.idchatsystem.User.distanciel.User;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.sql.Timestamp;
 //TODO : s'inspirer de generateDisplayedMessage pour régler le problème de taille
 public class UserView extends JPanel implements UserViewObservable {
@@ -48,6 +50,7 @@ public class UserView extends JPanel implements UserViewObservable {
         this.setLayout(new BoxLayout(this,BoxLayout.LINE_AXIS));
         this.mainPanel.add(this.usernameLabel);
         this.mainPanel.add(Box.createRigidArea(new Dimension(15, 0)));
+        selectButton.setOpaque(false);
         this.mainPanel.add(selectButton);
         this.mainPanel.setBorder(new EmptyBorder(10,10,10,10));
         this.add(mainPanel);
@@ -65,6 +68,7 @@ public class UserView extends JPanel implements UserViewObservable {
         this.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                System.out.printf(".(UserView.java:68) - mouseClicked : CALLED1\n");
                 parent.notificationSeen();
                 parent.userSelected();
             }

@@ -194,7 +194,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
                 updateTabs();
             }
         });
-        this.addWindowListener(new WindowAdapter() {
+        /*this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
@@ -244,7 +244,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
                 }
             };
             frame.addWindowStateListener(listener);
-        }
+        }*/
     }
     
     @Override
@@ -395,6 +395,8 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
             if(userComp.getOnline())
                 this.onlineUsersPanel.add(userComp);
         });
+        this.repaint();
+        this.validate();
     }
     private synchronized void updateOfflineUsers(){
         this.onlineUsersPanel.removeAll();
@@ -404,15 +406,19 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
             if(!userComp.getOnline())
                 this.offlineUsersPanel.add(userComp);
         });
+        this.repaint();
+        this.validate();
     }
     public synchronized void updateRecentUsers() {
         this.onlineUsersPanel.removeAll();
-        this.offlineUsersPanel.removeAll();
+        this.offlineUsersPanel.removeAll();// maybe because of that
         this.recentUsersPanel.removeAll();
         this.usersContainer.getListOrderedByPriority().forEach(userComp->{
             if(userComp.getPriority() > 0)
                 this.recentUsersPanel.add(userComp);
         });
+        this.repaint();
+        this.validate();
     }
     public void offlineUser(User user){
         //System.out.printf("CHATWINDOW offlineUser %s\n",user);

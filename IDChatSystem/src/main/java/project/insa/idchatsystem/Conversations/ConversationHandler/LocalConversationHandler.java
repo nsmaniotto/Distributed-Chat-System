@@ -33,7 +33,7 @@ public class LocalConversationHandler extends AbstractConversationHandler implem
     private final int listenerPort;
     private final int destinationPort;
     private int MINLISTENERPORT = 10000;
-    private int MAXCONVERSATIONSPORTS = 500;
+    private int MAXCONVERSATIONSPORTS = 5000;
     
     public LocalConversationHandler() throws NoPortAvailable {
         super();
