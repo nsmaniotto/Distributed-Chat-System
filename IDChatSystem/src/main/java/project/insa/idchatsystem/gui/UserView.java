@@ -147,4 +147,12 @@ public class UserView extends JPanel implements UserViewObservable {
     public User getUser() {
         return user;
     }
+
+    @Override
+    public String toString() {
+        return this.user.toString();
+    }
+    public String getText() {
+        return this.user.get_username()+" #"+this.user.get_id_to_show();
+    }
 }

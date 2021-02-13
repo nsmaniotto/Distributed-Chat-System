@@ -36,13 +36,15 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
             private JButton changeUsernameButton;
             private JButton minimizeButton;
         private JTabbedPane conversationTabs;
-            private JScrollPane recentConversationsTab;
-            private JPanel recentUsersPanel;
-            private JScrollPane onlineUsersTab;
-            private JPanel onlineUsersPanel;
-            private JScrollPane offlineUsersTab;
-            private JPanel offlineUsersPanel;
-            private JScrollPane allUsersTab;
+            private JList<String> listRecentUsersList;
+            private DefaultListModel<String> modelRecentUsersList;
+            private JList<String> listOnlineUsersList;
+            private DefaultListModel<String> modelOnlineUsersList;
+            private JList<String> listDisconnectedUsersList;
+            private DefaultListModel<String> modelDisconnectedUsersList;
+            private JScrollPane listScrollerRecent;
+            private JScrollPane listScrollerOnline;
+            private JScrollPane listScrollerOffline;
     private JPanel chatPanel;
         private JPanel correspondentPanel;
             private JLabel correspondentInfoLabel;
@@ -96,14 +98,68 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         this.conversationTabs.setPreferredSize(new Dimension(200, HEIGHT));
         //this.recentConversationsTab.setViewportView(this.recentConversationsTab);
 
-        this.recentConversationsTab = new JScrollPane();
-        this.recentUsersPanel = new JPanel();
-        this.onlineUsersTab = new JScrollPane();
-        this.onlineUsersPanel = new JPanel();
-        this.offlineUsersTab = new JScrollPane();
-        this.offlineUsersPanel = new JPanel();
-        this.allUsersTab = new JScrollPane();
+        this.modelOnlineUsersList = new DefaultListModel<>();
+        this.modelOnlineUsersList.addElement("hey");
+        this.modelOnlineUsersList.addElement("ho");
+        this.modelOnlineUsersList.addElement("ha");
+        this.modelOnlineUsersList.addElement("hey");
+        this.modelOnlineUsersList.addElement("ho");
+        this.modelOnlineUsersList.addElement("ha");
+        this.modelOnlineUsersList.addElement("hey");
+        this.modelOnlineUsersList.addElement("ho");
+        this.modelOnlineUsersList.addElement("ha");
+        this.modelOnlineUsersList.addElement("hey");
+        this.modelOnlineUsersList.addElement("ho");
+        this.modelOnlineUsersList.addElement("ha");
+        this.modelOnlineUsersList.addElement("hey");
+        this.modelOnlineUsersList.addElement("ho");
+        this.modelOnlineUsersList.addElement("ha");
+        this.modelOnlineUsersList.addElement("hey");
+        this.modelOnlineUsersList.addElement("ho");
+        this.modelOnlineUsersList.addElement("ha");
+        this.modelOnlineUsersList.addElement("hey");
+        this.modelOnlineUsersList.addElement("ho");
+        this.modelOnlineUsersList.addElement("ha");
+        this.modelOnlineUsersList.addElement("hey");
+        this.modelOnlineUsersList.addElement("ho");
+        this.modelOnlineUsersList.addElement("ha");
+        this.modelOnlineUsersList.addElement("hey");
+        this.modelOnlineUsersList.addElement("ho");
+        this.modelOnlineUsersList.addElement("ha");
+        this.modelOnlineUsersList.addElement("hey");
+        this.modelOnlineUsersList.addElement("ho");
+        this.modelOnlineUsersList.addElement("ha");
+        this.modelOnlineUsersList.addElement("hey");
+        this.modelOnlineUsersList.addElement("ho");
+        this.modelOnlineUsersList.addElement("ha");
+        this.modelOnlineUsersList.addElement("hey");
+        this.modelOnlineUsersList.addElement("ho");
+        this.modelOnlineUsersList.addElement("ha");
+        this.modelOnlineUsersList.addElement("hey");
+        this.modelOnlineUsersList.addElement("ho");
+        this.modelOnlineUsersList.addElement("ha");
+        this.modelOnlineUsersList.addElement("hey");
+        this.modelOnlineUsersList.addElement("ho");
+        this.modelOnlineUsersList.addElement("ha");
+        this.modelOnlineUsersList.addElement("hey");
+        this.modelOnlineUsersList.addElement("ho");
+        this.modelOnlineUsersList.addElement("ha");
+        this.modelOnlineUsersList.addElement("hey");
+        this.modelOnlineUsersList.addElement("ho");
+        this.modelOnlineUsersList.addElement("ha");
+        this.modelOnlineUsersList.addElement("hey");
+        this.modelOnlineUsersList.addElement("ho");
+        this.modelOnlineUsersList.addElement("ha");
+        this.modelRecentUsersList = new DefaultListModel<>();
+        this.modelDisconnectedUsersList = new DefaultListModel<>();
 
+        this.listRecentUsersList = new JList<>(modelRecentUsersList);
+        this.listOnlineUsersList = new JList<>(modelOnlineUsersList);
+        this.listDisconnectedUsersList = new JList<>(modelDisconnectedUsersList);
+
+        this.listScrollerRecent = new JScrollPane(listRecentUsersList);
+        this.listScrollerOnline = new JScrollPane(listOnlineUsersList);
+        this.listScrollerOffline = new JScrollPane(listDisconnectedUsersList);
         this.chatPanel = new JPanel(new GridBagLayout());
         this.chatPanel.setBorder(BorderFactory.createEmptyBorder(
                 0, //top
@@ -270,17 +326,19 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         conversationTabsConstraints.anchor = GridBagConstraints.SOUTH;
         this.userPanel.add(this.conversationTabs, conversationTabsConstraints);
 
-        this.onlineUsersPanel.setLayout(new BoxLayout(this.onlineUsersPanel,BoxLayout.Y_AXIS));
-        this.recentUsersPanel.setLayout(new BoxLayout(this.recentUsersPanel,BoxLayout.Y_AXIS));
-        this.offlineUsersPanel.setLayout(new BoxLayout(this.offlineUsersPanel,BoxLayout.Y_AXIS));
+        this.listOnlineUsersList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        this.listOnlineUsersList.setLayoutOrientation(JList.VERTICAL);
+        this.listOnlineUsersList.setVisibleRowCount(-1);
+        this.listRecentUsersList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        this.listRecentUsersList.setLayoutOrientation(JList.VERTICAL);
+        this.listRecentUsersList.setVisibleRowCount(-1);
+        this.listDisconnectedUsersList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        this.listDisconnectedUsersList.setLayoutOrientation(JList.VERTICAL);
+        this.listDisconnectedUsersList.setVisibleRowCount(-1);
 
-        this.onlineUsersTab.setViewportView(this.onlineUsersPanel);
-        this.recentConversationsTab.setViewportView(this.recentUsersPanel);
-        this.offlineUsersTab.setViewportView(this.offlineUsersPanel);
-
-        this.conversationTabs.addTab("Recent", this.recentConversationsTab);
-        this.conversationTabs.addTab("Online", this.onlineUsersTab);
-        this.conversationTabs.addTab("Offline", this.offlineUsersTab);
+        this.conversationTabs.addTab("Recent", this.listScrollerRecent);
+        this.conversationTabs.addTab("Online", this.listScrollerOnline);
+        this.conversationTabs.addTab("Offline", this.listScrollerOffline);
         //this.conversationTabs.addTab("All", this.allUsersTab); // Maybe later
         /* END: userPanel build */
 
@@ -388,37 +446,38 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         }
     }
     private synchronized void updateOnlineUsers(){
-        this.onlineUsersPanel.removeAll();
-        this.offlineUsersPanel.removeAll();
-        this.recentUsersPanel.removeAll();
+//        this.modelRecentUsersList.removeAllElements();
+        this.modelOnlineUsersList.removeAllElements();
+//        this.modelDisconnectedUsersList.removeAllElements();
         this.usersContainer.getListOrderedByName().forEach(userComp->{
-            if(userComp.getOnline())
-                this.onlineUsersPanel.add(userComp);
+            if(userComp.getOnline()) {
+                this.modelOnlineUsersList.addElement(userComp.getText());
+            }
         });
-        this.repaint();
-        this.validate();
+//        this.repaint();
+//        this.validate();
     }
     private synchronized void updateOfflineUsers(){
-        this.onlineUsersPanel.removeAll();
-        this.offlineUsersPanel.removeAll();
-        this.recentUsersPanel.removeAll();
+//        this.modelRecentUsersList.removeAllElements();
+//        this.modelOnlineUsersList.removeAllElements();
+        this.modelDisconnectedUsersList.removeAllElements();
         this.usersContainer.getListOrderedByName().forEach(userComp->{
             if(!userComp.getOnline())
-                this.offlineUsersPanel.add(userComp);
+                this.modelDisconnectedUsersList.addElement(userComp.getText());
         });
-        this.repaint();
-        this.validate();
+//        this.repaint();
+//        this.validate();
     }
     public synchronized void updateRecentUsers() {
-        this.onlineUsersPanel.removeAll();
-        this.offlineUsersPanel.removeAll();// maybe because of that
-        this.recentUsersPanel.removeAll();
+        this.modelRecentUsersList.removeAllElements();
+//        this.modelOnlineUsersList.removeAllElements();
+//        this.modelDisconnectedUsersList.removeAllElements();
         this.usersContainer.getListOrderedByPriority().forEach(userComp->{
             if(userComp.getPriority() > 0)
-                this.recentUsersPanel.add(userComp);
+                this.modelRecentUsersList.addElement(userComp.getText());
         });
-        this.repaint();
-        this.validate();
+//        this.repaint();
+//        this.validate();
     }
     public void offlineUser(User user){
         //System.out.printf("CHATWINDOW offlineUser %s\n",user);
