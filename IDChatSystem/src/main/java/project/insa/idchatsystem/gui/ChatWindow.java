@@ -384,7 +384,6 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         }
     }
     public void offlineUser(User user){
-        System.out.printf("CHATWINDOW offlineUser %s\n",user);
         UserView v = new UserView(user);
         v.initListeners(this);
         int index = this.usersContainer.indexOf(v);
