@@ -61,7 +61,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         super("IDChat");
         this.usersContainer = new UserViewArrayList();
     }
-    
+
     @Override
     protected void initComponents() {
         /* BEGIN: frame initialization */
