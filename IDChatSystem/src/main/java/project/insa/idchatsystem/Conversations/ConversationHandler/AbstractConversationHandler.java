@@ -5,7 +5,6 @@ import project.insa.idchatsystem.Message;
 import project.insa.idchatsystem.Observers.Conversations.Observables.ConversationHandlerObservable;
 import project.insa.idchatsystem.Observers.Conversations.Observers.ConversationHandlerObserver;
 import project.insa.idchatsystem.Observers.Conversations.Observers.ConversationObserver;
-import project.insa.idchatsystem.Observers.Conversations.Observers.LocalConversationHandlerObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 
 import java.util.ArrayList;
@@ -78,22 +77,7 @@ public abstract class AbstractConversationHandler implements ConversationObserve
         // Add this new conversation thread to our thread pool
         this.conversationThreadPool.submit(newConversation);
     }
-    public ArrayList<Message> setCurrentConversation(User user) {
-        Conversation conv = this.findConversationByCorrespondent(user);
-        this.conversations.forEach(conversation -> {
-            if(!conversation.equals(conv))
-                conversation.close();
-            else
-                conversation.open();
-        });
-        if(conv != null) {
-            return conv.getHistory();
-        }
-        return null;
-    }
-    public void noCurrentConversation() {
-        this.conversations.forEach(Conversation::close);
-    }
+
     public abstract void open(User correspondent);
     /**
      * Closing the current conversation
@@ -116,9 +100,6 @@ public abstract class AbstractConversationHandler implements ConversationObserve
     public void removeKnownUser(User user){
         this.users.remove(user.get_id(),user);
 //        System.out.printf("CONVERSATIONHANDLER : Removing user %s\n",user);
-    }
-    public void offlineUser(User user) {
-        this.removeKnownUser(user);
     }
     //OBSERVERS
 
@@ -159,7 +140,7 @@ public abstract class AbstractConversationHandler implements ConversationObserve
     public void deleteObserver(ConversationHandlerObserver obs) {
         this.observers.remove(obs);
     }
-    
+
     @Override
     public void wrongCorrespondentConversation(Conversation conversation, User rightUser) {
         rightUser = this.users.get(rightUser.get_id());

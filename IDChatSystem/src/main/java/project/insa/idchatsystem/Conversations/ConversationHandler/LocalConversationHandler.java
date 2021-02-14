@@ -12,9 +12,6 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import project.insa.idchatsystem.Conversations.Conversation.Conversation;
 
 /**
  * Based on Singleton pattern, a conversation handler is here to collect
@@ -25,13 +22,9 @@ import project.insa.idchatsystem.Conversations.Conversation.Conversation;
  */
 public class LocalConversationHandler extends AbstractConversationHandler implements LocalConversationHandlerObservable,Runnable {
     private static LocalConversationHandler INSTANCE;
-    private ArrayList<LocalConversation> conversations;
-    
-    private HashMap<Integer,User> users; // Copy of UserModel's hashmap to identify every user
 
     private ServerSocket handlerSocket; // Acts as a server listening for incoming connection requests
     private final int listenerPort;
-    private final int destinationPort;
     private int MINLISTENERPORT = 10000;
     private int MAXCONVERSATIONSPORTS = 5000;
     
@@ -48,7 +41,6 @@ public class LocalConversationHandler extends AbstractConversationHandler implem
 
         this.listenerPort = port;
 
-        this.destinationPort = -1;
     }
      
     /**
@@ -129,7 +121,6 @@ public class LocalConversationHandler extends AbstractConversationHandler implem
             try {
                 conversationSocket = new Socket(InetAddress.getByName(correspondent.get_ipAddress()), correspondent.getConversationHandlerListenerPort());
             } catch(IOException e) {
-//                System.out.println("EXCEPTION: CANNOT CREATE CONVERSATION SOCKET TOWARDS " + correspondent.get_ipAddress() + ":" + correspondent.getConversationHandlerListenerPort() + " (" + e + ")");
                 System.exit(0);
             }
 

@@ -1,7 +1,6 @@
 package project.insa.idchatsystem.Conversations.ConversationHandler;
 
 import project.insa.idchatsystem.Conversations.Conversation.DistantConversation;
-import project.insa.idchatsystem.Conversations.Conversation.LocalConversation;
 import project.insa.idchatsystem.Observers.Server.Observers.ServerConvControllerObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 import project.insa.idchatsystem.servlet.ServerController;

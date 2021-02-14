@@ -11,10 +11,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import project.insa.idchatsystem.database.MessageDatabase;
 
 public class LocalConversation extends Conversation implements Runnable {
     private Socket socket;
@@ -42,11 +40,6 @@ public class LocalConversation extends Conversation implements Runnable {
         // Listen on the current socket
         this.listen();
     }
-
-    private Message generateMessage(Data data) {
-        return null;
-    }
-
 
 
     /**
