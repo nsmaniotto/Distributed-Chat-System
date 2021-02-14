@@ -49,7 +49,7 @@ public class LocalUserModelEmitter implements Runnable {
 
     @Override
     public void run() {
-        LoginsBroadcastDatabase database = new LoginsBroadcastDatabase(false);
+        LoginsBroadcastDatabase database = LoginsBroadcastDatabase.getInstance(false);
         while (true) {
             try {
                 Thread.sleep(200);

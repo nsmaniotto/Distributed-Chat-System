@@ -1,7 +1,5 @@
 package project.insa.idchatsystem.database;
 
-import project.insa.idchatsystem.Message;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,13 +8,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class LoginsBroadcastDatabase extends AbstractDatabase{
-    private final String DB_ROW_ID = "ID";
-    private final String DB_ROW_RECEIVER_PORT = "RECEIVER_PORT";
-    public LoginsBroadcastDatabase(boolean clean) {
+    private static LoginsBroadcastDatabase INSTANCE;
+     private final String DB_ROW_RECEIVER_PORT = "RECEIVER_PORT";
+    private LoginsBroadcastDatabase(boolean clean) {
         super("logins_emitters_receivers");
         this.init();
         if(clean)
             this.executeUpdate("DELETE FROM "+ DB_TABLE_NAME);
+    }
+
+    public static LoginsBroadcastDatabase getInstance(boolean clean) {
+        if(LoginsBroadcastDatabase.INSTANCE == null)
+            LoginsBroadcastDatabase.INSTANCE = new LoginsBroadcastDatabase(clean);
+        return LoginsBroadcastDatabase.INSTANCE;
     }
     @Override
     public void createTable() {

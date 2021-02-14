@@ -61,7 +61,7 @@ public class ClientController implements FacadeConversationHandlerObserver, User
         }
         ArrayList<Integer> portsBroadcast = null;
         if (local) {
-            LoginsBroadcastDatabase logins = new LoginsBroadcastDatabase(cleanReceiversPorts);
+            LoginsBroadcastDatabase logins = LoginsBroadcastDatabase.getInstance(cleanReceiversPorts);
             portsBroadcast = logins.getPortReceivers();
             logins.writePortReceiver(portReception);
         }
