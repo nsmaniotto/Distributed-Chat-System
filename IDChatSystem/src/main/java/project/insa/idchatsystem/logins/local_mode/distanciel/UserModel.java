@@ -46,11 +46,19 @@ public class UserModel implements ServerLoginControllerObserver, UserModelEmitte
         }).start();
     }
 
+    /**
+     * Adding a new user to the model and inform the controller of this event
+     * @param user
+     */
     public void addOnlineUser(User user) {
         this.users.put(user.get_id(),user);//Replace automatically the previous version if already in the HashMap
         this.notifyNewUserObservers(user);
     }
 
+    /**
+     * Removing an online user and inform the controller of this event
+     * @param id
+     */
     public void removeOnlineUser(String id) {
         User removed_user = this.users.remove(id);
         if(removed_user == null) {
@@ -61,6 +69,9 @@ public class UserModel implements ServerLoginControllerObserver, UserModelEmitte
         }
     }
 
+    /**
+     * Check if all users are still active thanks to their timestamps set when they arrive. Then remove offline users
+     */
     protected void checkUserStillActive() {
         long time = System.currentTimeMillis();
         ArrayList<String> toRemove = new ArrayList<>();
@@ -78,6 +89,11 @@ public class UserModel implements ServerLoginControllerObserver, UserModelEmitte
         return this.users;
     }
 
+    /**
+     * Check if a login is already used in the local hashmap
+     * @param username
+     * @return
+     */
     public boolean checkLocallyAvailable(String username) {
         for (Map.Entry<String, User> integerUserEntry : this.users.entrySet()) {
             User user = (User) ((Map.Entry) integerUserEntry).getValue();
@@ -88,6 +104,11 @@ public class UserModel implements ServerLoginControllerObserver, UserModelEmitte
         return true;
     }
 
+    /**
+     * Check if the desired username for the current user is not already taken by another connected client
+     * @param username
+     * @return
+     */
     public boolean setUsername(String username) {
         this.emitters.askUpdate();
         try {
@@ -111,6 +132,9 @@ public class UserModel implements ServerLoginControllerObserver, UserModelEmitte
         }
     }
 
+    /**
+     * Stop the local emission publish state disconnected
+     */
     public void stopperEmission(){
         this.emitters.stopperEmission();
         try {
@@ -120,6 +144,11 @@ public class UserModel implements ServerLoginControllerObserver, UserModelEmitte
         }
     }
 
+
+    /**
+     * Stop the local emission publish state disconnected
+     */
+    //TODO : Duplicate
     public void disconnect() {
         try {
             this.emitters.disconnect(User.get_current_id());
@@ -129,6 +158,9 @@ public class UserModel implements ServerLoginControllerObserver, UserModelEmitte
         }
     }
 
+    /**
+     * Diffuse the new login informations containing new username on the global network
+     */
     public void diffuseNewUsername(){
         String response = User.current_user_transfer_string();
         this.emitters.diffuseNewUsername(response);
@@ -150,6 +182,10 @@ public class UserModel implements ServerLoginControllerObserver, UserModelEmitte
             System.out.println("Object not an observer stored");
     }
 
+    /**
+     * Notify that a new user is connected
+     * @param user
+     */
     @Override
     public void notifyNewUserObservers(User user)  {
         //System.out.printf("LOCALUSERMODEL : Online : %s\n",user);

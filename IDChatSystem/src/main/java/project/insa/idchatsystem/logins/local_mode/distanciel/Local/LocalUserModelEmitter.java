@@ -21,10 +21,15 @@ public class LocalUserModelEmitter implements Runnable {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Send a message to all users of the local network adding protocol (=login) information
+     * UDP simulated
+     * @param msg
+     */
     public void sendBroadcast(String msg) {
         String full_msg = String.format("login,%s",msg);
         for(int port:this.liste_ports_others) {
-//            System.out.printf(".(LocalUserModelEmitter.java:25) - sendBroadcast : port : %d\n",port);
             DatagramPacket outPacket = null;
             try {
                 outPacket = new DatagramPacket(full_msg.getBytes(),

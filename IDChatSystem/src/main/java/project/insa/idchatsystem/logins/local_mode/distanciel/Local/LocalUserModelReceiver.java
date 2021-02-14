@@ -25,9 +25,13 @@ public class LocalUserModelReceiver implements Runnable {
             socket.setSoTimeout(0);//infinite timeout to block on receive
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Mutlicast socket in error");
+            System.out.println("Broadcast socket in error");
         }
     }
+
+    /**
+     * Waits for message and notify the model when a message arrives
+     */
     @Override
     public void run() {
         //Création des objets pour recevoir de l'UDP en broadcast (multicast ici pour éviter de trop utiliser de ressources) des communications
@@ -35,7 +39,7 @@ public class LocalUserModelReceiver implements Runnable {
 
             while (true) {
                 DatagramPacket packet = new DatagramPacket(in_buf, in_buf.length);
-                socket.receive(packet);
+                socket.receive(packet);//blocked until message arrived : see comment above
                 String received = new String(packet.getData(), 0, packet.getLength());
                 if(!received.equals("")) {
                     this.model.notifyNewMsg(received);
