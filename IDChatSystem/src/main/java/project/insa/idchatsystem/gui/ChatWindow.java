@@ -374,7 +374,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
     }
     public void onlineUser(User user){
         int indexUserView = this.usersContainer.contains(user.get_id());
-        if(indexUserView != -1){
+        if(indexUserView != -1 && this.usersContainer.get(indexUserView).getOnline()){
             this.usersContainer.get(indexUserView).setUser(user);
             return;
         }
@@ -385,12 +385,11 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         potentialArray.add(v);
         UserViewArrayList arraySorted = potentialArray.getListOrderedByName();
         arraySorted.remove(arraySorted.size()-1);
-        if(arraySorted.equals(this.usersContainer)) {
+        if(arraySorted.equals(this.usersContainer) && indexUserView == -1) {
             this.usersContainer.add(v);
             this.onlineUsersPanel.add(v);
         }
         else {
-            System.out.printf(".(ChatWindow.java:373) - onlineUser : complete refresh\n");
             this.usersContainer = potentialArray;
             this.onlineUsersPanel.removeAll();
             this.usersContainer.forEach((userView -> {
