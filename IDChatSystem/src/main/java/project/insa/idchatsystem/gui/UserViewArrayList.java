@@ -1,14 +1,16 @@
 package project.insa.idchatsystem.gui;
 
+import project.insa.idchatsystem.User.distanciel.User;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 
 class UserViewArrayList extends ArrayList<UserView> {
-    public ArrayList<UserView> getListOrderedByName() {
+    public UserViewArrayList getListOrderedByName() {
         this.sort(Comparator.comparing(UserView::getUsername));
         return this;
     }
-    public ArrayList<UserView> getListOrderedByPriority() {
+    public UserViewArrayList getListOrderedByPriority() {
         this.sort(Comparator.comparing(UserView::getPriority));
         return this;
     }
@@ -26,5 +28,30 @@ class UserViewArrayList extends ArrayList<UserView> {
             this.set(indexElem,pastUserViewUpdated);
             return false;
         }
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof UserViewArrayList))
+            return false;
+        UserViewArrayList other = (UserViewArrayList) o;
+        if(this.size() != other.size())
+            return false;
+        else {
+            boolean same = true;
+            for(int i=0;i<this.size();i++) {
+                if(!this.get(i).fullEqual(other.get(i)))
+                    same = false;
+            }
+            return same;
+        }
+    }
+    public int contains(String idCheck) {
+        for (int index = 0; index < this.size();index++) {
+            if (this.get(index).getId().equals(idCheck))
+                return index;
+        }
+        return -1;
     }
 }

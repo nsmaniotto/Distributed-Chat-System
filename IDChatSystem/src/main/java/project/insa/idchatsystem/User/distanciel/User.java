@@ -158,5 +158,20 @@ public class User {
         else
             return false;
     }
+    public boolean fullEquals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof User))
+            return false;
+        User other = (User) o;
+        if (this.id.equals(other.get_id())
+                && this.get_username().equals(other.get_username())
+                && this.getConversationHandlerListenerPort()!= other.getConversationHandlerListenerPort()
+                && this.get_ipAddress().equals(other.get_ipAddress())
+                && this.isLocal_user() == other.isLocal_user())
+            return true;
+        else
+            return false;
+    }
 
 }

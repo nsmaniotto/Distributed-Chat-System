@@ -143,8 +143,21 @@ public class UserView extends JPanel implements UserViewObservable {
             return false;
         }
     }
+    public boolean fullEqual(Object o) {
+        if(o instanceof UserView){
+            UserView v = (UserView) o;
+            return this.getUser().fullEquals(v.getUser());
+        } else {
+            return false;
+        }
+    }
+
 
     public User getUser() {
         return user;
+    }
+    public void setUser(User u){
+        this.user = u;
+        this.usernameLabel.setText(String.format("%s #%s",this.user.get_username(),this.user.get_id_to_show()));
     }
 }

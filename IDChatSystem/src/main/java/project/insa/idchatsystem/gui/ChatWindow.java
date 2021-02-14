@@ -358,11 +358,45 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         /* END: frame build */
     }
     public void onlineUser(User user){
+        int indexUserView = this.usersContainer.contains(user.get_id());
+        if(indexUserView != -1){
+            this.usersContainer.get(indexUserView).setUser(user);
+            return;
+        }
         UserView v = new UserView(user);
         v.initListeners(this);
-        this.usersContainer.add(v);
-        //System.out.printf("CHATWINDOW onlineUser : %s\n",v.getUsername());
-        this.updateOnlineUsers();
+        UserViewArrayList potentialArray = new UserViewArrayList();
+        potentialArray.addAll(this.usersContainer);
+        potentialArray.add(v);
+        UserViewArrayList arraySorted = potentialArray.getListOrderedByName();
+        arraySorted.remove(arraySorted.size()-1);
+        if(arraySorted.equals(this.usersContainer)) {
+            this.usersContainer.add(v);
+            this.onlineUsersPanel.add(v);
+        }
+        else {
+            System.out.printf(".(ChatWindow.java:373) - onlineUser : complete refresh\n");
+            this.usersContainer = potentialArray;
+            this.onlineUsersPanel.removeAll();
+            this.usersContainer.forEach((userView -> {
+                this.onlineUsersPanel.add(userView);
+            }));
+        }
+    }
+    public void offlineUser(User user){
+        //System.out.printf("CHATWINDOW offlineUser %s\n",user);
+        UserView v = new UserView(user);
+        v.initListeners(this);
+        int index = this.usersContainer.indexOf(v);
+        v.offline();
+        if(index != -1) {
+            this.usersContainer.set(index,v);
+            this.updateOfflineUsers();
+            this.updateOnlineUsers();
+        }
+        else {
+            System.out.printf("User %s was not connected\n",user);
+        }
     }
     private void updateTabs() {
         if (this.conversationTabs == null || this.usersContainer == null)
@@ -418,21 +452,6 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         });
         this.repaint();
         this.validate();
-    }
-    public void offlineUser(User user){
-        //System.out.printf("CHATWINDOW offlineUser %s\n",user);
-        UserView v = new UserView(user);
-        v.initListeners(this);
-        int index = this.usersContainer.indexOf(v);
-        v.offline();
-        if(index != -1) {
-            this.usersContainer.set(index,v);
-            this.updateOfflineUsers();
-            this.updateOnlineUsers();
-        }
-        else {
-            System.out.printf("User %s was not connected\n",user);
-        }
     }
     private synchronized void uniformizePriorities(){
         int prevPrio=0;
