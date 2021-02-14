@@ -101,7 +101,7 @@ public class UserView extends JPanel implements UserViewObservable {
         this.mainPanel.setOpaque(false);
         this.mainPanel.setBackground(new Color(0,0,0,0));
     }
-    
+
     public void userSelected() {
         this.observer.startCommunicationWith(this);
     }
@@ -146,7 +146,7 @@ public class UserView extends JPanel implements UserViewObservable {
     public boolean fullEqual(Object o) {
         if(o instanceof UserView){
             UserView v = (UserView) o;
-            return this.getUser().fullEquals(v.getUser());
+            return this.getUser().fullEquals(v.getUser()) && this.online == v.getOnline();
         } else {
             return false;
         }

@@ -384,15 +384,15 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         }
     }
     public void offlineUser(User user){
-        //System.out.printf("CHATWINDOW offlineUser %s\n",user);
+        System.out.printf("CHATWINDOW offlineUser %s\n",user);
         UserView v = new UserView(user);
         v.initListeners(this);
         int index = this.usersContainer.indexOf(v);
         v.offline();
         if(index != -1) {
+            this.onlineUsersPanel.remove(v);
             this.usersContainer.set(index,v);
-            this.updateOfflineUsers();
-            this.updateOnlineUsers();
+            this.updateTabs();
         }
         else {
             System.out.printf("User %s was not connected\n",user);
@@ -425,11 +425,15 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         this.offlineUsersPanel.removeAll();
         this.recentUsersPanel.removeAll();
         this.usersContainer.getListOrderedByName().forEach(userComp->{
-            if(userComp.getOnline())
+            if(userComp.getOnline()) {
                 this.onlineUsersPanel.add(userComp);
+                System.out.printf(".(ChatWindow.java:430) - updateOnlineUsers : %s\n",userComp.getUser());
+            }
+            else
+                System.out.printf(".(ChatWindow.java:431) - updateOnlineUsers : one found %s\n",userComp.getUser());
         });
-        this.repaint();
-        this.validate();
+        this.onlineUsersPanel.repaint();
+        this.onlineUsersPanel.validate();
     }
     private synchronized void updateOfflineUsers(){
         this.onlineUsersPanel.removeAll();
@@ -439,8 +443,8 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
             if(!userComp.getOnline())
                 this.offlineUsersPanel.add(userComp);
         });
-        this.repaint();
-        this.validate();
+        this.offlineUsersPanel.repaint();
+        this.offlineUsersPanel.validate();
     }
     public synchronized void updateRecentUsers() {
         this.onlineUsersPanel.removeAll();
@@ -450,8 +454,8 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
             if(userComp.getPriority() > 0)
                 this.recentUsersPanel.add(userComp);
         });
-        this.repaint();
-        this.validate();
+        this.recentUsersPanel.repaint();
+        this.recentUsersPanel.validate();
     }
     private synchronized void uniformizePriorities(){
         int prevPrio=0;
