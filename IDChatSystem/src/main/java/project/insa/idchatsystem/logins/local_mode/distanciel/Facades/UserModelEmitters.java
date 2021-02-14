@@ -11,7 +11,6 @@ public class UserModelEmitters implements Runnable {
     private LocalUserModelEmitter localEmitter;
     protected String last_user_updated_string;
     protected  boolean emission = true;
-    protected String state = "connected";
     private UserModelEmittersObserver obs;
     private boolean local;
     public UserModelEmitters(UserModelEmittersObserver obs,int emitter_port, int receiver_port, ArrayList<Integer> others,boolean local) {

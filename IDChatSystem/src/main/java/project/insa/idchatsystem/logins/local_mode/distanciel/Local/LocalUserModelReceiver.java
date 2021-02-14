@@ -7,7 +7,6 @@ import java.net.*;
 
 public class LocalUserModelReceiver implements Runnable {
     private UserModelReceiverObserver model;
-    private InetAddress group;
     private DatagramSocket socket;
     //Format of UDP packets : username,id,ipAddress with :
     // - username : max 25 letters
