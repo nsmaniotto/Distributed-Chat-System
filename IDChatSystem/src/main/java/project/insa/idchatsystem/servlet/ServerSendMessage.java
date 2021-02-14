@@ -3,19 +3,17 @@ package project.insa.idchatsystem.servlet;
 import project.insa.idchatsystem.Observers.Server.Observables.ServerSendMessageObservable;
 import project.insa.idchatsystem.Observers.Server.Observers.ServerSendMessageObserver;
 import project.insa.idchatsystem.User.distanciel.User;
-import project.insa.idchatsystem.tools.TestPort;
 
-import javax.servlet.http.HttpServlet;
-import java.io.*;
-import java.net.*;
-import java.net.http.HttpClient;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
-import javax.servlet.*;
-import javax.servlet.http.*;
 
 public class ServerSendMessage implements ServerSendMessageObservable {
     private final String URLServlet;

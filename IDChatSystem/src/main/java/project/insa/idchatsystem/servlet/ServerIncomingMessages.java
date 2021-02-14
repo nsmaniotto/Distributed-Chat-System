@@ -3,12 +3,6 @@ package project.insa.idchatsystem.servlet;
 import project.insa.idchatsystem.Observers.Server.Observables.ServerIncomingMessagesObservable;
 import project.insa.idchatsystem.Observers.Server.Observers.ServerIncomingMessagesObserver;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 public class ServerIncomingMessages implements Runnable, ServerIncomingMessagesObservable {
     private ServerIncomingMessagesObserver observer;
     public ServerIncomingMessages(){
