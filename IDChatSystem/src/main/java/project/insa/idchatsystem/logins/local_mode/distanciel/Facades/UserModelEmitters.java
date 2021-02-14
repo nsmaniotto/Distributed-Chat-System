@@ -52,22 +52,42 @@ public class UserModelEmitters implements Runnable {
         }
     }
 
+    /**
+     * Stop login emission
+     */
     public void stopperEmission(){
         this.emission = false;
     }
+
+    /**
+     * Stop current user, the emission of its informations and notify everyone
+     * @param id
+     */
     public void disconnect(String id) {
         this.stopperEmission();
         String disconnected_str = String.format("%s,disconnected",id);
         this.sendMessage(disconnected_str);
     }
+
+    /**
+     * Send last user logins informations
+     */
     private void diffuse(){
         this.sendMessage(last_user_updated_string);
     }
 
+    /**
+     * Force the diffusion of new login informations
+     * @param updatedUserString
+     */
     public void diffuseNewUsername(String updatedUserString) {
         this.last_user_updated_string = updatedUserString;
         this.diffuse();
     }
+
+    /**
+     * Diffuse login informations periodically
+     */
     @Override
     public void run() {
         while(this.emission) {
