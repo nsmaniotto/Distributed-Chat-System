@@ -20,7 +20,7 @@ public class UserModel implements ServerLoginControllerObserver, UserModelEmitte
     private final UserModelReceivers receivers;
     private ArrayList<UsersStatusObserver> observers;
     private HashMap<String, User> users;
-    private final long limite_tolerance_ss_nouvelles = 10000;
+    private final long limite_tolerance_ss_nouvelles = 600;
 
 
     public UserModel(String id, int receiver_port, int emitter_port, ArrayList<Integer> others)  {
@@ -37,7 +37,7 @@ public class UserModel implements ServerLoginControllerObserver, UserModelEmitte
         new Thread(() -> {
             while(true){
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
