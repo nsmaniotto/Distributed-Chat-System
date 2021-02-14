@@ -3,11 +3,8 @@ package project.insa.idchatsystem.gui;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.Observable;
 
 public class LoginWindow extends Window {
     private View observer;

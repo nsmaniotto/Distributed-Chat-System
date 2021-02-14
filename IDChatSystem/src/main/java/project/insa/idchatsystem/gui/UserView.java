@@ -7,12 +7,10 @@ import project.insa.idchatsystem.User.distanciel.User;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.sql.Timestamp;
-//TODO : s'inspirer de generateDisplayedMessage pour régler le problème de taille
+
 public class UserView extends JPanel implements UserViewObservable {
     private User user ;
     private JPanel mainPanel;
@@ -46,7 +44,6 @@ public class UserView extends JPanel implements UserViewObservable {
     public boolean getOnline() {
         return this.online;
     }
-    //TODO change colors to notify new message
     protected void initComponents() {
         this.mainPanel = new JPanel();
         this.usernameLabel = new JLabel(String.format("%s #%s",this.user.get_username(),this.user.get_id_to_show()));
@@ -122,9 +119,6 @@ public class UserView extends JPanel implements UserViewObservable {
         this.priority = priority;
     }
 
-    public void userObserved() {
-        this.priority ++;
-    }
     public String getUsername() {
         return this.user.get_username();
     }

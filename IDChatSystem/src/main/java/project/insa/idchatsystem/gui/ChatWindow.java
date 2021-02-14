@@ -13,9 +13,7 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  *
@@ -41,7 +39,6 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
             private JPanel onlineUsersPanel;
             private JScrollPane offlineUsersTab;
             private JPanel offlineUsersPanel;
-            private JScrollPane allUsersTab;
     private JPanel chatPanel;
         private JPanel correspondentPanel;
             private JLabel correspondentInfoLabel;
@@ -101,7 +98,6 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         this.onlineUsersPanel = new JPanel();
         this.offlineUsersTab = new JScrollPane();
         this.offlineUsersPanel = new JPanel();
-        this.allUsersTab = new JScrollPane();
 
         this.chatPanel = new JPanel(new GridBagLayout());
         this.chatPanel.setBorder(BorderFactory.createEmptyBorder(

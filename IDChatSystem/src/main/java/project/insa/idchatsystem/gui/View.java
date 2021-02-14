@@ -74,10 +74,6 @@ public class View implements Runnable, ChatWindowObserver {
         this.chat_window.displayNotification(message);
     }
 
-    public void checkUsernameAvailable(String username){
-        
-    }
-    
     /* CHAT WINDOW OBSERVER METHODS */
 
     @Override

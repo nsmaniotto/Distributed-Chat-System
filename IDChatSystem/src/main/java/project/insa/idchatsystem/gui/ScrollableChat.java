@@ -4,9 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 
 class ScrollableChat extends JPanel implements Scrollable {
-    public void ScrollableChat() {
-
-    }
 
     @Override
     public Dimension getPreferredScrollableViewportSize() {
