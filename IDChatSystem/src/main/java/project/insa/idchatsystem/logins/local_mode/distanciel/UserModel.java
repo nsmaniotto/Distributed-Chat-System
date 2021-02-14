@@ -122,9 +122,7 @@ public class UserModel implements ServerLoginControllerObserver, UserModelEmitte
 
     public void disconnect() {
         try {
-            while(!this.emitters.getState().equals("disconnected")) {
-                this.emitters.disconnect(User.get_current_id());
-            }
+            this.emitters.disconnect(User.get_current_id());
             this.stopperEmission();
         } catch (Uninitialized uninitialized) {
             uninitialized.printStackTrace();

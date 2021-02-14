@@ -23,12 +23,21 @@ public class UserModelEmitters implements Runnable {
         }
         this.last_user_updated_string = "";
     }
+
+    /**
+     * Allows to send login message to all the clients knows
+     * @param message
+     */
     public void sendMessage(String message) {
         if(this.local)
             this.localEmitter.sendBroadcast(message);
         this.obs.newMsgToSend(message);
 
     }
+
+    /**
+     * Asking update for logins to all users
+     */
     public void askUpdate() {
         //ask to the other users to send their infos
         try {
@@ -42,9 +51,7 @@ public class UserModelEmitters implements Runnable {
             e.printStackTrace();
         }
     }
-    public String getState(){
-        return this.state;
-    }
+
     public void stopperEmission(){
         this.emission = false;
     }
@@ -52,7 +59,6 @@ public class UserModelEmitters implements Runnable {
         this.stopperEmission();
         String disconnected_str = String.format("%s,disconnected",id);
         this.sendMessage(disconnected_str);
-        this.state = "disconnected";
     }
     private void diffuse(){
         this.sendMessage(last_user_updated_string);
