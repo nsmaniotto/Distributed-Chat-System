@@ -132,27 +132,19 @@ public class UserModel implements ServerLoginControllerObserver, UserModelEmitte
         }
     }
 
-    /**
-     * Stop the local emission publish state disconnected
-     */
-    public void stopperEmission(){
-        this.emitters.stopperEmission();
-        try {
-            this.serverController.publish(String.format("login,%s,disconnected",User.get_current_id()));
-        } catch (Uninitialized uninitialized) {
-            uninitialized.printStackTrace();
-        }
-    }
-
 
     /**
      * Stop the local emission publish state disconnected
      */
-    //TODO : Duplicate
     public void disconnect() {
         try {
             this.emitters.disconnect(User.get_current_id());
-            this.stopperEmission();
+            this.emitters.stopperEmission();
+            try {
+                this.serverController.publish(String.format("login,%s,disconnected",User.get_current_id()));
+            } catch (Uninitialized uninitialized) {
+                uninitialized.printStackTrace();
+            }
         } catch (Uninitialized uninitialized) {
             uninitialized.printStackTrace();
         }

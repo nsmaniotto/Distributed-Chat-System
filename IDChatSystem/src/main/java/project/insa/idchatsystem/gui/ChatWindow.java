@@ -193,14 +193,28 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
                 updateTabs();
             }
         });
-        /*this.addWindowListener(new WindowAdapter() {
+        this.addWindowListener(new WindowAdapter() {
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+                super.windowClosed(e); //To change body of generated methods, choose Tools | Templates.
+                System.out.println(e.getComponent().getClass().getSimpleName() + ".windowClosed fired");
+            }
             @Override
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
-                //Closing events
+                System.out.printf(".(ChatWindow.java:199) - windowClosing : \n");
+                notifyObserverClosing();
+                System.exit(0);
             }
-        });
-
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+                super.windowDeactivated(e);
+                notifyObserverClosing();
+                System.exit(0);
+            }
+        }
+        );
         if (SystemTray.isSupported()) {
             showItem.addActionListener(new ActionListener() {
                 @Override
@@ -212,6 +226,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
             exitItem.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    notifyObserverClosing();
                     System.exit(0);
                 }
             });
@@ -243,7 +258,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
                 }
             };
             frame.addWindowStateListener(listener);
-        }*/
+        }
     }
     
     @Override
@@ -685,5 +700,11 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         if(this.chatWindowObserver != null) {
             this.chatWindowObserver.newMessageSending(sentMessage);
         }
+    }
+
+    @Override
+    public void notifyObserverClosing() {
+        if(this.chatWindowObserver != null)
+            this.chatWindowObserver.closing();
     }
 }

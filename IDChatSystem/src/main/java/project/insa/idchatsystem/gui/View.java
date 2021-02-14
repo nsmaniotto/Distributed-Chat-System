@@ -90,4 +90,9 @@ public class View implements Runnable, ChatWindowObserver {
     public void userSelected(UserView userview) {
         this.viewObserver.userSelected(userview);
     }
+
+    @Override
+    public void closing() {
+        this.viewObserver.closing();
+    }
 }
