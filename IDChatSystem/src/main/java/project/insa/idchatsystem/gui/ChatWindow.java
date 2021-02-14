@@ -36,12 +36,12 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
             private JButton changeUsernameButton;
             private JButton minimizeButton;
         private JTabbedPane conversationTabs;
-            private JList<String> listRecentUsersList;
-            private DefaultListModel<String> modelRecentUsersList;
-            private JList<String> listOnlineUsersList;
-            private DefaultListModel<String> modelOnlineUsersList;
-            private JList<String> listDisconnectedUsersList;
-            private DefaultListModel<String> modelDisconnectedUsersList;
+            private JList<UserView> listRecentUsersList;
+            private DefaultListModel<UserView> modelRecentUsersList;
+            private JList<UserView> listOnlineUsersList;
+            private DefaultListModel<UserView> modelOnlineUsersList;
+            private JList<UserView> listDisconnectedUsersList;
+            private DefaultListModel<UserView> modelDisconnectedUsersList;
             private JScrollPane listScrollerRecent;
             private JScrollPane listScrollerOnline;
             private JScrollPane listScrollerOffline;
@@ -102,9 +102,9 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         this.modelRecentUsersList = new DefaultListModel<>();
         this.modelDisconnectedUsersList = new DefaultListModel<>();
 
-        this.listRecentUsersList = new JList<>(modelRecentUsersList);
-        this.listOnlineUsersList = new JList<>(modelOnlineUsersList);
-        this.listDisconnectedUsersList = new JList<>(modelDisconnectedUsersList);
+        this.listRecentUsersList = new JList<UserView>(modelRecentUsersList);
+        this.listOnlineUsersList = new JList<UserView>(modelOnlineUsersList);
+        this.listDisconnectedUsersList = new JList<UserView>(modelDisconnectedUsersList);
 
         this.listScrollerRecent = new JScrollPane(listRecentUsersList);
         this.listScrollerOnline = new JScrollPane(listOnlineUsersList);
@@ -284,6 +284,9 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         this.listDisconnectedUsersList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         this.listDisconnectedUsersList.setLayoutOrientation(JList.VERTICAL);
         this.listDisconnectedUsersList.setVisibleRowCount(-1);
+        this.listRecentUsersList.setCellRenderer(new LoginsListRenderer());
+        this.listOnlineUsersList.setCellRenderer(new LoginsListRenderer());
+        this.listDisconnectedUsersList.setCellRenderer(new LoginsListRenderer());
 
         this.conversationTabs.addTab("Recent", this.listScrollerRecent);
         this.conversationTabs.addTab("Online", this.listScrollerOnline);
@@ -395,38 +398,29 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         }
     }
     private synchronized void updateOnlineUsers(){
-//        this.modelRecentUsersList.removeAllElements();
-        this.modelOnlineUsersList.removeAllElements();
-//        this.modelDisconnectedUsersList.removeAllElements();
+        if(this.modelOnlineUsersList.getSize() > 0)
+            this.modelOnlineUsersList.removeAllElements();
         this.usersContainer.getListOrderedByName().forEach(userComp->{
             if(userComp.getOnline()) {
-                this.modelOnlineUsersList.addElement(userComp.getText());
+                this.modelOnlineUsersList.addElement(userComp);
             }
         });
-//        this.repaint();
-//        this.validate();
     }
     private synchronized void updateOfflineUsers(){
-//        this.modelRecentUsersList.removeAllElements();
-//        this.modelOnlineUsersList.removeAllElements();
-        this.modelDisconnectedUsersList.removeAllElements();
+        if(this.modelDisconnectedUsersList.getSize() > 0)
+            this.modelDisconnectedUsersList.removeAllElements();
         this.usersContainer.getListOrderedByName().forEach(userComp->{
             if(!userComp.getOnline())
-                this.modelDisconnectedUsersList.addElement(userComp.getText());
+                this.modelDisconnectedUsersList.addElement(userComp);
         });
-//        this.repaint();
-//        this.validate();
     }
     public synchronized void updateRecentUsers() {
-        this.modelRecentUsersList.removeAllElements();
-//        this.modelOnlineUsersList.removeAllElements();
-//        this.modelDisconnectedUsersList.removeAllElements();
+        if(this.modelRecentUsersList.getSize() > 0)
+            this.modelRecentUsersList.removeAllElements();
         this.usersContainer.getListOrderedByPriority().forEach(userComp->{
             if(userComp.getPriority() > 0)
-                this.modelRecentUsersList.addElement(userComp.getText());
+                this.modelRecentUsersList.addElement(userComp);
         });
-//        this.repaint();
-//        this.validate();
     }
     public void offlineUser(User user){
         //System.out.printf("CHATWINDOW offlineUser %s\n",user);
