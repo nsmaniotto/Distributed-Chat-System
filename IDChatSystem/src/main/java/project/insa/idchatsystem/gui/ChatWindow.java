@@ -34,7 +34,6 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         private JPanel userInfoPanel;
             private JLabel usernameLabel;
             private JButton changeUsernameButton;
-            private JButton minimizeButton;
         private JTabbedPane conversationTabs;
             private JScrollPane recentConversationsTab;
             private JPanel recentUsersPanel;
