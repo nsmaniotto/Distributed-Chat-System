@@ -17,7 +17,8 @@ public class DistantConversation extends Conversation {
         this.loadConversation();
     }
     @Override
-    public void send(Data data,User corresp) {
+    public void send(Data data) {
+        User corresp = data.getDestination();
         System.out.printf(".(DistantConversation.java:20) - send : %s\n",String.format("%s,%s",corresp.get_id(),data.toStream()));
         
         if(data.isMessage()) {

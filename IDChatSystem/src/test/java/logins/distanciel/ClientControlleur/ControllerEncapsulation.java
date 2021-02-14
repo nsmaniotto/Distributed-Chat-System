@@ -38,7 +38,10 @@ public class ControllerEncapsulation implements FacadeConversationHandlerObserve
         User user = this.userModel.getOnlineUsers().get(id);
         System.out.println(user);
         this.conversationHandler.open(user);
-        this.conversationHandler.getCurrentConversation().send(new Message("raclette et tartiflette seront au menu"),this.conversationHandler.getCurrentConversation().getCorrespondent());
+        
+        Message newMessage = new Message("raclette et tartiflette seront au menu");
+        newMessage.setDestination(user);
+        this.conversationHandler.getCurrentConversation().send(newMessage);
     }
     @Override
     public void offlineUser(User user) {

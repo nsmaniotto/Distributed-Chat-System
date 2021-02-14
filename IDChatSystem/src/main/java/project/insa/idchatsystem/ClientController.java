@@ -162,7 +162,7 @@ public class ClientController implements FacadeConversationHandlerObserver, User
             sendingMessage.setSource(User.getCurrentUser());
             System.out.printf(".(ClientController.java:138) - newMessageSending : currentConv : %s\n",this.conversationHandler.getCurrentConversation().getCorrespondent().get_id());
             if(this.conversationHandler.getCurrentConversation() != null) {
-                this.conversationHandler.getCurrentConversation().send(sendingMessage,this.conversationHandler.getCurrentConversation().getCorrespondent());
+                this.conversationHandler.getCurrentConversation().send(sendingMessage);
             }
         } catch (Uninitialized uninitialized) {
             uninitialized.printStackTrace();

@@ -78,15 +78,8 @@ public class LocalConversation extends Conversation implements Runnable {
      * @param message : Message - message we want to send and display
      */
     @Override
-    public void send(Data data, User corresp) {
+    public void send(Data data) {
         System.out.printf(".(LocalConversation.java:104) - send : data: %s\n", data);
-        try {
-            data.setSource(User.getCurrentUser());
-            data.setDestination(this.correspondent);
-        } catch (Uninitialized e) {
-            // Current user (thereforce message source) is not initialized
-            System.out.println("Conversation: EXCEPTION WHILE SETTING MESSAGE SOURCE " + e);
-        }
         
         PrintWriter outputStreamLink = null;
         
