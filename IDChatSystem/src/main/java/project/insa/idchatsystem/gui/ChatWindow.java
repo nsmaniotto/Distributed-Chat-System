@@ -376,6 +376,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         int indexUserView = this.usersContainer.contains(user.get_id());
         if(indexUserView != -1 && this.usersContainer.get(indexUserView).getOnline()){
             this.usersContainer.get(indexUserView).setUser(user);
+            this.usersContainer.get(indexUserView).online();
             return;
         }
         UserView v = new UserView(user);

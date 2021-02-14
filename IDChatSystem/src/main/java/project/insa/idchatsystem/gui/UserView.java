@@ -34,7 +34,15 @@ public class UserView extends JPanel implements UserViewObservable {
         this.buildPanel();
         this.setMaximumSize(new Dimension(Short.MAX_VALUE,this.selectButton.getPreferredSize().height*2+10));
     }
-    public void offline(){this.online=false;}
+    public void offline(){
+        this.online=false;
+        this.selectButton.setEnabled(false);
+    }
+    public void online() {
+        this.online = true;
+        this.selectButton.setEnabled(true);
+
+    }
     public boolean getOnline() {
         return this.online;
     }
