@@ -1,0 +1,98 @@
+@startuml
+participant Actor
+Actor -> UserModel : diffuseNewUsername
+activate UserModel
+UserModel -> User : current_user_transfer_string
+activate User
+User --> UserModel
+deactivate User
+UserModel -> UserModelEmitters : diffuseNewUsername
+activate UserModelEmitters
+UserModelEmitters -> UserModelEmitters : diffuse
+activate UserModelEmitters
+UserModelEmitters -> UserModelEmitters : sendMessage
+activate UserModelEmitters
+UserModelEmitters -> LocalUserModelEmitter : sendBroadcast
+activate LocalUserModelEmitter
+LocalUserModelEmitter --> UserModelEmitters
+deactivate LocalUserModelEmitter
+UserModelEmitters -> UserModelEmittersObserver : newMsgToSend
+activate UserModelEmittersObserver
+UserModelEmittersObserver -> UserModel : newMsgToSend
+activate UserModel
+UserModel -> ServerController : sendMessage
+activate ServerController
+ServerController --> UserModel
+deactivate ServerController
+UserModel --> UserModelEmittersObserver
+deactivate UserModel
+UserModelEmittersObserver --> UserModelEmitters
+deactivate UserModelEmittersObserver
+UserModelEmitters --> UserModelEmitters
+deactivate UserModelEmitters
+UserModelEmitters --> UserModelEmitters
+deactivate UserModelEmitters
+UserModelEmitters --> UserModel
+deactivate UserModelEmitters
+UserModel -> ServerController : sendMessage
+activate ServerController
+ServerController -> ServerSendMessage : sendPost
+activate ServerSendMessage
+ServerSendMessage -> ServerSendMessageObserver : notifyNewMessage
+activate ServerSendMessageObserver
+ServerSendMessageObserver -> ServerController : notifyNewMessage
+activate ServerController
+ServerController -> ServerLoginControllerObserver : notifyNewMessage
+activate ServerLoginControllerObserver
+ServerLoginControllerObserver -> UserModel : notifyNewMessage
+activate UserModel
+UserModel -> UserModelReceivers : notifyNewMsg
+activate UserModelReceivers
+UserModelReceivers --> UserModel
+deactivate UserModelReceivers
+UserModel --> ServerLoginControllerObserver
+deactivate UserModel
+ServerLoginControllerObserver --> ServerController
+deactivate ServerLoginControllerObserver
+ServerController -> ServerConvControllerObserver : notifyNewMessage
+activate ServerConvControllerObserver
+ServerConvControllerObserver -> DistantConversationHandler : notifyNewMessage
+activate DistantConversationHandler
+DistantConversationHandler -> AbstractConversationHandler : findUserById
+activate AbstractConversationHandler
+AbstractConversationHandler --> DistantConversationHandler
+deactivate AbstractConversationHandler
+DistantConversationHandler -> AbstractConversationHandler : findConversationByCorrespondent
+activate AbstractConversationHandler
+AbstractConversationHandler --> DistantConversationHandler
+deactivate AbstractConversationHandler
+DistantConversationHandler -> DistantConversation : new
+activate DistantConversation
+DistantConversation --> DistantConversationHandler
+deactivate DistantConversation
+DistantConversationHandler -> Conversation : addConversationObserver
+activate Conversation
+Conversation --> DistantConversationHandler
+deactivate Conversation
+DistantConversationHandler -> AbstractConversationHandler : addConversation
+activate AbstractConversationHandler
+AbstractConversationHandler --> DistantConversationHandler
+deactivate AbstractConversationHandler
+DistantConversationHandler -> Conversation : onReceive
+activate Conversation
+Conversation --> DistantConversationHandler
+deactivate Conversation
+DistantConversationHandler --> ServerConvControllerObserver
+deactivate DistantConversationHandler
+ServerConvControllerObserver --> ServerController
+deactivate ServerConvControllerObserver
+ServerController --> ServerSendMessageObserver
+deactivate ServerController
+ServerSendMessageObserver --> ServerSendMessage
+deactivate ServerSendMessageObserver
+ServerSendMessage --> ServerController
+deactivate ServerSendMessage
+ServerController --> UserModel
+deactivate ServerController
+return
+@enduml
