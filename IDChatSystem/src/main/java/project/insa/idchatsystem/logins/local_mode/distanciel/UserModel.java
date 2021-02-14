@@ -37,7 +37,7 @@ public class UserModel implements ServerLoginControllerObserver, UserModelEmitte
         new Thread(() -> {
             while(true){
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(600);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

@@ -94,7 +94,7 @@ public class UserModelEmitters implements Runnable {
             //System.out.println("I am in a loooooooooop");
             this.diffuse();
             try {
-                Thread.sleep(500);
+                Thread.sleep(200);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

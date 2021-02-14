@@ -11,7 +11,7 @@ class UserViewArrayList extends ArrayList<UserView> {
         return this;
     }
     public UserViewArrayList getListOrderedByPriority() {
-        this.sort(Comparator.comparing(UserView::getPriority));
+        this.sort(Comparator.comparing(UserView::getPriority).reversed());
         return this;
     }
     @Override
