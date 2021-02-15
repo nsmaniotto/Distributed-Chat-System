@@ -11,8 +11,9 @@ import java.net.URL;
  */
 public abstract class Window extends JFrame {
     /* BEGIN: constants definitions */
-    private static final String ICON_IMAGE_PATH = "/chatsystem_icon.png";
+    protected static final String ICON_IMAGE_PATH = "/chatsystem_icon.png";
     protected static final Color COLOR_SOFTWHITE = new Color(236, 240, 241);
+    protected static final Color COLOR_SOFTBLUE = new Color(34, 167, 204);
     /* END: constants definitions */
     
     /* BEGIN: graphical components declaration */

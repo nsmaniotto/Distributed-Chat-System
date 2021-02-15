@@ -13,7 +13,13 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 
 /**
  * @author nsmaniotto
@@ -154,12 +160,34 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         //Check the SystemTray is supported
         if (SystemTray.isSupported()) {
             popup = new PopupMenu();
-            BufferedImage i = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g = i.createGraphics();
-            g.setColor(Color.RED);
-            g.fillRect(2, 2, 12, 12);
-            g.dispose();
-            trayIcon = new TrayIcon(i, "tray", popup);
+            
+            BufferedImage image = null;
+            
+            URL iconURL = getClass().getResource(Window.ICON_IMAGE_PATH);
+            
+            // Null when icon not found
+            if(image == null) {
+                image = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g = image.createGraphics();
+                g.setColor(Window.COLOR_SOFTBLUE);
+                g.fillRect(2, 2, 12, 12);
+                g.dispose();
+            }
+            
+            trayIcon = new TrayIcon(image, "IDChatSystem", popup);
+            
+            // Retrieving chat app icon
+            if(iconURL != null) {
+                ImageIcon icon = new ImageIcon(iconURL);
+                Image temporary = icon.getImage();
+                
+                Graphics2D g2d = image.createGraphics();
+                g2d.drawImage(temporary, 0, 0, null);
+                g2d.dispose();
+                
+                trayIcon.setImage(image);
+            }
+            
             // Create a pop-up menu components
             showItem = new MenuItem("Show");
             exitItem = new MenuItem("Exit");
