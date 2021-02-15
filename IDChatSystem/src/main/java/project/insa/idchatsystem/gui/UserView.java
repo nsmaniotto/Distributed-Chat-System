@@ -21,6 +21,8 @@ public class UserView extends JPanel implements UserViewObservable {
     private boolean online;
     /* BEGIN: constants definitions */
     protected static final Color COLOR_SOFTWHITE = new Color(236, 240, 241);
+    protected static final Color COLOR_SELECTED = new Color(41, 148, 178);
+    protected static final Color COLOR_NOTIFICATION = new Color(34, 167, 204);
     /* END: constants definitions */
 
     public UserView(User user) {
@@ -65,7 +67,7 @@ public class UserView extends JPanel implements UserViewObservable {
     public void initListeners(UserViewObserver observer) {
         UserView parent = this;
         this.selectButton.addActionListener(e -> {
-            parent.mainPanel.setBackground(Color.RED);
+            parent.mainPanel.setBackground(COLOR_SELECTED);
             parent.setOpaque(true);
             parent.userSelected();
         });
@@ -100,7 +102,7 @@ public class UserView extends JPanel implements UserViewObservable {
         });
     }
     public void notificationAvailable() {
-        this.mainPanel.setBackground(Color.GREEN);
+        this.mainPanel.setBackground(COLOR_NOTIFICATION);
     }
     public void notificationSeen() {
         this.mainPanel.setOpaque(false);
