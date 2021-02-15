@@ -7,6 +7,7 @@ public class ServerIncomingMessages implements Runnable, ServerIncomingMessagesO
     private ServerIncomingMessagesObserver observer;
     public ServerIncomingMessages(){
     }
+    @Override
     public void run() {
         while(true) {
             this.askForUpdate();

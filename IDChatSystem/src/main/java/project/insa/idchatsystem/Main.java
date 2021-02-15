@@ -6,17 +6,10 @@ package project.insa.idchatsystem;
 //import java.util.ArrayList;
 
 import project.insa.idchatsystem.Exceptions.NoPortAvailable;
-import project.insa.idchatsystem.database.LoginsBroadcastDatabase;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 
