@@ -3,6 +3,7 @@ package project.insa.idchatsystem.gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 
 /**
  *
@@ -10,7 +11,9 @@ import java.awt.*;
  */
 public abstract class Window extends JFrame {
     /* BEGIN: constants definitions */
+    protected static final String ICON_IMAGE_PATH = "/chatsystem_icon.png";
     protected static final Color COLOR_SOFTWHITE = new Color(236, 240, 241);
+    protected static final Color COLOR_SOFTBLUE = new Color(34, 167, 204);
     /* END: constants definitions */
     
     /* BEGIN: graphical components declaration */
@@ -20,6 +23,7 @@ public abstract class Window extends JFrame {
     public Window(String title) {
         this.frame = new JFrame(title);
         
+        this.setIconImage(ICON_IMAGE_PATH);
         this.initComponents();
         this.initListeners();
         this.buildFrame();
@@ -39,6 +43,18 @@ public abstract class Window extends JFrame {
     public void display() {
         //this.frame.pack(); // causes main frame to fit its content
         this.frame.setVisible(true);
+    }
+
+    private void setIconImage(String ICON_IMAGE_PATH) {
+        URL iconURL = getClass().getResource(ICON_IMAGE_PATH);
+        
+        // iconURL is null when not found
+        if(iconURL != null) {
+            ImageIcon icon = new ImageIcon(iconURL);
+            this.frame.setIconImage(icon.getImage());
+        } else {
+            System.out.println("(Window) - Icon image not found");
+        }
     }
     
     protected abstract void initComponents();

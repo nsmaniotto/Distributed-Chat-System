@@ -26,7 +26,7 @@ public class ClientController implements FacadeConversationHandlerObserver, User
     
     public ClientController(String id, boolean local, boolean cleanReceiversPorts) throws NoPortAvailable {
         User.init_current_user(id,local);
-
+        
         // Initialize local database
         this.database = MessageDatabase.getInstance();
         this.database.init();
@@ -53,12 +53,15 @@ public class ClientController implements FacadeConversationHandlerObserver, User
             }
             port++;
         }
+        
         ArrayList<Integer> portsBroadcast = null;
+        
         if (local) {
             LoginsBroadcastDatabase logins = LoginsBroadcastDatabase.getInstance(cleanReceiversPorts);
             portsBroadcast = logins.getPortReceivers();
             logins.writePortReceiver(portReception);
         }
+        
         this.userModel = new UserModel(id,portReception,portEmission,portsBroadcast);
         this.userModel.addUserModelObserver(this);
         HashMap<String,User> knownUsers = new HashMap<>();

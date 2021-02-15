@@ -1,5 +1,7 @@
 package project.insa.idchatsystem.gui;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import project.insa.idchatsystem.Exceptions.Uninitialized;
 import project.insa.idchatsystem.Message;
 import project.insa.idchatsystem.Observers.gui.Observers.ViewObserver;
@@ -41,7 +43,9 @@ public class View implements Runnable, ChatWindowObserver {
         //Indicates that the user has been seen
         assert this.chat_window != null;
         //System.out.printf("VIEW onlineUser : Online user %s\n",user);
-        this.chat_window.onlineUser(user);
+        if(this.chat_window != null) {
+            this.chat_window.onlineUser(user);
+        }
     }
     public void offlineUser(User user) {
         assert this.chat_window != null : "Vous n'êtes pas login";
@@ -62,6 +66,14 @@ public class View implements Runnable, ChatWindowObserver {
         this.chat_window.displayMessage(message);
     }
     public void enableLoginTextField() {
+        while(this.login_window == null) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
         this.login_window.enableLoginField();
     }
     /**
