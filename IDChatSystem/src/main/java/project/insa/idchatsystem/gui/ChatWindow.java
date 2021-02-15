@@ -16,7 +16,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 /**
- *
  * @author nsmaniotto
  */
 public class ChatWindow extends Window implements ActionListener, ChatWindowObservable, UserViewObserver {
@@ -24,36 +23,36 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
 
     /* BEGIN: variables declaration */
     private PopupMenu popup;
-        private TrayIcon trayIcon;
-        private MenuItem showItem;
-        private SystemTray tray;
-        private MenuItem exitItem;
+    private TrayIcon trayIcon;
+    private MenuItem showItem;
+    private SystemTray tray;
+    private MenuItem exitItem;
     private JPanel userPanel;
-        private JPanel userInfoPanel;
-            private JLabel usernameLabel;
-            private JButton changeUsernameButton;
-        private JTabbedPane conversationTabs;
-            private JScrollPane recentConversationsTab;
-            private JPanel recentUsersPanel;
-            private JScrollPane onlineUsersTab;
-            private JPanel onlineUsersPanel;
-            private JScrollPane offlineUsersTab;
-            private JPanel offlineUsersPanel;
+    private JPanel userInfoPanel;
+    private JLabel usernameLabel;
+    private JButton changeUsernameButton;
+    private JTabbedPane conversationTabs;
+    private JScrollPane recentConversationsTab;
+    private JPanel recentUsersPanel;
+    private JScrollPane onlineUsersTab;
+    private JPanel onlineUsersPanel;
+    private JScrollPane offlineUsersTab;
+    private JPanel offlineUsersPanel;
     private JPanel chatPanel;
-        private JPanel correspondentPanel;
-            private JLabel correspondentInfoLabel;
-        private JScrollPane chatScrollPane;
-            private JPanel chatHistoryPanel;
-        private JPanel chatFormPanel;
-            private JTextField chatTextInputField;
-            private JButton chatSendButton;
+    private JPanel correspondentPanel;
+    private JLabel correspondentInfoLabel;
+    private JScrollPane chatScrollPane;
+    private JPanel chatHistoryPanel;
+    private JPanel chatFormPanel;
+    private JTextField chatTextInputField;
+    private JButton chatSendButton;
     /*Users containers*/
     private UserViewArrayList usersContainer;
     /* END: variables declarations */
-    
+
     /* OBSERVERS */
     private ChatWindowObserver chatWindowObserver;
-            
+
     public ChatWindow() {
         super("IDChatSystem - Chat");
         this.usersContainer = new UserViewArrayList();
@@ -62,7 +61,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
     @Override
     protected void initComponents() {
         /* BEGIN: frame initialization */
-        this.frame.setSize(800,600);
+        this.frame.setSize(800, 600);
         this.frame.setLayout(new GridBagLayout());
         this.frame.setLocationRelativeTo(null);
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -74,13 +73,13 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         this.userPanel = new JPanel(new GridBagLayout());
         this.userPanel.setMinimumSize(new Dimension(200, HEIGHT));
 
-        this.userInfoPanel = new JPanel(new GridLayout(2,0));
+        this.userInfoPanel = new JPanel(new GridLayout(2, 0));
         this.userInfoPanel.setBorder(BorderFactory.createEmptyBorder(
                 10, //top
                 10, //left
                 10, //bottom
                 10) //right
-                );
+        );
         this.userInfoPanel.setBackground(Window.COLOR_SOFTWHITE);
 
         this.usernameLabel = new JLabel("AAAAA#xx", JLabel.LEFT);
@@ -108,7 +107,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
                 1, //left
                 0, //bottom
                 1) //right
-                );
+        );
 
         this.chatPanel.setBackground(Color.LIGHT_GRAY/*Window.COLOR_SOFTWHITE*/);
 
@@ -118,7 +117,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
                 10, //left
                 10, //bottom
                 10) //right
-                );
+        );
         this.correspondentPanel.setBackground(Color.white);
 
         this.correspondentInfoLabel = new JLabel("Select your correspondent!", JLabel.LEFT);
@@ -135,7 +134,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
                 10, //left
                 10, //bottom
                 10) //right
-                );
+        );
 
         this.chatFormPanel = new JPanel(new GridBagLayout());
         this.chatFormPanel.setBorder(BorderFactory.createEmptyBorder(
@@ -143,7 +142,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
                 10, //left
                 10, //bottom
                 10) //right
-                );
+        );
         this.chatFormPanel.setBackground(Window.COLOR_SOFTWHITE);
 
         this.chatTextInputField = new JTextField();
@@ -155,12 +154,12 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         //Check the SystemTray is supported
         if (SystemTray.isSupported()) {
             popup = new PopupMenu();
-            BufferedImage i= new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+            BufferedImage i = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
             Graphics2D g = i.createGraphics();
             g.setColor(Color.RED);
             g.fillRect(2, 2, 12, 12);
             g.dispose();
-            trayIcon = new TrayIcon(i,"tray",popup);
+            trayIcon = new TrayIcon(i, "tray", popup);
             // Create a pop-up menu components
             showItem = new MenuItem("Show");
             exitItem = new MenuItem("Exit");
@@ -168,22 +167,34 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         /* END: variables initialization */
         this.updateTabs();
     }
+
     @Override
     protected void initListeners() {
         ChatWindow chatWindowReference = this;
-        
+        this.changeUsernameButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String login = JOptionPane.showInputDialog("Please input a value");
+                if(!chatWindowObserver.setUsername(login)) {
+                    JOptionPane.showMessageDialog(chatWindowReference,"Error, this login is already taken");
+                }
+                else {
+                    chatWindowObserver.loginModify(login);
+                }
+            }
+        });
         // Chat input text field on ENTER
         this.chatTextInputField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 int key = e.getKeyCode();
-                
-                if(key == KeyEvent.VK_ENTER){
+
+                if (key == KeyEvent.VK_ENTER) {
                     chatWindowReference.sendMessage();
                 }
             }
         });
-        
+
         // Chat send button on click
         this.chatSendButton.addActionListener(this);
         this.conversationTabs.addChangeListener(new ChangeListener() {
@@ -194,25 +205,27 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         });
         this.addWindowListener(new WindowAdapter() {
 
-            @Override
-            public void windowClosed(WindowEvent e) {
-                super.windowClosed(e); //To change body of generated methods, choose Tools | Templates.
-                System.out.println(e.getComponent().getClass().getSimpleName() + ".windowClosed fired");
-            }
-            @Override
-            public void windowClosing(WindowEvent e) {
-                super.windowClosing(e);
-                System.out.printf(".(ChatWindow.java:199) - windowClosing : \n");
-                notifyObserverClosing();
-                System.exit(0);
-            }
-            @Override
-            public void windowDeactivated(WindowEvent e) {
-                super.windowDeactivated(e);
-                notifyObserverClosing();
-                System.exit(0);
-            }
-        }
+                                   @Override
+                                   public void windowClosed(WindowEvent e) {
+                                       super.windowClosed(e); //To change body of generated methods, choose Tools | Templates.
+                                       System.out.println(e.getComponent().getClass().getSimpleName() + ".windowClosed fired");
+                                   }
+
+                                   @Override
+                                   public void windowClosing(WindowEvent e) {
+                                       super.windowClosing(e);
+                                       System.out.printf(".(ChatWindow.java:199) - windowClosing : \n");
+                                       notifyObserverClosing();
+                                       System.exit(0);
+                                   }
+
+                                   @Override
+                                   public void windowDeactivated(WindowEvent e) {
+                                       super.windowDeactivated(e);
+                                       notifyObserverClosing();
+                                       System.exit(0);
+                                   }
+                               }
         );
         if (SystemTray.isSupported()) {
             showItem.addActionListener(new ActionListener() {
@@ -259,7 +272,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
             frame.addWindowStateListener(listener);
         }
     }
-    
+
     @Override
     protected void buildFrame() {
         /* BEGIN: userPanel build */
@@ -283,9 +296,9 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         conversationTabsConstraints.anchor = GridBagConstraints.SOUTH;
         this.userPanel.add(this.conversationTabs, conversationTabsConstraints);
 
-        this.onlineUsersPanel.setLayout(new BoxLayout(this.onlineUsersPanel,BoxLayout.Y_AXIS));
-        this.recentUsersPanel.setLayout(new BoxLayout(this.recentUsersPanel,BoxLayout.Y_AXIS));
-        this.offlineUsersPanel.setLayout(new BoxLayout(this.offlineUsersPanel,BoxLayout.Y_AXIS));
+        this.onlineUsersPanel.setLayout(new BoxLayout(this.onlineUsersPanel, BoxLayout.Y_AXIS));
+        this.recentUsersPanel.setLayout(new BoxLayout(this.recentUsersPanel, BoxLayout.Y_AXIS));
+        this.offlineUsersPanel.setLayout(new BoxLayout(this.offlineUsersPanel, BoxLayout.Y_AXIS));
 
         this.onlineUsersTab.setViewportView(this.onlineUsersPanel);
         this.recentConversationsTab.setViewportView(this.recentUsersPanel);
@@ -362,7 +375,6 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         this.frame.getContentPane().add(this.chatPanel, chatPanelConstraints);
 
 
-
         //Add components to pop-up menu
         if (SystemTray.isSupported()) {
             popup.add(showItem);
@@ -371,9 +383,10 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         }
         /* END: frame build */
     }
-    public void onlineUser(User user){
+
+    public void onlineUser(User user) {
         int indexUserView = this.usersContainer.contains(user.get_id());
-        if(indexUserView != -1 && this.usersContainer.get(indexUserView).getOnline()){
+        if (indexUserView != -1 && this.usersContainer.get(indexUserView).getOnline()) {
             this.usersContainer.get(indexUserView).setUser(user);
             this.usersContainer.get(indexUserView).online();
             return;
@@ -384,12 +397,11 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         potentialArray.addAll(this.usersContainer);
         potentialArray.add(v);
         UserViewArrayList arraySorted = potentialArray.getListOrderedByName();
-        arraySorted.remove(arraySorted.size()-1);
-        if(arraySorted.equals(this.usersContainer) && indexUserView == -1) {
+        arraySorted.remove(arraySorted.size() - 1);
+        if (arraySorted.equals(this.usersContainer) && indexUserView == -1) {
             this.usersContainer.add(v);
             this.onlineUsersPanel.add(v);
-        }
-        else {
+        } else {
             this.usersContainer = potentialArray;
             this.onlineUsersPanel.removeAll();
             this.usersContainer.forEach((userView -> {
@@ -397,20 +409,21 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
             }));
         }
     }
-    public void offlineUser(User user){
+
+    public void offlineUser(User user) {
         UserView v = new UserView(user);
         v.initListeners(this);
         int index = this.usersContainer.indexOf(v);
         v.offline();
-        if(index != -1) {
+        if (index != -1) {
             this.onlineUsersPanel.remove(v);
-            this.usersContainer.set(index,v);
+            this.usersContainer.set(index, v);
             this.updateTabs();
-        }
-        else {
-            System.out.printf("User %s was not connected\n",user);
+        } else {
+            System.out.printf("User %s was not connected\n", user);
         }
     }
+
     private void updateTabs() {
         if (this.conversationTabs == null || this.usersContainer == null)
             return;
@@ -433,89 +446,92 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
             }
         }
     }
-    private synchronized void updateOnlineUsers(){
+
+    private synchronized void updateOnlineUsers() {
         this.onlineUsersPanel.removeAll();
         this.offlineUsersPanel.removeAll();
         this.recentUsersPanel.removeAll();
-        this.usersContainer.getListOrderedByName().forEach(userComp->{
-            if(userComp.getOnline()) {
+        this.usersContainer.getListOrderedByName().forEach(userComp -> {
+            if (userComp.getOnline()) {
                 this.onlineUsersPanel.add(userComp);
-                System.out.printf(".(ChatWindow.java:430) - updateOnlineUsers : %s\n",userComp.getUser());
-            }
-            else
-                System.out.printf(".(ChatWindow.java:431) - updateOnlineUsers : one found %s\n",userComp.getUser());
+                System.out.printf(".(ChatWindow.java:430) - updateOnlineUsers : %s\n", userComp.getUser());
+            } else
+                System.out.printf(".(ChatWindow.java:431) - updateOnlineUsers : one found %s\n", userComp.getUser());
         });
         this.onlineUsersPanel.repaint();
         this.onlineUsersPanel.validate();
     }
-    private synchronized void updateOfflineUsers(){
+
+    private synchronized void updateOfflineUsers() {
         this.onlineUsersPanel.removeAll();
         this.offlineUsersPanel.removeAll();
         this.recentUsersPanel.removeAll();
-        this.usersContainer.getListOrderedByName().forEach(userComp->{
-            if(!userComp.getOnline())
+        this.usersContainer.getListOrderedByName().forEach(userComp -> {
+            if (!userComp.getOnline())
                 this.offlineUsersPanel.add(userComp);
         });
         this.offlineUsersPanel.repaint();
         this.offlineUsersPanel.validate();
     }
+
     public synchronized void updateRecentUsers() {
         System.out.printf(".(ChatWindow.java:464) - updateRecentUsers : \n");
         this.onlineUsersPanel.removeAll();
         this.offlineUsersPanel.removeAll();// maybe because of that
         this.recentUsersPanel.removeAll();
-        this.usersContainer.getListOrderedByPriority().forEach(userComp->{
-            if(userComp.getPriority() > 0) {
-                System.out.printf(".(ChatWindow.java:470) - updateRecentUsers : %s,%d\n",userComp.getUser(),userComp.getPriority());
+        this.usersContainer.getListOrderedByPriority().forEach(userComp -> {
+            if (userComp.getPriority() > 0) {
+                System.out.printf(".(ChatWindow.java:470) - updateRecentUsers : %s,%d\n", userComp.getUser(), userComp.getPriority());
                 this.recentUsersPanel.add(userComp);
             }
         });
         this.recentUsersPanel.repaint();
         this.recentUsersPanel.validate();
     }
-    private synchronized void uniformizePriorities(){
-        int prevPrio=0;
+
+    private synchronized void uniformizePriorities() {
+        int prevPrio = 0;
         for (UserView v : this.usersContainer.getListOrderedByPriority()) {
-            if((v.getPriority()-prevPrio)>1) {
-                v.setPriority(prevPrio+1);
+            if ((v.getPriority() - prevPrio) > 1) {
+                v.setPriority(prevPrio + 1);
             }
             prevPrio = v.getPriority();
         }
     }
+
     public synchronized boolean userSelected(UserView userview) {
         int index = this.usersContainer.indexOf(userview);
-        if(index != -1){
+        if (index != -1) {
             //Recalculate priorities
             int maxPriotity = 0;
-            for(UserView v : this.usersContainer) {
-                if(v.getPriority() > maxPriotity)
+            for (UserView v : this.usersContainer) {
+                if (v.getPriority() > maxPriotity)
                     maxPriotity = v.getPriority();
             }
-            userview.setPriority(maxPriotity+1);
+            userview.setPriority(maxPriotity + 1);
             //Uniformize priorities
             this.uniformizePriorities();
 
             this.openChatWith(userview);
             return true;
-        }
-        else {
+        } else {
             System.out.print("The element was not in the list of online users !\n");
             return false;
         }
     }
+
     @Override
     public void startCommunicationWith(UserView userview) {
         System.out.printf(".(ChatWindow.java:388) - startCommunicationWith : \n");
-        if(this.userSelected(userview)) {//Transmit to view if user found
+        if (this.userSelected(userview)) {//Transmit to view if user found
             System.out.printf(".(ChatWindow.java:390) - startCommunicationWith : 2222\n");
             this.chatWindowObserver.userSelected(userview);
         }
     }
 
 
-
     public void displayUsername(String username, String id) {
-        if(this.usernameLabel != null) {
+        if (this.usernameLabel != null) {
             this.usernameLabel.setText(username + " #" + id);
             try {
                 this.usernameLabel.setToolTipText(User.get_current_id());
@@ -524,14 +540,14 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
             }
         }
     }
-    
+
     private void openChatWith(UserView userview) {
         User correspondent = userview.getUser();
         String correspondentInfo = correspondent.get_username() + "#" + correspondent.get_id();
 
         boolean chatIsOpened = this.correspondentInfoLabel.getText().equalsIgnoreCase(correspondentInfo);
 
-        if(!chatIsOpened) {
+        if (!chatIsOpened) {
             // Update correspondent information label
             this.correspondentInfoLabel.setText(correspondentInfo);
 
@@ -545,14 +561,14 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
 
     /**
      * Treat and display the message according to its data
-     * 
-     * @param message 
+     *
+     * @param message
      */
     public void displayMessage(Message message) {
-        System.out.printf(".(ChatWindow.java:411) - displayMessage : %s\n",message);
+        System.out.printf(".(ChatWindow.java:411) - displayMessage : %s\n", message);
         // Generate the graphical instance
         JPanel messageInstancePanel = this.generateDisplayedMessage(message);
-        
+
         // Add the instance to the display conversation
         this.chatHistoryPanel.add(messageInstancePanel);
         this.chatHistoryPanel.validate();
@@ -560,27 +576,29 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         // Scroll down to see the latest message
         this.chatScrollPane.getVerticalScrollBar().setValue(this.chatScrollPane.getVerticalScrollBar().getMaximum());
     }
-    
+
     /**
      * Treat and display of a notification according to the given message
-     * 
+     *
      * @param message : Message - message based on which the notification will be built
      */
     public void displayNotification(Message message) {
         ArrayList<UserView> users = this.usersContainer.getListOrderedByName();
-        for(UserView user : users) {
-            if(user.getId().equals(message.getSource().get_id())){
+        for (UserView user : users) {
+            if (user.getId().equals(message.getSource().get_id())) {
                 user.notificationAvailable();
                 return;
             }
         }
     }
+
     public void clearMessages() {
         this.chatHistoryPanel.removeAll();
     }
+
     /**
      * Create a graphical instance which will be displayed, based on the given message
-     * 
+     *
      * @param message : Message - message from which will be generated the graphical instance
      * @return corresponding displayed message
      */
@@ -591,36 +609,36 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
                 5, //left
                 10, //bottom
                 5) //right
-                );
-        
+        );
+
         // text area
         JTextArea messageTextArea = new JTextArea();
         messageTextArea.setEnabled(false);
         messageTextArea.setLineWrap(true);
         messageTextArea.setWrapStyleWord(true);
-        
+
         GridBagConstraints messageTextAreaConstraints = new GridBagConstraints();
         messageTextAreaConstraints.weightx = 0.7;
         messageTextAreaConstraints.fill = GridBagConstraints.HORIZONTAL;
-        
+
         // timestamp area
         JLabel messageTimestampLabel = new JLabel(message.getTimestampString());
         GridBagConstraints messageTimestampLabelConstraints = new GridBagConstraints();
         messageTimestampLabelConstraints.weightx = 0.3;
         messageTimestampLabelConstraints.fill = GridBagConstraints.HORIZONTAL;
-        
+
         // Check if this is an incoming or outgoing message
         try {
-            if(message.getSource().equals(User.getCurrentUser())) {
+            if (message.getSource().equals(User.getCurrentUser())) {
                 // Outgoing message
                 messageTextAreaConstraints.gridx = 0; // Text at left
                 messageTextAreaConstraints.anchor = GridBagConstraints.WEST;
 
                 messageTimestampLabel.setBorder(BorderFactory.createEmptyBorder(
-                0, //top
-                20, //left
-                0, //bottom
-                0) //right
+                        0, //top
+                        20, //left
+                        0, //bottom
+                        0) //right
                 );
 
                 messageTimestampLabelConstraints.gridx = 1; // Timestamp at right
@@ -631,10 +649,10 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
                 messageTextAreaConstraints.anchor = GridBagConstraints.EAST;
 
                 messageTimestampLabel.setBorder(BorderFactory.createEmptyBorder(
-                0, //top
-                0, //left
-                0, //bottom
-                20) //right
+                        0, //top
+                        0, //left
+                        0, //bottom
+                        20) //right
                 );
 
                 messageTimestampLabelConstraints.gridx = 0; // Timestamp at left
@@ -649,19 +667,19 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
 
         messagePanel.add(messageTextArea, messageTextAreaConstraints);
         messagePanel.add(messageTimestampLabel, messageTimestampLabelConstraints);
-        
+
         return messagePanel;
     }
-    
+
     /* UTILITIES */
-    
+
     private void sendMessage() {
         // Retrieve text from input
         String messageInputText = this.chatTextInputField.getText();
 
         boolean isMessageEmpty = messageInputText.isBlank(); // To be later modified to support file sending
 
-        if(!isMessageEmpty) {
+        if (!isMessageEmpty) {
             // Create a message based on the retrieved text
             Message newMessage = null;
             newMessage = new Message(messageInputText);
@@ -673,18 +691,18 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
             this.notifyObserverSendingMessage(newMessage);
         }
     }
-    
+
     /* ACTION LISTENER METHODS */
-    
+
     @Override
     public void actionPerformed(ActionEvent event) {
         Object sourceObject = event.getSource();
-        
-        if(sourceObject == this.chatSendButton) {
+
+        if (sourceObject == this.chatSendButton) {
             this.sendMessage();
         }
     }
-    
+
     /* CHAT WINDOW OBSERVABLE METHODS */
 
     @Override
@@ -699,14 +717,14 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
 
     @Override
     public void notifyObserverSendingMessage(Message sentMessage) {
-        if(this.chatWindowObserver != null) {
+        if (this.chatWindowObserver != null) {
             this.chatWindowObserver.newMessageSending(sentMessage);
         }
     }
 
     @Override
     public void notifyObserverClosing() {
-        if(this.chatWindowObserver != null)
+        if (this.chatWindowObserver != null)
             this.chatWindowObserver.closing();
     }
 }

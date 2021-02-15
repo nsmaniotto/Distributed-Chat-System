@@ -103,4 +103,13 @@ public class View implements Runnable, ChatWindowObserver {
     public void closing() {
         this.viewObserver.closing();
     }
+    @Override
+    public void loginModify(String login) {
+        try {
+            this.chat_window.displayUsername(login,User.get_current_id_to_show());
+        } catch (Uninitialized uninitialized) {
+            uninitialized.printStackTrace();
+        }
+    }
+
 }

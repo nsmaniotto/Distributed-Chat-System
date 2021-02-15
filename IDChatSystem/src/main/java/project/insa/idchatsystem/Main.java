@@ -52,7 +52,7 @@ public class Main {
     public static void createClient(String id,boolean local,boolean clean) {
         System.out.printf(".(Main.java:60) - createClient : with local %b\n",local);
         try {
-            ClientController controller = new ClientController(id,local,clean);
+            new ClientController(id, local, clean);
         } catch (NoPortAvailable noPortAvailable) {
             noPortAvailable.printStackTrace();
         }

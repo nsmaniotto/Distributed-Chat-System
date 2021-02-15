@@ -5,32 +5,28 @@ import project.insa.idchatsystem.Conversations.FacadeConversationHandler;
 import project.insa.idchatsystem.Exceptions.NoPortAvailable;
 import project.insa.idchatsystem.Exceptions.Uninitialized;
 import project.insa.idchatsystem.Observers.Conversations.Observers.FacadeConversationHandlerObserver;
-import project.insa.idchatsystem.Observers.logins.Observers.UsersStatusObserver;
 import project.insa.idchatsystem.Observers.gui.Observers.ViewObserver;
+import project.insa.idchatsystem.Observers.logins.Observers.UsersStatusObserver;
 import project.insa.idchatsystem.User.distanciel.User;
 import project.insa.idchatsystem.database.LoginsBroadcastDatabase;
+import project.insa.idchatsystem.database.MessageDatabase;
 import project.insa.idchatsystem.gui.UserView;
 import project.insa.idchatsystem.gui.View;
 import project.insa.idchatsystem.logins.local_mode.distanciel.UserModel;
+import project.insa.idchatsystem.tools.TestPort;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import project.insa.idchatsystem.database.MessageDatabase;
-import project.insa.idchatsystem.tools.TestPort;
 
 public class ClientController implements FacadeConversationHandlerObserver, UsersStatusObserver, ViewObserver {
     private final View view;
     private final MessageDatabase database;
     private final FacadeConversationHandler conversationHandler;
     private final UserModel userModel;
-    /*
-    private DistantUserModel centralizedUserModel;*/
     
     public ClientController(String id, boolean local, boolean cleanReceiversPorts) throws NoPortAvailable {
-//        System.out.printf(".(ClientController.java:27) - ClientController : id : %s\n",id);
         User.init_current_user(id,local);
-
+        
         // Initialize local database
         this.database = MessageDatabase.getInstance();
         this.database.init();
@@ -58,11 +54,16 @@ public class ClientController implements FacadeConversationHandlerObserver, User
             port++;
         }
         ArrayList<Integer> portsBroadcast = null;
+        System.out.println("////////////////////////////");
         if (local) {
+            System.out.println("2////////////////////////////");
             LoginsBroadcastDatabase logins = LoginsBroadcastDatabase.getInstance(cleanReceiversPorts);
+            System.out.println("3////////////////////////////");
             portsBroadcast = logins.getPortReceivers();
+            System.out.println("4////////////////////////////");
             logins.writePortReceiver(portReception);
         }
+        System.out.println("5////////////////////////////");
         this.userModel = new UserModel(id,portReception,portEmission,portsBroadcast);
         this.userModel.addUserModelObserver(this);
         HashMap<String,User> knownUsers = new HashMap<>();
@@ -86,9 +87,6 @@ public class ClientController implements FacadeConversationHandlerObserver, User
         this.view.enableLoginTextField();
     }
 
-    public UserModel getUserModel() {
-        return userModel;
-    }
     /* USERS STATUS OBSERVER METHODS */
     
     @Override
@@ -140,10 +138,6 @@ public class ClientController implements FacadeConversationHandlerObserver, User
     public void messagesRetrieved(ArrayList<Message> retrievedMessages) {
         this.view.clearMessages();
         retrievedMessages.forEach(this.view::displayMessage);
-    }
-    /* GETTERS/SETTERS */
-    public FacadeConversationHandler getConversationHandler() {
-        return this.conversationHandler;
     }
 
     /* VIEW OBSERVER METHODS */

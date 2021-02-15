@@ -126,9 +126,6 @@ public class User {
         return local_user;
     }
 
-    public String transfer_string() {
-        return String.format("%s,%s,%s",this.username,this.id,this.ipAddress);
-    }
     public void setUsername(String username) { this.username = username;}
     public void setLastSeen(Timestamp lastSeen) {this.lastSeen = lastSeen;}
 

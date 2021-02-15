@@ -1,16 +1,14 @@
 
 package project.insa.idchatsystem;
 
-import java.io.File;
+import project.insa.idchatsystem.User.distanciel.User;
+
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import project.insa.idchatsystem.User.distanciel.User;
 
 public class Message extends Data {
     private String text;
-    private ArrayList<File> files;
     private Timestamp timestamp;
     
     public static final String TYPE = "message";
