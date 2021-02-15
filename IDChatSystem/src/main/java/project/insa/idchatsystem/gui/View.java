@@ -1,5 +1,7 @@
 package project.insa.idchatsystem.gui;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import project.insa.idchatsystem.Exceptions.Uninitialized;
 import project.insa.idchatsystem.Message;
 import project.insa.idchatsystem.Observers.gui.Observers.ViewObserver;
@@ -62,6 +64,14 @@ public class View implements Runnable, ChatWindowObserver {
         this.chat_window.displayMessage(message);
     }
     public void enableLoginTextField() {
+        while(this.login_window == null) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
         this.login_window.enableLoginField();
     }
     /**
