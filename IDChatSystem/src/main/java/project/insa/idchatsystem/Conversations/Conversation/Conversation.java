@@ -129,7 +129,9 @@ public abstract class Conversation implements ConversationObservable, Runnable {
         }
 
         // Notify ConversationHandler to display the previously retrieved messages
+        System.out.printf(".(Conversation.java:132) - loadConversation : 1\n");
         if(!history.isEmpty()) {
+            System.out.printf(".(Conversation.java:133) - loadConversation : 2\n");
             this.notifyObserversRetrievedMessages(history);
         }
     }

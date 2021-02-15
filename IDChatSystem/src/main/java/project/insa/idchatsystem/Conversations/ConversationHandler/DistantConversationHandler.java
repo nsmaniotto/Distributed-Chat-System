@@ -38,7 +38,7 @@ public class DistantConversationHandler extends AbstractConversationHandler impl
             this.addConversation(conversation);
         }
         if(conversation != this.currentConversation) {// Close the previous conversation
-            this.closeCurrentConversation();
+//            this.closeCurrentConversation();
 
             // Set the opening conversation as our current conversation
             this.currentConversation = conversation;

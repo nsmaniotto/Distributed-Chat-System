@@ -1,7 +1,4 @@
-
-package project.insa.idchatsystem;
-
-//import project.insa.idchatsystem.Exceptions.NoPortAvailable;
+package project.insa.idchatsystem;//import project.insa.idchatsystem.Exceptions.NoPortAvailable;
 
 //import java.util.ArrayList;
 
@@ -20,7 +17,7 @@ public class Main {
         String id;
         String filename = "ClientID.txt";
         if(args.length == 3) {
-            System.out.printf(".(Main.java:30) - main : 3 arguments\n");
+            System.out.printf(".(project.insa.idchatsystem.Main.java:30) - main : 3 arguments\n");
             filename = String.format("ClientID%s.txt", args[2]);
         }
         try {
@@ -50,7 +47,7 @@ public class Main {
         }
     }
     public static void createClient(String id,boolean local,boolean clean) {
-        System.out.printf(".(Main.java:60) - createClient : with local %b\n",local);
+        System.out.printf(".(project.insa.idchatsystem.Main.java:60) - createClient : with local %b\n",local);
         try {
             new ClientController(id, local, clean);
         } catch (NoPortAvailable noPortAvailable) {

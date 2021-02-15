@@ -110,6 +110,7 @@ public class LocalConversationHandler extends AbstractConversationHandler implem
      * @param correspondent : User - reference of the correspondent
      */
     public void open(User correspondent) {
+        System.out.printf(".(LocalConversationHandler.java:113) - open : %s\n",correspondent);
         // Check if we aleady have a conversation instance with this correspondent
         LocalConversation conversation = (LocalConversation)this.findConversationByCorrespondent(correspondent);
         
@@ -131,8 +132,9 @@ public class LocalConversationHandler extends AbstractConversationHandler implem
         }
         
         if(conversation != this.currentConversation) {
+            System.out.printf(".(LocalConversationHandler.java:135) - open : changeConversation\n");
             // Close the previous conversation
-            this.closeCurrentConversation();
+//            this.closeCurrentConversation();
 
             // Set the opening conversation as our current conversation
             this.currentConversation = conversation;

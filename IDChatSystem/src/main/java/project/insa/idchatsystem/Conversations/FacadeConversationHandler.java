@@ -55,6 +55,9 @@ public class FacadeConversationHandler implements LocalConversationHandlerObserv
         }
     }
     public void open(User correspondent) {
+        if (this.localHandler != null)
+            this.localHandler.closeCurrentConversation();
+        this.distantHandler.closeCurrentConversation();
         if(this.local && correspondent.isLocal_user())
             this.localHandler.open(correspondent);
         else
