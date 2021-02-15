@@ -53,17 +53,15 @@ public class ClientController implements FacadeConversationHandlerObserver, User
             }
             port++;
         }
+        
         ArrayList<Integer> portsBroadcast = null;
-        System.out.println("////////////////////////////");
+        
         if (local) {
-            System.out.println("2////////////////////////////");
             LoginsBroadcastDatabase logins = LoginsBroadcastDatabase.getInstance(cleanReceiversPorts);
-            System.out.println("3////////////////////////////");
             portsBroadcast = logins.getPortReceivers();
-            System.out.println("4////////////////////////////");
             logins.writePortReceiver(portReception);
         }
-        System.out.println("5////////////////////////////");
+        
         this.userModel = new UserModel(id,portReception,portEmission,portsBroadcast);
         this.userModel.addUserModelObserver(this);
         HashMap<String,User> knownUsers = new HashMap<>();
