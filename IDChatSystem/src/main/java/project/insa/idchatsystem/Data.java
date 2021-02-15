@@ -11,11 +11,7 @@ public abstract class Data {
     private String type;
     
     /* CONSTRUCTORS */
-    
-    public Data() {
-        
-    }
-    
+    public Data(){}
     public Data(User source, User destination) {
         this.source = source;
         this.destination = destination;

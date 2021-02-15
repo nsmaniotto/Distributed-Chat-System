@@ -19,8 +19,6 @@ public class UserView extends JPanel implements UserViewObservable {
     private int priority;
     private UserViewObserver observer;
     private boolean online;
-    /* BEGIN: constants definitions */
-    protected static final Color COLOR_SOFTWHITE = new Color(236, 240, 241);
     /* END: constants definitions */
 
     public UserView(User user) {
