@@ -1,0 +1,30 @@
+@startuml
+UserModel -> UserModelEmitters : askUpdate
+activate UserModelEmitters
+UserModelEmitters -> UserModelEmitters : sendMessage
+activate UserModelEmitters
+UserModelEmitters -> LocalUserModelEmitter : sendBroadcast
+activate LocalUserModelEmitter
+LocalUserModelEmitter --> UserModelEmitters
+deactivate LocalUserModelEmitter
+UserModelEmitters -> UserModel : newMsgToSend
+activate UserModel
+UserModel -> UserModel : newMsgToSend
+activate UserModel
+UserModel -> ServerController : sendMessage
+activate ServerController
+ServerController -> ServerSendMessage : sendPost
+activate ServerSendMessage
+ServerSendMessage --> ServerController
+deactivate ServerController
+deactivate ServerSendMessage
+ServerController --> UserModel
+deactivate ServerController
+UserModel --> UserModel
+deactivate UserModel
+UserModel --> UserModelEmitters
+deactivate UserModel
+UserModelEmitters --> UserModelEmitters
+deactivate UserModelEmitters
+return
+@enduml

@@ -1,0 +1,34 @@
+@startuml
+participant Actor
+Actor -> UserModelEmitters : diffuse
+activate UserModelEmitters
+UserModelEmitters -> UserModelEmitters : sendMessage
+activate UserModelEmitters
+UserModelEmitters -> LocalUserModelEmitter : sendBroadcast
+activate LocalUserModelEmitter
+LocalUserModelEmitter --> UserModelEmitters
+deactivate LocalUserModelEmitter
+UserModelEmitters -> UserModelEmittersObserver : newMsgToSend
+activate UserModelEmittersObserver
+UserModelEmittersObserver -> UserModel : newMsgToSend
+activate UserModel
+UserModel -> ServerController : sendMessage
+activate ServerController
+ServerController -> ServerSendMessage : sendPost
+activate ServerSendMessage
+ServerSendMessage -> ServerSendMessageObserver : notifyNewMessage
+activate ServerSendMessageObserver
+ServerSendMessageObserver --> ServerSendMessage
+deactivate ServerSendMessageObserver
+ServerSendMessage --> ServerController
+deactivate ServerSendMessage
+ServerController --> UserModel
+deactivate ServerController
+UserModel --> UserModelEmittersObserver
+deactivate UserModel
+UserModelEmittersObserver --> UserModelEmitters
+deactivate UserModelEmittersObserver
+UserModelEmitters --> UserModelEmitters
+deactivate UserModelEmitters
+return
+@enduml
