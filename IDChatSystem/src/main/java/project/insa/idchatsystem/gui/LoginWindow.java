@@ -13,12 +13,13 @@ public class LoginWindow extends Window {
     private JTextField loginTextField;
 
     public LoginWindow() {
-        super("Login");
+        super("IDChatSystem - Login");
     }
 
     @Override
     protected void initComponents() {
         /* BEGIN: frame initialization */
+        this.frame.setSize(300,100);
         this.frame.setLayout(new GridBagLayout());
         this.frame.setLocationRelativeTo(null);
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -52,7 +53,6 @@ public class LoginWindow extends Window {
         this.loginPannel.add(loginTextField,c1);
         this.loginPannel.setBorder(new EmptyBorder(10,10,10,10));
         this.frame.getContentPane().add(this.loginPannel);
-        this.frame.pack();
         this.frame.setMinimumSize(frame.getMinimumSize());
 
     }
