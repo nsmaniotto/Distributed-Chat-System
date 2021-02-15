@@ -43,7 +43,9 @@ public class View implements Runnable, ChatWindowObserver {
         //Indicates that the user has been seen
         assert this.chat_window != null;
         //System.out.printf("VIEW onlineUser : Online user %s\n",user);
-        this.chat_window.onlineUser(user);
+        if(this.chat_window != null) {
+            this.chat_window.onlineUser(user);
+        }
     }
     public void offlineUser(User user) {
         assert this.chat_window != null : "Vous n'êtes pas login";
