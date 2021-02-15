@@ -1,22 +1,12 @@
-
-package project.insa.idchatsystem;
-
-//import project.insa.idchatsystem.Exceptions.NoPortAvailable;
+package project.insa.idchatsystem;//import project.insa.idchatsystem.Exceptions.NoPortAvailable;
 
 //import java.util.ArrayList;
 
 import project.insa.idchatsystem.Exceptions.NoPortAvailable;
-import project.insa.idchatsystem.database.LoginsBroadcastDatabase;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -27,7 +17,7 @@ public class Main {
         String id;
         String filename = "ClientID.txt";
         if(args.length == 3) {
-            System.out.printf(".(Main.java:30) - main : 3 arguments\n");
+            System.out.printf(".(project.insa.idchatsystem.Main.java:30) - main : 3 arguments\n");
             filename = String.format("ClientID%s.txt", args[2]);
         }
         try {
@@ -57,7 +47,7 @@ public class Main {
         }
     }
     public static void createClient(String id,boolean local,boolean clean) {
-        System.out.printf(".(Main.java:60) - createClient : with local %b\n",local);
+        System.out.printf(".(project.insa.idchatsystem.Main.java:60) - createClient : with local %b\n",local);
         try {
             new ClientController(id, local, clean);
         } catch (NoPortAvailable noPortAvailable) {

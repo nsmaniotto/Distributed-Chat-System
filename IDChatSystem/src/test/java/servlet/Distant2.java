@@ -1,7 +1,5 @@
 package servlet;
 
-import project.insa.idchatsystem.ClientController;
-import project.insa.idchatsystem.Exceptions.NoPortAvailable;
 import project.insa.idchatsystem.Main;
 
 public class Distant2 {
