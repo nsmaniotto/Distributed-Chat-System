@@ -92,11 +92,14 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
         this.conversationTabs.setPreferredSize(new Dimension(200, HEIGHT));
         //this.recentConversationsTab.setViewportView(this.recentConversationsTab);
 
-        this.recentConversationsTab = new JScrollPane();
+        this.recentConversationsTab = new JScrollPane(this.recentUsersPanel);
+        this.recentConversationsTab.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         this.recentUsersPanel = new JPanel();
-        this.onlineUsersTab = new JScrollPane();
+        this.onlineUsersTab = new JScrollPane(this.onlineUsersPanel);
+        this.onlineUsersTab.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         this.onlineUsersPanel = new JPanel();
-        this.offlineUsersTab = new JScrollPane();
+        this.offlineUsersTab = new JScrollPane(this.offlineUsersPanel);
+        this.offlineUsersTab.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         this.offlineUsersPanel = new JPanel();
 
         this.chatPanel = new JPanel(new GridBagLayout());
