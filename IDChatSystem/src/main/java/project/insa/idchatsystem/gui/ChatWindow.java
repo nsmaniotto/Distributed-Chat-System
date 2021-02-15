@@ -55,7 +55,7 @@ public class ChatWindow extends Window implements ActionListener, ChatWindowObse
     private ChatWindowObserver chatWindowObserver;
             
     public ChatWindow() {
-        super("IDChat");
+        super("IDChatSystem - Chat");
         this.usersContainer = new UserViewArrayList();
     }
 
